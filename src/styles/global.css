@@ -9440,3 +9440,318 @@ button {
     opacity: 1 !important;
   }
 }
+
+/* === FINAL VISUAL QA POLISH V10 === */
+
+/*
+  Final refinement pass.
+  No redesign: only spacing, cross-device alignment, explorer metadata,
+  fixed-theme consistency and small visual-quality corrections.
+*/
+
+/* 02 — keep the zone metadata cleanly separated at every width. */
+.zone-panel-meta {
+  width: 100%;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 24px !important;
+  row-gap: 6px;
+}
+
+.zone-panel-meta .mono {
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.zone-panel-meta .mono:first-child {
+  justify-self: start;
+  color: #8cc63f;
+}
+
+.zone-panel-meta .mono:last-child {
+  justify-self: end;
+  text-align: right;
+  color: #eef3f5;
+}
+
+/* Preserve the compact visiting-card wordmark while improving SERVICES legibility. */
+.site-header .brand-sub {
+  font-size: 10.5px !important;
+  letter-spacing: .24em !important;
+  padding-left: .24em !important;
+}
+
+.footer .brand-sub {
+  font-size: 8.8px !important;
+}
+
+/* Keep major interactive colors authored by SHK instead of browser-adjusted. */
+.button-primary,
+.header-cta,
+.contact-bar > a:last-child {
+  background-color: #087fba;
+  border-color: #087fba;
+  color: #ffffff;
+}
+
+.button-secondary {
+  background-color: transparent;
+  border-color: #43535d;
+  color: #f5f7f8;
+}
+
+.text-link {
+  color: #087fba;
+}
+
+/* Tablet: one clear visual hierarchy, no accidental desktop/mobile hybrid. */
+@media (min-width: 601px) and (max-width: 900px) {
+  .container {
+    width: calc(100% - 48px);
+  }
+
+  .section {
+    padding-block: 58px;
+  }
+
+  .site-header .brand-sub {
+    font-size: 10px !important;
+    letter-spacing: .22em !important;
+    padding-left: .22em !important;
+  }
+
+  .zone-panel-meta {
+    column-gap: 20px !important;
+  }
+
+  .zone-panel-meta .mono {
+    font-size: 9px !important;
+  }
+
+  .zone-stage {
+    padding: 24px 24px 22px !important;
+  }
+
+  .zone-panel-actions {
+    flex-wrap: wrap;
+  }
+}
+
+/* Phone: refine section 02 without changing the new schematic + panel model. */
+@media (max-width: 600px) {
+  .container {
+    width: calc(100% - 28px);
+  }
+
+  .site-header .brand-sub {
+    font-size: 9.5px !important;
+    letter-spacing: .20em !important;
+    padding-left: .20em !important;
+  }
+
+  .explorer .container {
+    width: calc(100% - 28px);
+  }
+
+  .zone-panel-meta {
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 14px !important;
+    margin-bottom: 14px !important;
+  }
+
+  .zone-panel-meta .mono {
+    font-size: 8px !important;
+    line-height: 1.25 !important;
+  }
+
+  .zone-panel-meta .mono:last-child {
+    width: 100%;
+    text-align: right;
+  }
+
+  .zone-detail-panel h3 {
+    font-size: clamp(23px, 6.5vw, 27px) !important;
+  }
+
+  .zone-panel-description {
+    color: #aeb9bf !important;
+  }
+
+  .zone-panel-list li {
+    min-height: 42px;
+  }
+
+  .zone-panel-actions {
+    margin-top: 4px !important;
+  }
+
+  .zone-panel-actions .button {
+    border-radius: 3px;
+  }
+
+  /* Keep the fixed bar useful without visually overpowering page content. */
+  .contact-bar {
+    border-top-color: #33434d !important;
+    box-shadow: 0 -8px 20px rgba(0,0,0,.16);
+  }
+}
+
+@media (max-width: 380px) {
+  .site-header .brand-sub {
+    font-size: 8.9px !important;
+    letter-spacing: .18em !important;
+    padding-left: .18em !important;
+  }
+
+  .zone-panel-meta {
+    column-gap: 10px !important;
+  }
+
+  .zone-panel-meta .mono {
+    font-size: 7.5px !important;
+  }
+}
+
+/*
+  Fixed visual theme.
+  The SHK site intentionally contains both light and dark sections.
+  Dark OS/browser preference must not transform the authored palette.
+*/
+:root,
+html {
+  color-scheme: only light !important;
+}
+
+html,
+body {
+  background-color: #f6f7f5;
+}
+
+input,
+textarea,
+select,
+button {
+  color-scheme: only light !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html,
+  body,
+  main {
+    background-color: #f6f7f5 !important;
+    color: #18222a !important;
+  }
+
+  .site-header,
+  #mobile-menu,
+  .hero,
+  .explorer,
+  .accuracy,
+  .lifecycle,
+  .footer,
+  .contact-bar,
+  .zone-stage,
+  .machine-drawing {
+    background-color: #0b1115 !important;
+    color: #f6f7f5 !important;
+  }
+
+  .zone-stage {
+    background-color: #151f26 !important;
+    border-color: #2c3a43 !important;
+  }
+
+  .zone-detail-panel h3,
+  .zone-panel-list a,
+  .zone-panel-meta .mono:last-child {
+    color: #f4f6f7 !important;
+  }
+
+  .zone-panel-description {
+    color: #aeb9bf !important;
+  }
+
+  .zone-panel-list,
+  .zone-panel-list li {
+    border-color: #2c3941 !important;
+  }
+
+  .problems-source,
+  .product-range,
+  .chip-coolant-source,
+  .industries-source,
+  .catalogue-page,
+  .service-index-page,
+  .about-page {
+    background-color: #f6f7f5 !important;
+    color: #18222a !important;
+  }
+
+  .problem-source-card,
+  .source-product-card,
+  .catalogue-card,
+  .detail-card,
+  .requirement-form,
+  .selected-items,
+  .compact-selected,
+  .empty-enquiry {
+    background-color: #ffffff !important;
+    color: #18222a !important;
+  }
+
+  .requirement {
+    background-color: #eaf0f3 !important;
+    color: #18222a !important;
+  }
+
+  .button-primary,
+  .header-cta,
+  .contact-bar > a:last-child {
+    background-color: #087fba !important;
+    border-color: #087fba !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+
+  .button-secondary {
+    background-color: transparent !important;
+    border-color: #43535d !important;
+    color: #f5f7f8 !important;
+    -webkit-text-fill-color: #f5f7f8 !important;
+  }
+
+  .text-link {
+    color: #168bc0 !important;
+    -webkit-text-fill-color: #168bc0 !important;
+  }
+
+  .hotspot {
+    background-color: #14242e !important;
+    color: #e9f7ff !important;
+    border-color: #526b79 !important;
+  }
+
+  .hotspot.active {
+    background-color: #8cc63f !important;
+    color: #0b1115 !important;
+    -webkit-text-fill-color: #0b1115 !important;
+    border-color: #b9db84 !important;
+  }
+
+  input:not([type='radio']),
+  textarea,
+  select {
+    background-color: #fbfcfc !important;
+    color: #17222a !important;
+    border-color: #cbd6de !important;
+    -webkit-text-fill-color: #17222a !important;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #6b7880 !important;
+    -webkit-text-fill-color: #6b7880 !important;
+    opacity: 1 !important;
+  }
+}

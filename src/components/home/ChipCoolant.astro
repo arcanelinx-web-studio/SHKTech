@@ -1,0 +1,60 @@
+---
+import { Image } from 'astro:assets';
+import sump from '../../assets/sump.webp';
+import SectionHeader from '../global/SectionHeader.astro';
+import SpecTable from '../products/SpecTable.astro';
+import { compactorSpecs } from '../../data/products';
+---
+
+<section class="section paper" id="chip-coolant">
+  <div class="container">
+    <SectionHeader
+      eyebrow="05 — CHIP & COOLANT"
+      title="Cleaner sumps. Denser scrap. Less downtime."
+      description="Address what happens after the cut: contaminated fluid, accumulated swarf and machine mist."
+    />
+    <div class="coolant-grid">
+      <div>
+        <figure class="sump-image">
+          <Image
+            src={sump}
+            alt="Oilmax sump cleaning equipment and before/after coolant images from the SHK catalogue"
+            loading="lazy"
+            widths={[400, 662]}
+            sizes="(max-width: 768px) 90vw, 45vw"
+          />
+          <figcaption class="mono">SUMP CLEANING / SOURCE: SHK CATALOGUE</figcaption>
+        </figure>
+        <h3>Keep the fluid working.</h3>
+        <p>
+          Sump cleaning, tramp oil separation and filtration options for machine coolant. Share the
+          fluid, contamination and sump details to discuss a suitable system.
+        </p>
+        <a class="text-link" href="/products/coolant-filtration/">
+          Explore coolant solutions ↗
+        </a>
+      </div>
+      <div class="spec-panel">
+        <p class="eyebrow">CHIP COMPACTION / VCC SERIES</p>
+        <h3>Make more of the swarf.</h3>
+        <SpecTable
+          headers={['Model', 'VCC 12-110', 'VCC 10-150']}
+          rows={compactorSpecs}
+          caption="Chip compactor specifications"
+        />
+        <p class="small">
+          Values transcribed from the SHK catalogue, page 43. Model suitability and current
+          specifications should be confirmed with SHK.
+        </p>
+        <a class="text-link" href="/products/chip-compactors/">
+          View compaction range ↗
+        </a>
+      </div>
+    </div>
+    <div class="coolant-links">
+      <a href="/products/chip-conveyors/">01 / Chip handling ↗</a>
+      <a href="/products/coolant-filtration/">02 / Coolant & filtration ↗</a>
+      <a href="/products/mist-collectors/">03 / Oil mist collection ↗</a>
+    </div>
+  </div>
+</section>

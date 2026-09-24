@@ -1,0 +1,42 @@
+---
+import { Image } from 'astro:assets';
+import type { ProductCategory } from '../../data/types';
+import EnquiryButton from '../enquiry/EnquiryButton.astro';
+interface Props {
+  product: ProductCategory;
+}
+const { product: p } = Astro.props;
+---
+
+<article class="product-card">
+  <a class="product-image" href={`/products/${p.id}/`} aria-label={`View ${p.title}`}>
+    {!p.image ? (
+      <span class="mono">
+        COMPONENT CLEANING
+        <br />
+        Discuss your application ↗
+      </span>
+    ) : (
+      <Image
+        src={p.image}
+        alt={p.title}
+        widths={[...new Set([Math.min(320, p.image.width), Math.min(480, p.image.width)])]}
+        sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 28vw"
+        loading="lazy"
+      />
+    )}
+  </a>
+  <div class="product-body">
+    <p class="eyebrow">{p.label}</p>
+    <h3>
+      <a href={`/products/${p.id}/`}>{p.title}</a>
+    </h3>
+    <p>{p.description}</p>
+    <div class="product-actions">
+      <a class="text-link" href={`/products/${p.id}/`}>
+        View Range ↗
+      </a>
+      <EnquiryButton id={p.id} title={p.title} />
+    </div>
+  </div>
+</article>

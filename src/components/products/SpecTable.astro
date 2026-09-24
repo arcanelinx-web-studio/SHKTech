@@ -1,0 +1,28 @@
+---
+interface Props {
+  headers: string[];
+  rows: string[][];
+  caption: string;
+}
+const { headers, rows, caption } = Astro.props;
+---
+
+<div class="table-scroll" role="region" aria-label={caption} tabindex="0">
+  <table>
+    <caption>{caption}</caption>
+    <thead>
+      <tr>
+        {headers.map((h) => (
+          <th scope="col">{h}</th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((row) => (
+        <tr>
+          {row.map((v, i) => (i === 0 ? <th scope="row">{v}</th> : <td class="mono">{v}</td>))}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

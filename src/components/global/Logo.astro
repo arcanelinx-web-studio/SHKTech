@@ -1,0 +1,18 @@
+---
+interface Props {
+  dark?: boolean;
+}
+const { dark = false } = Astro.props;
+---
+
+<a class="brand" href="/" aria-label="SHK Tech Services home">
+  <img
+    src={`/images/logos/SHK-logo${dark ? '-white' : ''}.svg`}
+    width="1762"
+    height="1636"
+    alt="SHK Tech Services"
+  />
+  <span aria-hidden="true">
+    SHK TECH<span class="brand-sub">SERVICES</span>
+  </span>
+</a>

@@ -1,0 +1,28 @@
+---
+import SectionHeader from '../global/SectionHeader.astro';
+import ProductCard from '../products/ProductCard.astro';
+import { products } from '../../data/products';
+---
+
+<section class="section paper" id="products">
+  <div class="container">
+    <SectionHeader
+      eyebrow="03 — PRODUCT RANGE"
+      title="For the spindle, the table and everything around it."
+    >
+      <a class="text-link" href="/products/">
+        Explore all {products.length} categories ↗
+      </a>
+    </SectionHeader>
+    <div class="product-grid">
+      {products.slice(0, 6).map((product) => (
+        <ProductCard product={product} />
+      ))}
+    </div>
+    <a class="range-banner" href="/products/">
+      <span class="mono">BEYOND THE CUTTING ZONE</span>
+      <span>Chip handling. Coolant. Measurement. And more.</span>
+      <span>View the complete range ↗</span>
+    </a>
+  </div>
+</section>

@@ -1,0 +1,23 @@
+---
+import { Plus } from '@lucide/astro';
+import type { EnquiryItem } from '../../data/types';
+interface Props {
+  id: string;
+  title: string;
+  kind?: EnquiryItem['kind'];
+}
+const { id, title, kind = 'category' } = Astro.props;
+---
+
+<button
+  class="enquiry-button"
+  data-add-enquiry
+  data-id={id}
+  data-title={title}
+  data-kind={kind}
+  aria-label={`Add ${title} to enquiry`}
+  aria-pressed="false"
+>
+  <Plus size={14} aria-hidden="true" />
+  <span>Add to Enquiry</span>
+</button>

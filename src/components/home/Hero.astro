@@ -1,0 +1,76 @@
+---
+import { Image } from 'astro:assets';
+import probe from '../../assets/probe.webp';
+import Button from '../global/Button.astro';
+import { brands } from '../../data/brands';
+---
+
+<section class="hero dark">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">
+        <span class="status-dot"></span> CNC ENGINEERING / BENGALURU
+      </p>
+      <h1>
+        Engineering
+        <br />
+        solutions for <br />
+        <span>CNC manufacturing.</span>
+      </h1>
+      <p class="hero-description">
+        Workholding, tooling, probing, calibration and chip &amp; coolant systems. Bring us the
+        machining problem. We'll help identify the right technology.
+      </p>
+      <div class="button-row">
+        <Button href="#requirement">Talk to an Engineer</Button>
+        <Button href="#machine" secondary>
+          Explore the Machine
+        </Button>
+      </div>
+      <div class="hero-values mono">
+        <span>PRECISION</span>
+        <span>PRODUCTIVITY</span>
+        <span>UPTIME</span>
+      </div>
+    </div>
+    <figure class="hero-visual">
+      <Image
+        src={probe}
+        alt="Tool measurement inside a CNC machine, from the SHK probing catalogue"
+        widths={[480, 720, 997]}
+        sizes="(max-width: 767px) 92vw, 48vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <div class="image-topline mono">
+        <span>INSIDE THE MACHINING CYCLE</span>
+        <span>SHK / 01</span>
+      </div>
+      <svg class="hero-crosshair" viewBox="0 0 400 400" aria-hidden="true">
+        <circle cx="200" cy="230" r="25" />
+        <path d="M200 193v22m0 30v22m-37-37h22m30 0h22m-20-18 67-67h61" />
+      </svg>
+      <figcaption>
+        <span class="mono">PROBING & TOOL SETTING</span>
+        <strong>
+          Precision begins
+          <br />
+          at the point of contact.
+        </strong>
+        <span class="image-note">Catalogue image · illustrative callout</span>
+      </figcaption>
+    </figure>
+  </div>
+  <div class="container technology-strip">
+    <span class="mono">
+      TECHNOLOGY
+      <br />
+      WE WORK WITH
+    </span>
+    <div>
+      {brands.map((b) => (
+        <span>{b.name}</span>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/global/Breadcrumb.astro';
+import Button from '../../components/global/Button.astro';
+import ProductCard from '../../components/products/ProductCard.astro';
+import EnquiryButton from '../../components/enquiry/EnquiryButton.astro';
+import { problems } from '../../data/problems';
+import { getProduct } from '../../data/products';
+import { services } from '../../data/services';
+export function getStaticPaths() {
+  return problems.map((problem) => ({ params: { slug: problem.id }, props: { problem } }));
+}
+const { problem: p } = Astro.props;
+---
+
+<BaseLayout
+  title={p.title}
+  description={p.description}
+  crumbs={[
+    { name: 'Solutions', path: '/solutions/' },
+    { name: p.title, path: `/solutions/${p.id}/` },
+  ]}
+>
+  <section class="section paper">
+    <div class="container">
+      <Breadcrumb items={[{ title: 'Solutions', href: '/solutions/' }, { title: p.title }]} />
+      <p class="eyebrow">START WITH THE PROBLEM</p>
+      <h1 class="page-title">{p.title}</h1>
+      <p class="lead">
+        {p.description} These capabilities are a starting point for a discussion; the right
+        combination depends on the part, process and machine.
+      </p>
+      <Button href={`/?details=${encodeURIComponent(p.title)}#requirement`}>
+        Discuss this problem
+      </Button>
+      {p.products.length > 0 && (
+        <>
+          <h2 class="subsection-title">Explore relevant products</h2>
+          <div class="product-grid">
+            {p.products.map((id) => (
+              <ProductCard product={getProduct(id)!} />
+            ))}
+          </div>
+        </>
+      )}
+      {p.services.length > 0 && (
+        <>
+          <h2 class="subsection-title">Relevant machine services</h2>
+          <div class="problem-grid">
+            {p.services.map((id) => {
+              const s = services.find((s) => s.id === id)!;
+              return (
+                <article class="problem-card">
+                  <h3>
+                    <a href={`/services/${s.id}/`}>{s.title} ↗</a>
+                  </h3>
+                  <p>{s.description}</p>
+                  <EnquiryButton id={s.id} title={s.title} kind="service" />
+                </article>
+              );
+            })}
+          </div>
+        </>
+      )}
+    </div>
+  </section>
+</BaseLayout>

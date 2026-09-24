@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+---
+
+<BaseLayout title="Privacy">
+  <section class="section paper">
+    <article class="container narrow prose">
+      <p class="eyebrow">YOUR INFORMATION</p>
+      <h1 class="page-title">Privacy & enquiries.</h1>
+      <h2>What stays in your browser</h2>
+      <p>
+        The enquiry list and item notes are stored in your browser’s localStorage. Clear the list or
+        browser site data to remove them. Contact form fields are not saved by this website.
+      </p>
+      <h2>Sending a requirement</h2>
+      <p>
+        The form generates a WhatsApp link containing the information you enter. Opening it shares
+        those details with WhatsApp. You review and send the message in WhatsApp; this website does
+        not send it automatically. WhatsApp’s own privacy terms apply.
+      </p>
+      <h2>Drawings and attachments</h2>
+      <p>
+        Selected files are not uploaded to this website or transferred through a WhatsApp link. Only
+        their filenames are included in the generated message. Attach files yourself in the WhatsApp
+        conversation.
+      </p>
+      <h2>Analytics and hosting</h2>
+      <p>
+        This build uses no analytics scripts or advertising cookies. The hosting provider may
+        process ordinary request logs when the site is deployed.
+      </p>
+      <h2>Questions</h2>
+      <p>
+        Contact <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a> about information
+        you share with SHK.
+      </p>
+    </article>
+  </section>
+</BaseLayout>

@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Problems from '../../components/home/Problems.astro';
+---
+
+<BaseLayout
+  title="Solutions for CNC machining problems"
+  crumbs={[{ name: 'Solutions', path: '/solutions/' }]}
+>
+  <div class="container page-intro">
+    <p class="eyebrow">SOLUTIONS</p>
+    <h1 class="page-title">Start with the challenge.</h1>
+  </div>
+  <Problems />
+</BaseLayout>

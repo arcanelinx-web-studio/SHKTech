@@ -1,0 +1,24 @@
+---
+import SectionHeader from '../global/SectionHeader.astro';
+import { industries } from '../../data/industries';
+---
+
+<section class="section paper" id="industries">
+  <div class="container">
+    <SectionHeader
+      eyebrow="APPLICATION ENVIRONMENTS"
+      title="Different parts. Shared engineering challenges."
+      description="From production components to complex one-offs, begin with your process and machine. Application suitability is assessed with SHK."
+    />
+    <div class="industry-grid">
+      {industries.map((industry, i) => (
+        <a href={`/?industry=${encodeURIComponent(industry.name)}#requirement`}>
+          <span class="mono">{String(i + 1).padStart(2, '0')}</span>
+          <h3>{industry.name}</h3>
+          <p>{industry.applications}</p>
+          <span class="industry-arrow">↗</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

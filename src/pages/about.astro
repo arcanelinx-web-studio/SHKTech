@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/global/Button.astro';
+---
+
+<BaseLayout title="About SHK" crumbs={[{ name: 'About SHK', path: '/about/' }]}>
+  <section class="section paper">
+    <div class="container">
+      <p class="eyebrow">SHK TECH SERVICES / BENGALURU</p>
+      <h1 class="page-title">Responsible Engineering.</h1>
+      <p class="lead">
+        SHK Tech Services markets and services CNC machines, related accessories and engineered
+        products for the metal-working industry.
+      </p>
+      <div class="about-grid">
+        <article>
+          <span class="mono">01 / VISION</span>
+          <h2>Value through engineering.</h2>
+          <p>
+            Provide value-added services through engineered products and solutions for CNC machines
+            in the metal-working industry.
+          </p>
+        </article>
+        <article>
+          <span class="mono">02 / MISSION</span>
+          <h2>Make the solution work.</h2>
+          <p>
+            Offer quality products, cost-conscious solutions and responsive supply. Build productive
+            relationships with customers and business partners.
+          </p>
+        </article>
+        <article>
+          <span class="mono">03 / VALUES</span>
+          <h2>People. Quality. Practicality.</h2>
+          <ul class="feature-list">
+            <li>Teamwork and empowered people</li>
+            <li>Customer satisfaction</li>
+            <li>Cost-effective solutions</li>
+            <li>Quality in products and service</li>
+          </ul>
+        </article>
+      </div>
+      <Button href="/#requirement">Talk to an Engineer</Button>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,50 @@
+---
+import Logo from './Logo.astro';
+import { site } from '../../config/site';
+import WhatsAppCTA from './WhatsAppCTA.astro';
+---
+
+<footer class="footer dark">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <Logo dark />
+        <h2>
+          Responsible
+          <br />
+          Engineering<span class="blue">.</span>
+        </h2>
+        <p>Engineered products and services for CNC machines in the metal-working industry.</p>
+      </div>
+      <div>
+        <h3>Solutions</h3>
+        <a href="/solutions/accuracy/">Machine accuracy</a>
+        <a href="/solutions/workholding/">Workholding</a>
+        <a href="/solutions/coolant/">Chip & coolant</a>
+        <a href="/services/retrofit/">Retrofit</a>
+      </div>
+      <div>
+        <h3>Explore</h3>
+        <a href="/products/">Product range</a>
+        <a href="/services/">Machine services</a>
+        <a href="/about/">About SHK</a>
+        <a href="/#industries">Industries</a>
+        <a href="/enquiry/">Enquiry list</a>
+      </div>
+      <div>
+        <h3>Let’s talk engineering</h3>
+        <a href={`tel:${site.contact.phoneHref}`}>{site.contact.phone}</a>
+        <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+        <p>{site.contact.address}</p>
+        <WhatsAppCTA />
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>
+        © {new Date().getFullYear()} {site.name} · Bengaluru
+      </span>
+      <span class="mono">PRECISION · PRODUCTIVITY · UPTIME</span>
+      <a href="/privacy/">Privacy</a>
+    </div>
+  </div>
+</footer>

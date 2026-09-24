@@ -1,0 +1,95 @@
+import type { Service } from './types';
+export const services: Service[] = [
+  {
+    id: 'laser-calibration',
+    title: 'Laser calibration',
+    description: 'Measure axis positioning errors and assess compensation requirements.',
+    problem: 'The machine is no longer positioning as expected.',
+    provides: [
+      'Laser measurement of machine axes',
+      'Assessment of measured errors for compensation',
+    ],
+    process: [
+      'Discuss the machine, symptoms and control.',
+      'Measure axis errors and assess applicable compensation.',
+      'Agree verification measurements and next actions.',
+    ],
+    applications: ['Turning machines', 'Machining centres', 'Grinding machines'],
+    source: { document: 'catalogue', pages: [21, 22, 23] },
+  },
+  {
+    id: 'ball-bar-testing',
+    title: 'Ball-bar testing',
+    description: 'Investigate circularity and machine motion with a ball-bar test.',
+    problem: 'Circular features or interpolated movements need investigation.',
+    provides: ['Ball-bar testing', 'Machine circularity assessment'],
+    process: [
+      'Review the machining problem.',
+      'Measure circular motion with a ball-bar test.',
+      'Discuss the measured result and appropriate corrective work.',
+    ],
+    applications: ['Turning machines', 'Machining centres', 'Grinding machines'],
+    source: { document: 'catalogue', pages: [22, 23] },
+  },
+  {
+    id: 'geometrical-alignment',
+    title: 'Geometrical alignment',
+    description: 'Assess machine geometry when alignment needs attention.',
+    problem: 'Machine geometry may be contributing to part errors.',
+    provides: ['Machine geometrical alignment', 'Calibration-related assessment'],
+    process: [
+      'Identify the machine and observed errors.',
+      'Review geometry and alignment requirements.',
+      'Agree the scope of alignment and subsequent checks.',
+    ],
+    applications: ['CNC machines'],
+    source: { document: 'catalogue', pages: [21] },
+  },
+  {
+    id: 'spindle-reconditioning',
+    title: 'Spindle reconditioning',
+    description: 'Review spindle and spindle cartridge reconditioning needs.',
+    problem: 'A spindle assembly needs assessment or reconditioning.',
+    provides: ['Spindle cartridge reconditioning', 'Machine subassembly assessment'],
+    process: [
+      'Share the spindle details and symptoms.',
+      'Review the assembly and reconditioning scope.',
+      'Agree the work and checks before return to service.',
+    ],
+    applications: ['CNC machine spindles'],
+    source: { document: 'catalogue', pages: [51, 52, 53] },
+  },
+  {
+    id: 'machine-reconditioning',
+    title: 'Machine & axis reconditioning',
+    description:
+      'Partial or complete reconditioning of machines, subassemblies and machine elements.',
+    problem: 'Wear in machine elements is affecting operation.',
+    provides: [
+      'Partial and complete machine reconditioning',
+      'Ball screw and guideway-related machine elements',
+      'Subassembly reconditioning',
+    ],
+    process: [
+      'Document the machine condition.',
+      'Assess affected subassemblies and elements.',
+      'Define the reconditioning scope and verification plan.',
+    ],
+    applications: ['Machining centres', 'Turning centres'],
+    source: { document: 'catalogue', pages: [51, 52, 53] },
+  },
+  {
+    id: 'retrofit',
+    title: 'Subsystem retrofit',
+    description: 'Review retrofit options for machine subsystems and accessories.',
+    problem: 'An existing machine needs a different capability or a subsystem update.',
+    provides: ['Retrofit of subsystems', 'Machine accessory integration assessment'],
+    process: [
+      'Define the required change.',
+      'Review compatibility with the existing machine.',
+      'Agree integration scope and commissioning checks.',
+    ],
+    applications: ['CNC machines and accessories'],
+    source: { document: 'catalogue', pages: [51, 52] },
+  },
+];

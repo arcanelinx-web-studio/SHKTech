@@ -1,0 +1,44 @@
+---
+import SectionHeader from '../global/SectionHeader.astro';
+import { problems } from '../../data/problems';
+import { getProduct } from '../../data/products';
+import { services } from '../../data/services';
+import { ArrowUpRight, Crosshair, Timer, Grip, Funnel, Wrench, MoveUpRight } from '@lucide/astro';
+const icons = [Crosshair, Timer, Grip, Funnel, Wrench, MoveUpRight];
+---
+
+<section class="section paper" id="solutions">
+  <div class="container">
+    <SectionHeader
+      eyebrow="01 — START WITH THE PROBLEM"
+      title="What are you trying to solve?"
+      description="Pick the challenge. We match the right technology. You don’t need to know the product name."
+    />
+    <div class="problem-grid">
+      {problems.map((p, i) => {
+        const Icon = icons[i]!;
+        return (
+          <a class="problem-card" href={`/solutions/${p.id}/`}>
+            <div class="card-top">
+              <Icon size={25} stroke-width={1.4} />
+              <span class="mono">0{i + 1}</span>
+            </div>
+            <h3>{p.title}</h3>
+            <p>{p.description}</p>
+            <div class="problem-bottom">
+              <span>
+                {[
+                  ...p.services.map((id) => services.find((s) => s.id === id)?.title),
+                  ...p.products.map((id) => getProduct(id)?.title),
+                ]
+                  .slice(0, 2)
+                  .join(' / ')}
+              </span>
+              <ArrowUpRight size={21} />
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</section>

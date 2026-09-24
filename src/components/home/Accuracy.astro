@@ -1,0 +1,126 @@
+---
+import SectionHeader from '../global/SectionHeader.astro';
+import Button from '../global/Button.astro';
+const plot = (compensated: boolean) =>
+  Array.from({ length: 181 }, (_, i) => {
+    const a = (i * 2 * Math.PI) / 180;
+    const r =
+      118 + (compensated ? 2 : 12) * Math.sin(3 * a) + (compensated ? 1 : 8) * Math.cos(5 * a);
+    return `${i === 0 ? 'M' : 'L'}${200 + r * Math.cos(a)},${200 + r * Math.sin(a)}`;
+  }).join(' ') + 'Z';
+---
+
+<section class="section dark accuracy" id="accuracy">
+  <div class="container">
+    <SectionHeader
+      eyebrow="04 — MACHINE ACCURACY SERVICE"
+      title="Measure. Compensate. Verify."
+      description="Understand what the machine is doing before deciding what to change."
+    />
+    <div class="accuracy-grid">
+      <div class="plot-card">
+        <div class="plot-top">
+          <span class="mono">CIRCULARITY / XY PLANE</span>
+          <div class="segmented" role="group" aria-label="Illustrative plot state">
+            <button data-plot="measured" aria-pressed="true">
+              As measured
+            </button>
+            <button data-plot="compensated" aria-pressed="false">
+              Compensated
+            </button>
+          </div>
+        </div>
+        <svg
+          viewBox="0 0 400 400"
+          role="img"
+          aria-label="Illustrative circularity plot, not measured customer data"
+        >
+          <g class="plot-grid" fill="none">
+            {[40, 80, 118, 155].map((r) => (
+              <circle cx="200" cy="200" r={r} />
+            ))}
+            <path d="M20 200h360M200 20v360M90 90l220 220M90 310 310 90" />
+          </g>
+          <circle cx="200" cy="200" r="118" fill="none" stroke="#71808a" stroke-dasharray="3 5" />
+          <path id="plot-measured" d={plot(false)} fill="none" stroke="#1e8fe1" stroke-width="2" />
+          <path
+            id="plot-compensated"
+            d={plot(true)}
+            fill="none"
+            stroke="#8cc63f"
+            stroke-width="2"
+            visibility="hidden"
+          />
+          <g class="plot-labels">
+            <text x="365" y="193">
+              +X
+            </text>
+            <text x="12" y="193">
+              −X
+            </text>
+            <text x="208" y="27">
+              +Y
+            </text>
+            <text x="208" y="382">
+              −Y
+            </text>
+          </g>
+        </svg>
+        <div class="plot-bottom mono">
+          <span id="plot-state" aria-live="polite">
+            AS MEASURED
+          </span>
+          <span>ILLUSTRATIVE PLOT · NOT CUSTOMER DATA</span>
+        </div>
+      </div>
+      <div class="accuracy-steps">
+        {[
+          [
+            '01',
+            'Measure',
+            'Laser calibration and ball-bar testing help identify positioning and circularity errors.',
+          ],
+          [
+            '02',
+            'Compensate',
+            'Assess measured errors for compensation in the machine control, where applicable.',
+          ],
+          [
+            '03',
+            'Verify',
+            'Review the result through repeat measurement and agree any further corrective work.',
+          ],
+        ].map(([n, title, copy]) => (
+          <div>
+            <span class="mono">{n}</span>
+            <div>
+              <h3>{title}</h3>
+              <p>{copy}</p>
+            </div>
+          </div>
+        ))}
+        <p class="eyebrow">TURNING · MACHINING · GRINDING MACHINES</p>
+        <Button href="/services/laser-calibration/">Book a calibration visit</Button>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-plot]').forEach((button) =>
+    button.addEventListener('click', () => {
+      const compensated = button.dataset.plot === 'compensated';
+      document
+        .querySelectorAll('[data-plot]')
+        .forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+      document
+        .getElementById('plot-measured')
+        ?.setAttribute('visibility', compensated ? 'hidden' : 'visible');
+      document
+        .getElementById('plot-compensated')
+        ?.setAttribute('visibility', compensated ? 'visible' : 'hidden');
+      document.getElementById('plot-state')!.textContent = compensated
+        ? 'COMPENSATED CONCEPT'
+        : 'AS MEASURED';
+    }),
+  );
+</script>

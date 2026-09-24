@@ -1,0 +1,32 @@
+---
+import SectionHeader from '../global/SectionHeader.astro';
+const stages = [
+  ['Select', 'Match technology to the part.', '/products/'],
+  ['Install', 'Discuss machine integration.', '/services/retrofit/'],
+  ['Calibrate', 'Understand axis and geometry errors.', '/services/laser-calibration/'],
+  ['Optimise', 'Review tooling, workholding and CAM.', '/solutions/capability/'],
+  ['Maintain', 'Address chips, coolant and mist.', '/solutions/coolant/'],
+  ['Recondition', 'Assess worn machine assemblies.', '/services/machine-reconditioning/'],
+  ['Retrofit', 'Review new subsystems and accessories.', '/services/retrofit/'],
+];
+---
+
+<section class="section dark lifecycle">
+  <div class="container">
+    <SectionHeader
+      eyebrow="06 — THE LIFE OF YOUR MACHINE"
+      title="From first setup to second life."
+      description="Start with the stage you’re at. Build the scope around your machine."
+    />
+    <div class="lifecycle-grid">
+      {stages.map(([name, copy, href], i) => (
+        <a href={href}>
+          <span class="stage-node mono">0{i + 1}</span>
+          <h3>{name}</h3>
+          <p>{copy}</p>
+          <span aria-hidden="true">↗</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,72 @@
+---
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/space-grotesk/500.css';
+import '@fontsource/space-grotesk/600.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '../styles/global.css';
+import Header from '../components/navigation/Header.astro';
+import Footer from '../components/global/Footer.astro';
+import ContactBar from '../components/global/ContactBar.astro';
+import { site } from '../config/site';
+import { organization, breadcrumbs } from '../utils/seo';
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+  crumbs?: { name: string; path: string }[];
+}
+const { title, description = site.description, noindex = false, crumbs = [] } = Astro.props;
+const fullTitle = title
+  ? `${title} | SHK Tech Services, Bengaluru`
+  : 'SHK Tech Services | Engineering solutions for CNC manufacturing';
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const origin = Astro.site!.origin;
+---
+
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0B1115" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/images/logos/SHK-logo.svg" />
+    {noindex && <meta name="robots" content="noindex,follow" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={site.name} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <script type="application/ld+json" set:html={JSON.stringify(organization(origin))}></script>
+    {crumbs.length > 0 && (
+      <script
+        type="application/ld+json"
+        set:html={JSON.stringify(
+          breadcrumbs([
+            { name: 'Home', url: origin },
+            ...crumbs.map((c) => ({ name: c.name, url: new URL(c.path, origin).href })),
+          ]),
+        )}
+      ></script>
+    )}
+  </head>
+  <body>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <ContactBar />
+    <div id="announcement" class="toast" role="status" aria-live="polite"></div>
+    <script>
+      import '../stores/enquiry';
+    </script>
+  </body>
+</html>

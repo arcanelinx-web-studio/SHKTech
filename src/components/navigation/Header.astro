@@ -1,0 +1,82 @@
+---
+import Logo from '../global/Logo.astro';
+import { Menu, X, ClipboardList, ArrowUpRight } from '@lucide/astro';
+const links = [
+  ['Solutions', '/solutions/'],
+  ['Products', '/products/'],
+  ['Services', '/services/'],
+  ['Industries', '/#industries'],
+  ['About', '/about/'],
+];
+---
+
+<a class="skip-link" href="#main">
+  Skip to content
+</a>
+<header class="site-header">
+  <div class="header-inner">
+    <Logo dark />
+    <nav class="desktop-nav" aria-label="Primary">
+      {links.map(([name, href]) => (
+        <a href={href}>{name}</a>
+      ))}
+    </nav>
+    <div class="header-actions">
+      <a class="enquiry-link" href="/enquiry/" aria-label="Enquiry list">
+        <ClipboardList size={17} />
+        <span class="enquiry-label">Enquiry list</span>
+        <span class="enquiry-count" data-enquiry-count hidden>
+          0
+        </span>
+      </a>
+      <a class="header-cta" href="/#requirement">
+        Talk to an Engineer <ArrowUpRight size={16} />
+      </a>
+      <button
+        class="menu-toggle"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Open navigation"
+      >
+        <Menu class="menu-icon" />
+        <X class="close-icon" />
+      </button>
+    </div>
+  </div>
+  <nav id="mobile-menu" aria-label="Mobile" hidden>
+    {links.map(([name, href], i) => (
+      <a href={href}>
+        <span class="mono">0{i + 1}</span>
+        {name}
+        <ArrowUpRight size={18} />
+      </a>
+    ))}
+    <a href="/#requirement">
+      Talk to an Engineer <ArrowUpRight size={18} />
+    </a>
+  </nav>
+</header>
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const menu = document.querySelector<HTMLElement>('#mobile-menu');
+  function close() {
+    if (toggle && menu) {
+      toggle.setAttribute('aria-expanded', 'false');
+      menu.hidden = true;
+    }
+  }
+  toggle?.addEventListener('click', () => {
+    if (!menu) return;
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    menu.hidden = open;
+  });
+  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') {
+      close();
+      toggle.focus();
+    }
+  });
+  matchMedia('(min-width: 1101px)').addEventListener('change', close);
+</script>

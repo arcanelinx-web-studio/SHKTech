@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../../components/products/ProductCard.astro';
+import Breadcrumb from '../../components/global/Breadcrumb.astro';
+import { products } from '../../data/products';
+---
+
+<BaseLayout title="CNC products & accessories" crumbs={[{ name: 'Products', path: '/products/' }]}>
+  <section class="section paper">
+    <div class="container">
+      <Breadcrumb items={[{ title: 'Products' }]} />
+      <p class="eyebrow">THE PRODUCT RANGE</p>
+      <h1 class="page-title">
+        Around the machine.
+        <br />
+        Built around the requirement.
+      </h1>
+      <p class="lead">
+        Explore by category, or <a href="/solutions/">start with your machining problem</a>. Add
+        relevant items to one enquiry and discuss compatibility with SHK.
+      </p>
+      <div class="product-grid">
+        {products.map((product) => (
+          <ProductCard product={product} />
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/global/Button.astro';
+---
+
+<BaseLayout title="Page not found" noindex>
+  <section class="section paper">
+    <div class="container">
+      <p class="eyebrow">404 / PAGE NOT FOUND</p>
+      <h1 class="page-title">
+        Let’s get you back
+        <br />
+        to the right solution.
+      </h1>
+      <div class="button-row">
+        <Button href="/">Go to homepage</Button>
+        <Button href="/products/" secondary>
+          Explore products
+        </Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

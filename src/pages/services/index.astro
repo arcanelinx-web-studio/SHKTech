@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/global/Breadcrumb.astro';
+import { services } from '../../data/services';
+---
+
+<BaseLayout title="CNC machine services" crumbs={[{ name: 'Services', path: '/services/' }]}>
+  <section class="section paper">
+    <div class="container">
+      <Breadcrumb items={[{ title: 'Services' }]} />
+      <p class="eyebrow">MACHINE PERFORMANCE / LIFECYCLE</p>
+      <h1 class="page-title">
+        Understand the error.
+        <br />
+        Define the next step.
+      </h1>
+      <p class="lead">
+        Calibration, alignment, reconditioning and subsystem retrofit. Begin with your machine and
+        the problem you are seeing.
+      </p>
+      <div class="problem-grid">
+        {services.map((s, i) => (
+          <a class="problem-card" href={`/services/${s.id}/`}>
+            <span class="mono">0{i + 1} / SERVICE</span>
+            <h2>{s.title}</h2>
+            <p>{s.description}</p>
+            <span class="text-link">Explore service ↗</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

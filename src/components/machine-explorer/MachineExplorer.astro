@@ -1,0 +1,169 @@
+---
+import SectionHeader from '../global/SectionHeader.astro';
+import { machineZones } from '../../data/machineZones';
+import { getProduct } from '../../data/products';
+import { services } from '../../data/services';
+---
+
+<section class="section dark explorer" id="machine">
+  <div class="container">
+    <SectionHeader
+      eyebrow="02 — EXPLORE THE MACHINE"
+      title="Every zone of your machine. One partner."
+      description="Start at the spindle. Follow the process. Select a zone to see the products and services around it."
+    />
+    <div class="explorer-layout">
+      <div class="machine-drawing">
+        <div class="drawing-heading mono">
+          <span>VMC / SYSTEM MAP</span>
+          <span>09 CONNECTED ZONES</span>
+        </div>
+        <svg
+          viewBox="0 0 660 540"
+          role="img"
+          aria-label="Schematic front view of a vertical machining centre"
+        >
+          <defs>
+            <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+              <path d="M30 0H0V30" fill="none" stroke="#22303a" stroke-width=".6" />
+            </pattern>
+            <linearGradient id="machine-face" x2="1" y2="1">
+              <stop stop-color="#202f3a" />
+              <stop offset="1" stop-color="#111b23" />
+            </linearGradient>
+          </defs>
+          <rect width="660" height="540" fill="url(#grid)" />
+          <g fill="url(#machine-face)" stroke="#657783" stroke-width="1.4">
+            <path d="M111 131 140 95h315l32 37v319H111Z" />
+            <path d="M129 148h302v254H129z" />
+            <path d="M140 95h315v36H111m320 17 38-16v269l-38 1" />
+            <path d="M99 451h400v32H99zM125 483v16h55v-16m226 0v16h58v-16" />
+            <path
+              d="M290 148h72v66h-72zM303 214h46v23h-46zM314 237h24v33h-24z"
+              data-machine-part="01"
+            />
+            <path d="M333 270v33m-5 0h10" data-machine-part="02" />
+            <path d="M173 376h218v27H173zM194 403h183v25H194z" data-machine-part="05" />
+            <path d="M205 324h72v52h-72z" data-machine-part="03" />
+            <ellipse cx="241" cy="347" rx="27" ry="20" data-machine-part="03" />
+            <path
+              d="M292 346h98v30h-98zM304 334h16v27h-16zM363 334h16v27h-16z"
+              data-machine-part="04"
+            />
+            <path
+              d="m468 419 63-40 26 18-65 42v42h-24zM531 379v-17l26 15v20m-24 8v56h51v-35l-27-29"
+              data-machine-part="06"
+            />
+            <path d="M397 445h64v48h-64z" data-machine-part="07" />
+            <path d="M146 82h67v42h-67zM159 82V63h40v19m-33 42v24" data-machine-part="08" />
+            <path
+              d="M487 174h97v116h-97zM498 187h75v51h-75zM503 252h12m9 0h12m9 0h12m-54 14h12m9 0h12m9 0h12M485 211h-17"
+              data-machine-part="09"
+            />
+          </g>
+          <g fill="none" stroke="#586c79" stroke-width="1">
+            <path d="M142 163v219m15-219v219m246-219v219m12-219v219M184 384h194m-194 8h194M277 157h-74v133h42M172 432h200" />
+            <path d="M73 356v61h47m-47-61-4 9m4-9 4 9m43 52-9-4m9 4-9 4" />
+          </g>
+          <g fill="#9aabb7" font-size="10" font-family="monospace">
+            <text x="66" y="344">
+              Z
+            </text>
+            <text x="124" y="421">
+              X
+            </text>
+            <text x="170" y="523">
+              SCHEMATIC · NOT TO SCALE
+            </text>
+          </g>
+        </svg>
+        {machineZones.map((zone, i) => (
+          <button
+            class:list={['hotspot', { active: i === 0 }]}
+            style={`--x:${(zone.x / 660) * 100}%;--y:${(zone.y / 540) * 100}%`}
+            data-zone={zone.id}
+            aria-label={`${zone.id} ${zone.title}`}
+            aria-pressed={i === 0}
+          >
+            {zone.id}
+          </button>
+        ))}
+      </div>
+      <div class="zone-list">
+        {machineZones.map((zone, i) => (
+          <details class="zone" name="machine-zone" open={i === 0} data-zone-panel={zone.id}>
+            <summary>
+              <span class="zone-number mono">{zone.id}</span>
+              <span>{zone.title}</span>
+              <span class="zone-sign" aria-hidden="true">
+                +
+              </span>
+            </summary>
+            <div class="zone-content">
+              <p>{zone.description}</p>
+              <ul>
+                {zone.products.map((id) => (
+                  <li>
+                    <a href={`/products/${id}/`}>{getProduct(id)!.title} ↗</a>
+                  </li>
+                ))}
+                {zone.services.map((id) => (
+                  <li>
+                    <a href={`/services/${id}/`}>{services.find((s) => s.id === id)!.title} ↗</a>
+                  </li>
+                ))}
+              </ul>
+              <div class="button-row">
+                <a
+                  class="text-link"
+                  href={
+                    zone.products[0]
+                      ? `/products/${zone.products[0]}/`
+                      : `/services/${zone.services[0]}/`
+                  }
+                >
+                  View this range ↗
+                </a>
+                <a
+                  class="text-link subtle"
+                  href={`/?details=${encodeURIComponent('I would like to discuss ' + zone.title + '.')}#requirement`}
+                >
+                  Ask an engineer ↗
+                </a>
+              </div>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  const panels = [...document.querySelectorAll<HTMLDetailsElement>('[data-zone-panel]')];
+  const hotspots = [...document.querySelectorAll<HTMLButtonElement>('[data-zone]')];
+  function highlight(id: string) {
+    hotspots.forEach((button) => {
+      button.classList.toggle('active', button.dataset.zone === id);
+      button.setAttribute('aria-pressed', String(button.dataset.zone === id));
+    });
+    document
+      .querySelectorAll<SVGElement>('[data-machine-part]')
+      .forEach((part) => part.classList.toggle('illuminated', part.dataset.machinePart === id));
+  }
+  function activate(id: string) {
+    panels.forEach((panel) => (panel.open = panel.dataset.zonePanel === id));
+    highlight(id);
+  }
+  hotspots.forEach((button) => {
+    button.addEventListener('click', () => activate(button.dataset.zone!));
+    button.addEventListener('pointerenter', (e) => {
+      if (e.pointerType === 'mouse') activate(button.dataset.zone!);
+    });
+  });
+  panels.forEach((panel) =>
+    panel.addEventListener('toggle', () => {
+      if (panel.open) highlight(panel.dataset.zonePanel!);
+    }),
+  );
+  highlight('01');
+</script>

@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/global/Button.astro';
+import RequirementForm from '../components/enquiry/RequirementForm.astro';
+---
+
+<BaseLayout title="Your enquiry list" noindex>
+  <section class="section paper">
+    <div class="container narrow">
+      <p class="eyebrow">YOUR REQUIREMENT / ONE CONVERSATION</p>
+      <h1 class="page-title">Your enquiry list.</h1>
+      <p class="lead">
+        Collect products and services here. Add any item-specific notes, then send one structured
+        requirement to SHK.
+      </p>
+      <div id="enquiry-items" aria-live="polite"></div>
+      <div class="button-row">
+        <Button href="#requirement">Discuss selected items</Button>
+        <a class="text-link" href="/products/">
+          Continue exploring ↗
+        </a>
+        <button id="clear-enquiry" class="text-button" hidden>
+          Clear list
+        </button>
+      </div>
+      <p class="small">Your list is stored in this browser. No account is required.</p>
+      <noscript>Enable JavaScript to manage a saved enquiry list.</noscript>
+    </div>
+  </section>
+  <RequirementForm />
+</BaseLayout>
+<script>
+  import { getItems, setItems, removeItem, notify } from '../stores/enquiry';
+  function render() {
+    const root = document.getElementById('enquiry-items')!;
+    const items = getItems();
+    root.replaceChildren();
+    document.getElementById('clear-enquiry')!.hidden = items.length === 0;
+    if (!items.length) {
+      const p = document.createElement('p');
+      p.className = 'empty-enquiry';
+      p.textContent =
+        'Your list is empty. Explore the range, or describe your problem in the form below.';
+      root.append(p);
+      return;
+    }
+    items.forEach((item) => {
+      const row = document.createElement('article');
+      row.className = 'enquiry-row';
+      const heading = document.createElement('h2');
+      heading.textContent = item.title;
+      const label = document.createElement('label');
+      label.textContent = 'Notes for this item';
+      const input = document.createElement('textarea');
+      input.rows = 2;
+      input.maxLength = 1000;
+      input.value = item.note || '';
+      input.addEventListener('change', () => {
+        const updated = getItems().map((i) => (i.id === item.id ? { ...i, note: input.value } : i));
+        setItems(updated);
+      });
+      label.append(input);
+      const button = document.createElement('button');
+      button.className = 'text-button';
+      button.textContent = 'Remove';
+      button.setAttribute('aria-label', `Remove ${item.title}`);
+      button.addEventListener('click', () => {
+        removeItem(item.id);
+        notify('Item removed.');
+        document
+          .querySelector<HTMLElement>('.enquiry-row button, #clear-enquiry, .button-row a')
+          ?.focus();
+      });
+      row.append(heading, label, button);
+      root.append(row);
+    });
+  }
+  document.getElementById('clear-enquiry')?.addEventListener('click', () => {
+    if (confirm('Clear all items from your enquiry list?')) {
+      setItems([]);
+      notify('Enquiry list cleared.');
+    }
+  });
+  window.addEventListener('shk:enquiry', render);
+  render();
+</script>

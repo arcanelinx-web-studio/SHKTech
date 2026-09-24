@@ -1,0 +1,123 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/global/Breadcrumb.astro';
+import EnquiryButton from '../../components/enquiry/EnquiryButton.astro';
+import Button from '../../components/global/Button.astro';
+import ProductCard from '../../components/products/ProductCard.astro';
+import SpecTable from '../../components/products/SpecTable.astro';
+import WhatsAppCTA from '../../components/global/WhatsAppCTA.astro';
+import { products, compactorSpecs } from '../../data/products';
+export function getStaticPaths() {
+  return products.map((product) => ({ params: { slug: product.id }, props: { product } }));
+}
+const { product: p } = Astro.props;
+---
+
+<BaseLayout
+  title={p.title}
+  description={p.description}
+  crumbs={[
+    { name: 'Products', path: '/products/' },
+    { name: p.title, path: `/products/${p.id}/` },
+  ]}
+>
+  <section class="section paper">
+    <div class="container">
+      <Breadcrumb items={[{ title: 'Products', href: '/products/' }, { title: p.title }]} />
+      <div class="detail-hero">
+        <div>
+          <p class="eyebrow">{p.label}</p>
+          <h1 class="page-title">{p.title}</h1>
+          <p class="lead">{p.description}</p>
+          <div class="button-row">
+            <EnquiryButton id={p.id} title={p.title} />
+            <Button href={`/?category=${encodeURIComponent(p.title)}#requirement`}>
+              Ask an Engineer
+            </Button>
+          </div>
+        </div>
+        {p.image && (
+          <div class="detail-image">
+            <Image src={p.image} alt={p.title} loading="eager" />
+          </div>
+        )}
+      </div>
+      <div class="detail-columns">
+        <div>
+          <h2>What’s in the range</h2>
+          <ul class="feature-list">
+            {p.features.map((f) => (
+              <li>{f}</li>
+            ))}
+          </ul>
+          <h2>Applications</h2>
+          <ul class="feature-list">
+            {p.applications.map((f) => (
+              <li>{f}</li>
+            ))}
+          </ul>
+        </div>
+        <aside class="detail-aside">
+          <p class="eyebrow">APPLICATION FIRST</p>
+          <h3>Send us your drawing.</h3>
+          <p>
+            Share the component, machine make/model and the operation. SHK can review the
+            requirement before selection.
+          </p>
+          <Button href={`/?category=${encodeURIComponent(p.title)}#requirement`} secondary>
+            Share your requirement
+          </Button>
+          <WhatsAppCTA />
+        </aside>
+      </div>
+      <div class="technical-details">
+        <h2>Technical details & compatibility</h2>
+        {p.specifications ? (
+          <SpecTable
+            headers={['Parameter', 'Details']}
+            rows={Object.entries(p.specifications)}
+            caption={`${p.title} — source specifications`}
+          />
+        ) : p.id === 'chip-compactors' ? (
+          <SpecTable
+            headers={['Model', 'VCC 12-110', 'VCC 10-150']}
+            rows={compactorSpecs}
+            caption="Chip compactor specifications — catalogue page 43"
+          />
+        ) : (
+          <p>Technical details available on request.</p>
+        )}
+        <p>
+          {p.compatibility ||
+            'Share the machine interface and application to confirm compatibility and configuration.'}
+        </p>
+        {p.downloads?.length && (
+          <div>
+            <h3>Downloads</h3>
+            {p.downloads.map((d) => (
+              <a href={d.href}>{d.title}</a>
+            ))}
+          </div>
+        )}
+      </div>
+      <div class="section-heading">
+        <h2>Explore related categories</h2>
+        <a href="/products/" class="text-link">
+          Complete range ↗
+        </a>
+      </div>
+      <div class="product-grid">
+        {products
+          .filter((v) => v.id !== p.id)
+          .slice(
+            Math.max(0, products.findIndex((v) => v.id === p.id) - 1),
+            Math.max(0, products.findIndex((v) => v.id === p.id) - 1) + 3,
+          )
+          .map((product) => (
+            <ProductCard product={product} />
+          ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,19 @@
+---
+interface Props {
+  items: { title: string; href?: string }[];
+}
+---
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">Home</a>
+  {Astro.props.items.map((item) => (
+    <>
+      <span aria-hidden="true">/</span>
+      {item.href ? (
+        <a href={item.href}>{item.title}</a>
+      ) : (
+        <span aria-current="page">{item.title}</span>
+      )}
+    </>
+  ))}
+</nav>

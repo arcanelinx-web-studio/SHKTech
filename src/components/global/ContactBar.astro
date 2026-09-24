@@ -1,0 +1,19 @@
+---
+import { Phone, MessageCircle, ArrowUpRight } from '@lucide/astro';
+import { site } from '../../config/site';
+---
+
+<nav class="contact-bar" aria-label="Quick contact">
+  <a href={`tel:${site.contact.phoneHref}`}>
+    <Phone size={17} />
+    Call
+  </a>
+  <a href={`https://wa.me/${site.contact.whatsapp}`}>
+    <MessageCircle size={17} />
+    WhatsApp
+  </a>
+  <a href="/#requirement">
+    <span>Get a Quote</span>
+    <ArrowUpRight size={17} />
+  </a>
+</nav>

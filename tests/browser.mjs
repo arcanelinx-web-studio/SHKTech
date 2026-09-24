@@ -209,9 +209,9 @@ await page.locator('.menu-toggle').click();
 if (!(await page.locator('#mobile-menu').isVisible())) throw Error('Mobile menu failed');
 await page.keyboard.press('Escape');
 if (await page.locator('#mobile-menu').isVisible()) throw Error('Escape failed');
-await page.locator('[data-zone-panel="04"] summary').click();
-if ((await page.locator('.zone[open]').count()) !== 1)
-  throw Error('Accordion opens multiple zones');
+await page.locator('[data-zone="04"]').click();
+if (await page.locator('[data-zone-detail="04"]').getAttribute('hidden'))
+  throw Error('Mobile machine zone panel did not activate');
 const mobileAxe = await new AxeBuilder({ page })
   .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
   .analyze();
@@ -251,7 +251,7 @@ if (await page.locator('.enquiry-row').count()) throw Error('Clear failed');
 report.additional =
   'Pass: mobile axe audit, form deep-link context/scroll, contact validation, cross-tab sync, clear list';
 report.interactions =
-  'Pass: hotspots, plot, deduplication, navigation persistence, notes, removal, menu and mobile accordion';
+  'Pass: desktop/mobile hotspots, plot, deduplication, navigation persistence, notes, removal and menu';
 await writeFile(new URL('browser-report.json', out), JSON.stringify(report, null, 2));
 console.log(
   JSON.stringify(

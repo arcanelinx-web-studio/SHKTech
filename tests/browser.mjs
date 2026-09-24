@@ -238,6 +238,16 @@ for (const profile of [
       asideRight: aside?.right || 0,
       actionHeight: action?.height || 0,
       whatsappHeight: whatsapp?.height || 0,
+      featureMarker: (() => {
+        const li = document.querySelector('.feature-list li');
+        if (!li) return { width: 0, height: 0, background: '' };
+        const marker = getComputedStyle(li, '::before');
+        return {
+          width: parseFloat(marker.width) || 0,
+          height: parseFloat(marker.height) || 0,
+          background: marker.backgroundColor || '',
+        };
+      })(),
     };
   });
 
@@ -393,7 +403,9 @@ if (
     r.tableRatio < 0.82 ||
     r.asideRight > r.viewport + 1 ||
     r.actionHeight > 64 ||
-    r.whatsappHeight > 56
+    r.whatsappHeight > 56 ||
+    r.featureMarker.width < 5 ||
+    r.featureMarker.height < 5
   ) ||
   errors.length
 )

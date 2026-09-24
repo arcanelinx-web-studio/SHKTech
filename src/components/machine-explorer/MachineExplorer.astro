@@ -188,9 +188,6 @@ const relatedFor = (zone: MachineZone) => [
 
   function activate(id: string) {
     highlight(id);
-    if (matchMedia('(max-width: 600px)').matches) {
-      mobilePanels.forEach((panel) => (panel.open = panel.dataset.zonePanel === id));
-    }
   }
 
   zones.forEach((button) => {

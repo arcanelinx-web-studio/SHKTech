@@ -6,28 +6,32 @@ import { services } from '../../data/services';
 import { ArrowUpRight } from '@lucide/astro';
 ---
 
-<section class="section paper" id="solutions">
+<section class="section paper problems-source" id="solutions">
   <div class="container">
     <SectionHeader
       eyebrow="01 — START WITH THE PROBLEM"
       title="What are you trying to solve?"
       description="Pick the challenge. We match the right technology. You don’t need to know the product name."
     />
-    <div class="problem-index">
+    <div class="problem-card-grid">
       {problems.map((p, i) => {
         const related = [
           ...p.services.map((id) => services.find((s) => s.id === id)?.title),
           ...p.products.map((id) => getProduct(id)?.title),
         ]
           .filter(Boolean)
-          .slice(0, 3);
+          .slice(0, 4);
         return (
-          <a class="problem-row" href={`/solutions/${p.id}/`}>
-            <span class="problem-number mono">0{i + 1}</span>
+          <a class="problem-source-card" href={`/solutions/${p.id}/`}>
+            <div class="problem-source-top">
+              <span class="problem-number mono">0{i + 1}</span>
+              <ArrowUpRight size={17} stroke-width={1.5} />
+            </div>
             <h3>{p.title}</h3>
             <p>{p.description}</p>
-            <span class="problem-related">{related.join(' · ')}</span>
-            <ArrowUpRight class="problem-arrow" size={20} stroke-width={1.5} />
+            <div class="problem-tags">
+              {related.map((item) => <span>{item}</span>)}
+            </div>
           </a>
         );
       })}

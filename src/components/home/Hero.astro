@@ -8,29 +8,23 @@ import { brands } from '../../data/brands';
 <section class="hero dark">
   <div class="container hero-grid">
     <div class="hero-copy">
-      <p class="eyebrow">
-        <span class="status-dot"></span> CNC ENGINEERING / BENGALURU
-      </p>
+      <p class="eyebrow">CNC ENGINEERING · BENGALURU</p>
       <h1>
-        Engineering
-        <br />
-        solutions for <br />
+        Engineering solutions for
         <span>CNC manufacturing.</span>
       </h1>
       <p class="hero-description">
-        Workholding, tooling, probing, calibration and chip &amp; coolant systems. Bring us the
-        machining problem. We'll help identify the right technology.
+        Workholding, tooling, probing, calibration and chip &amp; coolant systems. Start with the
+        machining problem; SHK helps narrow the technology and the next engineering step.
       </p>
       <div class="button-row">
         <Button href="#requirement">Talk to an Engineer</Button>
-        <Button href="#machine" secondary>
-          Explore the Machine
-        </Button>
+        <Button href="#machine" secondary>Explore the Machine</Button>
       </div>
-      <div class="hero-values mono">
-        <span>PRECISION</span>
-        <span>PRODUCTIVITY</span>
-        <span>UPTIME</span>
+      <div class="hero-values" aria-label="Precision, productivity and uptime">
+        <span>Precision</span>
+        <span>Productivity</span>
+        <span>Uptime</span>
       </div>
     </div>
     <figure class="hero-visual">
@@ -42,35 +36,17 @@ import { brands } from '../../data/brands';
         loading="eager"
         fetchpriority="high"
       />
-      <div class="image-topline mono">
-        <span>INSIDE THE MACHINING CYCLE</span>
-        <span>SHK / 01</span>
-      </div>
-      <svg class="hero-crosshair" viewBox="0 0 400 400" aria-hidden="true">
-        <circle cx="200" cy="230" r="25" />
-        <path d="M200 193v22m0 30v22m-37-37h22m30 0h22m-20-18 67-67h61" />
-      </svg>
       <figcaption>
-        <span class="mono">PROBING & TOOL SETTING</span>
-        <strong>
-          Precision begins
-          <br />
-          at the point of contact.
-        </strong>
-        <span class="image-note">Catalogue image · illustrative callout</span>
+        <span class="mono">PROBING &amp; TOOL SETTING</span>
+        <strong>Precision begins at the point of contact.</strong>
+        <span class="image-note">Catalogue image · application context</span>
       </figcaption>
     </figure>
   </div>
   <div class="container technology-strip">
-    <span class="mono">
-      TECHNOLOGY
-      <br />
-      WE WORK WITH
-    </span>
+    <span class="mono">TECHNOLOGY WE WORK WITH</span>
     <div>
-      {brands.map((b) => (
-        <span>{b.name}</span>
-      ))}
+      {brands.map((b) => <span>{b.name}</span>)}
     </div>
   </div>
 </section>

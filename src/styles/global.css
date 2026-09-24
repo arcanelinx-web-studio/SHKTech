@@ -6970,3 +6970,47 @@ body {
 .desktop-nav a:focus-visible {
   color: #f5f8fa;
 }
+
+/* === TRUE FULL DESKTOP HERO V6.5 === */
+
+/* Full desktop hero: use the viewport canvas, not a capped page container. */
+@media (min-width: 1400px) {
+  .hero {
+    min-height: calc(100vh - 84px);
+    min-height: calc(100svh - 84px);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero > .hero-grid,
+  .hero > .technology-strip {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+    padding-left: clamp(48px, 3.25vw, 68px);
+    padding-right: clamp(48px, 3.25vw, 68px);
+  }
+
+  .hero > .hero-grid {
+    flex: 1 0 auto;
+    grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+    gap: clamp(42px, 3vw, 58px);
+    align-items: center;
+  }
+
+  .hero > .technology-strip {
+    flex: 0 0 auto;
+  }
+
+  .hero-visual {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1680px) {
+  .hero > .hero-grid,
+  .hero > .technology-strip {
+    padding-left: 56px;
+    padding-right: 56px;
+  }
+}

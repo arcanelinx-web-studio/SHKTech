@@ -9846,3 +9846,323 @@ button {
     -webkit-text-fill-color: #f5f7f8 !important;
   }
 }
+
+/* === PRODUCT DETAIL RELEASE POLISH V11 === */
+
+/*
+  Product detail pages were visually under-scaled compared with the homepage.
+  This final layer gives specifications and the application callout proper presence
+  without making inner pages feel oversized.
+*/
+
+/* Application-first callout */
+.application-aside {
+  max-width: 100%;
+  padding: 34px 36px 32px !important;
+  background: #e8eff3;
+  border-left: 3px solid #168bc0;
+}
+
+.application-aside .eyebrow {
+  margin-bottom: 14px;
+  font-size: 10px;
+  color: #0878ac;
+}
+
+.application-aside h3 {
+  margin: 0 0 14px;
+  font-size: clamp(28px, 2.1vw, 34px);
+  line-height: 1.08;
+}
+
+.application-aside > p:not(.eyebrow) {
+  max-width: 600px;
+  margin: 0;
+  color: #596a73;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.detail-aside-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+  margin-top: 24px;
+}
+
+.application-aside .button {
+  min-height: 48px;
+  margin: 0 !important;
+  padding: 13px 18px;
+  font-size: 13px;
+}
+
+.application-aside .whatsapp-cta {
+  min-height: 44px;
+  font-size: 14px;
+}
+
+/* Technical specifications — use the available page width and readable industrial scale. */
+.technical-details {
+  max-width: 1180px;
+  margin: 56px 0 78px !important;
+}
+
+.technical-details h2 {
+  margin-bottom: 24px !important;
+  font-size: clamp(30px, 2.5vw, 38px) !important;
+  line-height: 1.08;
+}
+
+.technical-details > p {
+  max-width: 980px;
+  margin-top: 18px;
+  color: #586a74;
+  font-size: 14px;
+}
+
+.technical-details .table-scroll {
+  width: 100%;
+  max-width: 1120px;
+  overflow-x: auto;
+  border: 1px solid #d7e0e5;
+  border-radius: 2px;
+  background: #fff;
+}
+
+.technical-details table {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 760px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.technical-details caption {
+  padding: 0 0 15px;
+  color: #60737e;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  caption-side: top;
+  background: #f6f7f5;
+}
+
+.technical-details thead th {
+  padding: 18px 18px;
+  background: #e8eff3;
+  color: #2a3b45;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.technical-details tbody th,
+.technical-details tbody td {
+  padding: 18px 18px;
+  border-top: 1px solid #d8e1e6;
+  vertical-align: middle;
+}
+
+.technical-details tbody th {
+  width: 34%;
+  color: #273741;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+}
+
+.technical-details tbody td.mono {
+  color: #1e2d35;
+  font-family: var(--font-technical);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .015em;
+}
+
+/* Large desktop: let specs breathe instead of sitting as a narrow 800px island. */
+@media (min-width: 1280px) {
+  .technical-details {
+    max-width: 1240px;
+  }
+
+  .technical-details .table-scroll {
+    max-width: 1180px;
+  }
+
+  .technical-details thead th,
+  .technical-details tbody th,
+  .technical-details tbody td {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+/* Tablet */
+@media (min-width: 601px) and (max-width: 900px) {
+  .detail-columns {
+    grid-template-columns: 1fr !important;
+    gap: 34px !important;
+  }
+
+  .application-aside {
+    padding: 28px 28px 26px !important;
+  }
+
+  .application-aside h3 {
+    font-size: 30px;
+  }
+
+  .technical-details {
+    max-width: 100%;
+    margin: 46px 0 64px !important;
+  }
+
+  .technical-details h2 {
+    font-size: 31px !important;
+  }
+
+  .technical-details .table-scroll {
+    max-width: 100%;
+  }
+
+  .technical-details table {
+    min-width: 700px;
+  }
+}
+
+/* Phone */
+@media (max-width: 600px) {
+  .detail-columns {
+    grid-template-columns: 1fr !important;
+    gap: 26px !important;
+    margin: 36px 0 !important;
+  }
+
+  .application-aside {
+    padding: 24px 20px 22px !important;
+    border-left-width: 2px;
+  }
+
+  .application-aside .eyebrow {
+    margin-bottom: 10px;
+    font-size: 9px;
+  }
+
+  .application-aside h3 {
+    font-size: 27px;
+  }
+
+  .application-aside > p:not(.eyebrow) {
+    font-size: 13.5px;
+  }
+
+  .detail-aside-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .application-aside .button {
+    width: 100%;
+    min-height: 46px;
+    justify-content: space-between;
+  }
+
+  .application-aside .whatsapp-cta {
+    width: max-content !important;
+    min-height: 40px;
+    font-size: 13px;
+  }
+
+  .technical-details {
+    margin: 42px 0 58px !important;
+  }
+
+  .technical-details h2 {
+    max-width: 330px;
+    margin-bottom: 18px !important;
+    font-size: 29px !important;
+  }
+
+  .technical-details > p {
+    font-size: 13px;
+  }
+
+  .technical-details .table-scroll {
+    width: 100%;
+    max-width: 100%;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+  }
+
+  .technical-details table {
+    min-width: 620px;
+  }
+
+  .technical-details caption {
+    padding-bottom: 12px;
+    font-size: 12px;
+  }
+
+  .technical-details thead th,
+  .technical-details tbody th,
+  .technical-details tbody td {
+    padding: 14px 15px;
+  }
+
+  .technical-details thead th {
+    font-size: 11px;
+  }
+
+  .technical-details tbody th {
+    font-size: 12.5px;
+  }
+
+  .technical-details tbody td.mono {
+    font-size: 12px;
+  }
+}
+
+/* Preserve these inner-page surfaces under OS/browser dark mode. */
+@media (prefers-color-scheme: dark) {
+  .application-aside {
+    background: #e8eff3 !important;
+    color: #18222a !important;
+  }
+
+  .application-aside h3 {
+    color: #18222a !important;
+  }
+
+  .application-aside > p:not(.eyebrow) {
+    color: #596a73 !important;
+  }
+
+  .technical-details .table-scroll {
+    background: #ffffff !important;
+    border-color: #d7e0e5 !important;
+  }
+
+  .technical-details caption {
+    background: #f6f7f5 !important;
+    color: #60737e !important;
+  }
+
+  .technical-details thead th {
+    background: #e8eff3 !important;
+    color: #2a3b45 !important;
+  }
+
+  .technical-details tbody th,
+  .technical-details tbody td {
+    background: #ffffff !important;
+    color: #273741 !important;
+    border-color: #d8e1e6 !important;
+  }
+}

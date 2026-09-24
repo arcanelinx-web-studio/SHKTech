@@ -7038,3 +7038,49 @@ body {
 .footer-top > div:nth-child(4) h3 {
   color: #e91e28;
 }
+
+/* === INDUSTRIES SCALE V6.8 === */
+
+/* Give the industries index a little more presence without turning it into another full feature section. */
+.industries-source {
+  padding-block: 42px 46px;
+}
+
+.industries-heading {
+  margin-bottom: 18px;
+}
+
+.industries-heading .eyebrow {
+  font-size: 10.5px;
+}
+
+.industries-heading .text-link {
+  font-size: 14px;
+}
+
+.industry-strip-list {
+  row-gap: 2px;
+}
+
+.industry-strip-list a {
+  padding: 14px 22px 14px 0;
+  margin-right: 22px;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+@media (max-width: 760px) {
+  .industries-source {
+    padding-block: 34px 38px;
+  }
+
+  .industries-heading {
+    margin-bottom: 15px;
+  }
+
+  .industry-strip-list a {
+    padding: 11px 16px 11px 0;
+    margin-right: 16px;
+    font-size: 12.5px;
+  }
+}

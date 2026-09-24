@@ -10422,3 +10422,50 @@ button {
     -webkit-text-fill-color: #066a9d !important;
   }
 }
+
+/* === DETAIL SURFACE THEME LOCK V11.4 === */
+
+.paper,
+.detail-aside,
+.application-aside,
+.technical-details,
+.table-scroll {
+  color-scheme: only light !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .paper {
+    background-color: #f6f7f5 !important;
+    color: #18222a !important;
+  }
+
+  .paper h1,
+  .paper h2,
+  .paper h3,
+  .paper h4 {
+    color: #18222a !important;
+  }
+
+  .paper p,
+  .paper li {
+    color: #53616b !important;
+  }
+
+  .detail-aside,
+  .application-aside {
+    background-color: #e8eff3 !important;
+    color: #18222a !important;
+  }
+
+  .detail-aside h2,
+  .detail-aside h3,
+  .application-aside h2,
+  .application-aside h3 {
+    color: #18222a !important;
+  }
+
+  .detail-aside p,
+  .application-aside p {
+    color: #596a73 !important;
+  }
+}

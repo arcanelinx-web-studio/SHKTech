@@ -16,7 +16,7 @@ page.on('console', (m) => {
 await page.goto(base + '/');
 await page.evaluate(() => document.fonts.ready);
 const report = { responsive: [], routeResponsive: [], accessibility: [], errors };
-for (const width of [1440, 1280, 1024, 768, 430, 390, 360]) {
+for (const width of [1920, 1728, 1440, 1280, 1024, 768, 430, 390, 360]) {
   await page.setViewportSize({ width, height: 1000 });
   await page.evaluate(async () => {
     for (const img of document.images) {
@@ -44,7 +44,7 @@ const criticalRoutes = [
   '/enquiry/',
   '/about/',
 ];
-for (const width of [1440, 1024, 768, 430, 390, 360]) {
+for (const width of [1920, 1728, 1440, 1024, 768, 430, 390, 360]) {
   await page.setViewportSize({ width, height: 1000 });
   for (const route of criticalRoutes) {
     await page.goto(base + route);

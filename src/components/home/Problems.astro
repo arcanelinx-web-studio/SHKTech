@@ -3,8 +3,7 @@ import SectionHeader from '../global/SectionHeader.astro';
 import { problems } from '../../data/problems';
 import { getProduct } from '../../data/products';
 import { services } from '../../data/services';
-import { ArrowUpRight, Crosshair, Timer, Grip, Funnel, Wrench, MoveUpRight } from '@lucide/astro';
-const icons = [Crosshair, Timer, Grip, Funnel, Wrench, MoveUpRight];
+import { ArrowUpRight } from '@lucide/astro';
 ---
 
 <section class="section paper" id="solutions">
@@ -14,28 +13,21 @@ const icons = [Crosshair, Timer, Grip, Funnel, Wrench, MoveUpRight];
       title="What are you trying to solve?"
       description="Pick the challenge. We match the right technology. You don’t need to know the product name."
     />
-    <div class="problem-grid">
+    <div class="problem-index">
       {problems.map((p, i) => {
-        const Icon = icons[i]!;
+        const related = [
+          ...p.services.map((id) => services.find((s) => s.id === id)?.title),
+          ...p.products.map((id) => getProduct(id)?.title),
+        ]
+          .filter(Boolean)
+          .slice(0, 3);
         return (
-          <a class="problem-card" href={`/solutions/${p.id}/`}>
-            <div class="card-top">
-              <Icon size={25} stroke-width={1.4} />
-              <span class="mono">0{i + 1}</span>
-            </div>
+          <a class="problem-row" href={`/solutions/${p.id}/`}>
+            <span class="problem-number mono">0{i + 1}</span>
             <h3>{p.title}</h3>
             <p>{p.description}</p>
-            <div class="problem-bottom">
-              <span>
-                {[
-                  ...p.services.map((id) => services.find((s) => s.id === id)?.title),
-                  ...p.products.map((id) => getProduct(id)?.title),
-                ]
-                  .slice(0, 2)
-                  .join(' / ')}
-              </span>
-              <ArrowUpRight size={21} />
-            </div>
+            <span class="problem-related">{related.join(' · ')}</span>
+            <ArrowUpRight class="problem-arrow" size={20} stroke-width={1.5} />
           </a>
         );
       })}

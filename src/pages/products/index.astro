@@ -1,27 +1,53 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ProductCard from '../../components/products/ProductCard.astro';
 import Breadcrumb from '../../components/global/Breadcrumb.astro';
+import EnquiryButton from '../../components/enquiry/EnquiryButton.astro';
 import { products } from '../../data/products';
 ---
 
 <BaseLayout title="CNC products & accessories" crumbs={[{ name: 'Products', path: '/products/' }]}>
-  <section class="section paper">
+  <section class="section paper catalogue-page">
     <div class="container">
       <Breadcrumb items={[{ title: 'Products' }]} />
-      <p class="eyebrow">THE PRODUCT RANGE</p>
-      <h1 class="page-title">
-        Around the machine.
-        <br />
-        Built around the requirement.
-      </h1>
-      <p class="lead">
-        Explore by category, or <a href="/solutions/">start with your machining problem</a>. Add
-        relevant items to one enquiry and discuss compatibility with SHK.
-      </p>
-      <div class="product-grid">
-        {products.map((product) => (
-          <ProductCard product={product} />
+      <div class="catalogue-intro">
+        <div>
+          <p class="eyebrow">THE PRODUCT RANGE</p>
+          <h1 class="page-title">Around the machine. Built around the requirement.</h1>
+        </div>
+        <p class="lead">
+          Explore by category, or <a href="/solutions/">start with your machining problem</a>. Add
+          relevant items to one enquiry and discuss compatibility with SHK.
+        </p>
+      </div>
+
+      <div class="catalogue-list">
+        {products.map((product, i) => (
+          <article class="catalogue-row">
+            <span class="catalogue-number mono">{String(i + 1).padStart(2, '0')}</span>
+            <div class="catalogue-copy">
+              <p class="eyebrow">{product.label}</p>
+              <h2><a href={`/products/${product.id}/`}>{product.title}</a></h2>
+              <p>{product.description}</p>
+              <div class="catalogue-actions">
+                <a class="text-link" href={`/products/${product.id}/`}>Explore category ↗</a>
+                <EnquiryButton id={product.id} title={product.title} />
+              </div>
+            </div>
+            <a class="catalogue-image" href={`/products/${product.id}/`} aria-label={`View ${product.title}`}>
+              {product.image ? (
+                <Image
+                  src={product.image}
+                  alt={product.title}
+                  widths={[220, 360]}
+                  sizes="(max-width: 600px) 34vw, 240px"
+                  loading="lazy"
+                />
+              ) : (
+                <span class="mono">TECHNICAL DETAILS<br />AVAILABLE ON REQUEST</span>
+              )}
+            </a>
+          </article>
         ))}
       </div>
     </div>

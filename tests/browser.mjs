@@ -188,6 +188,8 @@ for (const profile of [
       return s.display !== 'none' && s.visibility !== 'hidden' && r.width > 0 && r.height > 0;
     };
     const brandSub = document.querySelector('.site-header .brand-sub');
+    const bulletItem = document.querySelector('.zone-panel-list li');
+    const bullet = bulletItem ? getComputedStyle(bulletItem, '::before') : null;
     const meta = document.querySelector('.zone-panel-meta');
     const metaItems = meta ? [...meta.querySelectorAll('.mono')] : [];
     const left = metaItems[0]?.getBoundingClientRect();
@@ -199,6 +201,12 @@ for (const profile of [
       accordionVisible: visible(document.querySelector('.mobile-zone-list')),
       metaGap: left && right ? right.left - left.right : 0,
       contactBarVisible: visible(document.querySelector('.contact-bar')),
+      zoneBullet: bullet ? {
+        width: parseFloat(bullet.width) || 0,
+        height: parseFloat(bullet.height) || 0,
+        background: bullet.backgroundColor || '',
+        opacity: parseFloat(bullet.opacity) || 0,
+      } : { width: 0, height: 0, background: '', opacity: 0 },
     };
   });
   report.visualConsistency.push({ ...profile, ...state });
@@ -259,6 +267,29 @@ for (const profile of [
 }
 
 await page.emulateMedia({ colorScheme: 'light' });
+
+// Service-detail process markers must remain visibly numbered.
+report.serviceProcessVisual = [];
+for (const profile of [
+  { name: 'service-1440', width: 1440, height: 1000 },
+  { name: 'service-390', width: 390, height: 844 },
+]) {
+  await page.setViewportSize({ width: profile.width, height: profile.height });
+  await page.goto(base + '/services/laser-calibration/');
+  const state = await page.evaluate(() => {
+    const li = document.querySelector('.process-list li');
+    const marker = li ? getComputedStyle(li, '::before') : null;
+    return {
+      markerContent: marker?.content || '',
+      markerWidth: marker ? parseFloat(marker.width) || 0 : 0,
+      markerHeight: marker ? parseFloat(marker.height) || 0 : 0,
+      markerColor: marker?.color || '',
+      scroll: document.documentElement.scrollWidth,
+      viewport: innerWidth,
+    };
+  });
+  report.serviceProcessVisual.push({ ...profile, ...state });
+}
 
 await page.setViewportSize({ width: 1440, height: 1000 });
 await page.goto(base + '/');
@@ -396,7 +427,16 @@ if (
     !r.zoneStageVisible ||
     r.accordionVisible ||
     r.metaGap < 8 ||
+    r.zoneBullet.width < 5 ||
+    r.zoneBullet.height < 5 ||
+    r.zoneBullet.opacity < 0.9 ||
     (r.width <= 600 ? !r.contactBarVisible : r.contactBarVisible)
+  ) ||
+  report.serviceProcessVisual.some((r) =>
+    r.scroll > r.viewport ||
+    r.markerWidth < 24 ||
+    r.markerHeight < 24 ||
+    !/01/.test(r.markerContent)
   ) ||
   report.productDetailVisual.some((r) =>
     r.scroll > r.viewport ||

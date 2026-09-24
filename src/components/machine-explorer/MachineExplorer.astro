@@ -1,13 +1,14 @@
 ---
 import SectionHeader from '../global/SectionHeader.astro';
 import { machineZones } from '../../data/machineZones';
+import type { MachineZone } from '../../data/types';
 import { getProduct } from '../../data/products';
 import { services } from '../../data/services';
 import { ArrowLeft, ArrowRight, ArrowUpRight } from '@lucide/astro';
 
-const relatedFor = (zone) => [
-  ...zone.products.map((id) => ({ title: getProduct(id)?.title, href: `/products/${id}/` })),
-  ...zone.services.map((id) => ({
+const relatedFor = (zone: MachineZone) => [
+  ...zone.products.map((id: string) => ({ title: getProduct(id)?.title, href: `/products/${id}/` })),
+  ...zone.services.map((id: string) => ({
     title: services.find((s) => s.id === id)?.title,
     href: `/services/${id}/`,
   })),

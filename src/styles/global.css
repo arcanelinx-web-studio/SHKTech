@@ -6066,3 +6066,87 @@ textarea {
     transition: none;
   }
 }
+
+/* === QA CONTRAST + MOBILE BAR FIX V5.1 === */
+
+/* Accessible SHK blue on light surfaces; brighter action blue on dark surfaces. */
+:root {
+  --shk-blue-accessible: #006b96;
+  --shk-blue-dark-surface: #61bff0;
+  --whatsapp-accessible: #117b39;
+}
+
+.paper .eyebrow,
+.industries-source .eyebrow,
+.catalogue-page .eyebrow,
+.service-index-page .eyebrow {
+  color: var(--shk-blue-accessible);
+}
+
+.source-product-body .eyebrow,
+.catalogue-copy .eyebrow,
+.sump-benefits .eyebrow,
+.spec-panel .eyebrow {
+  color: var(--shk-blue-accessible);
+}
+
+.dark .text-link,
+.explorer .text-link,
+.accuracy .text-link,
+.lifecycle .text-link {
+  color: var(--shk-blue-dark-surface);
+}
+
+.whatsapp-cta {
+  color: var(--whatsapp-accessible) !important;
+}
+
+.whatsapp-cta svg {
+  color: var(--whatsapp-accessible);
+}
+
+.whatsapp-cta:hover {
+  color: #0d6630 !important;
+}
+
+.footer .whatsapp-cta,
+.footer .whatsapp-cta svg {
+  color: #55df86 !important;
+}
+
+@media (max-width: 600px) {
+  .contact-bar {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .contact-bar > a {
+    min-width: 0;
+    padding-inline: 5px;
+    font-size: 10.5px;
+    white-space: nowrap;
+  }
+
+  .contact-bar > a:last-child {
+    gap: 5px;
+  }
+
+  .contact-bar > a:last-child svg {
+    width: 13px;
+  }
+}
+
+@media (max-width: 380px) {
+  .contact-bar {
+    gap: 5px;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .contact-bar > a {
+    font-size: 10px;
+    gap: 5px;
+  }
+}

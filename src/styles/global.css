@@ -10166,3 +10166,67 @@ button {
     border-color: #d8e1e6 !important;
   }
 }
+
+/* === PRODUCT DETAIL LIST MARKERS V11.1 === */
+
+/* Clear, deliberate bullets for product/service feature lists. */
+.feature-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.feature-list li {
+  position: relative;
+  display: grid !important;
+  grid-template-columns: 14px minmax(0, 1fr);
+  gap: 12px !important;
+  align-items: start;
+  padding: 15px 0 !important;
+  border-bottom: 1px solid #d8e1e7;
+  color: #273741;
+  font-size: 15px !important;
+  line-height: 1.55;
+}
+
+.feature-list li::before {
+  content: '' !important;
+  width: 7px;
+  height: 7px;
+  margin-top: .55em;
+  border-radius: 50%;
+  background: #0775ad;
+  display: block;
+}
+
+.feature-list li:last-child {
+  border-bottom-color: #cbd6dc;
+}
+
+@media (max-width: 600px) {
+  .feature-list li {
+    grid-template-columns: 12px minmax(0,1fr);
+    gap: 10px !important;
+    padding: 13px 0 !important;
+    font-size: 14px !important;
+  }
+
+  .feature-list li::before {
+    width: 6px;
+    height: 6px;
+    margin-top: .58em;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .paper .feature-list li,
+  .service-index-page .feature-list li,
+  .catalogue-page .feature-list li {
+    color: #273741 !important;
+    border-bottom-color: #d8e1e7 !important;
+  }
+
+  .feature-list li::before {
+    background: #0775ad !important;
+  }
+}

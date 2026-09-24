@@ -58,17 +58,19 @@ const { product: p } = Astro.props;
             ))}
           </ul>
         </div>
-        <aside class="detail-aside">
+        <aside class="detail-aside application-aside">
           <p class="eyebrow">APPLICATION FIRST</p>
           <h3>Send us your drawing.</h3>
           <p>
             Share the component, machine make/model and the operation. SHK can review the
             requirement before selection.
           </p>
-          <Button href={`/?category=${encodeURIComponent(p.title)}#requirement`} secondary>
-            Share your requirement
-          </Button>
-          <WhatsAppCTA />
+          <div class="detail-aside-actions">
+            <Button href={`/?category=${encodeURIComponent(p.title)}#requirement`}>
+              Share your requirement
+            </Button>
+            <WhatsAppCTA />
+          </div>
         </aside>
       </div>
       <div class="technical-details">

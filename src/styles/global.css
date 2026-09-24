@@ -9755,3 +9755,94 @@ button {
     opacity: 1 !important;
   }
 }
+
+/* === FINAL QA CONTRAST + THEME FIX V10.1 === */
+
+/* Accessible SHK blue: visually consistent with the existing palette but clears WCAG AA. */
+.button-primary,
+.header-cta,
+.form-submit,
+.contact-bar > a:last-child {
+  background-color: #0775ad !important;
+  border-color: #0775ad !important;
+  color: #ffffff !important;
+}
+
+.button-primary:hover,
+.header-cta:hover,
+.form-submit:hover,
+.contact-bar > a:last-child:hover {
+  background-color: #066a9d !important;
+  border-color: #066a9d !important;
+}
+
+.text-link,
+.blue {
+  color: #0775ad !important;
+}
+
+/* Secondary buttons must work on both light and dark surfaces. */
+.button-secondary {
+  background-color: transparent !important;
+  border-color: #a9b8c0 !important;
+  color: #18222a !important;
+}
+
+.dark .button-secondary,
+.hero .button-secondary,
+.explorer .button-secondary,
+.accuracy .button-secondary,
+.lifecycle .button-secondary,
+.footer .button-secondary {
+  border-color: #43535d !important;
+  color: #f5f7f8 !important;
+}
+
+/* Preserve exact authored section colors when the OS/browser asks for dark mode. */
+@media (prefers-color-scheme: dark) {
+  .explorer {
+    background-color: #11181d !important;
+  }
+
+  .machine-drawing {
+    background-color: #10191f !important;
+  }
+
+  .zone-stage {
+    background-color: #151f26 !important;
+  }
+
+  .button-primary,
+  .header-cta,
+  .form-submit,
+  .contact-bar > a:last-child {
+    background-color: #0775ad !important;
+    border-color: #0775ad !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+
+  .text-link,
+  .blue {
+    color: #168bc0 !important;
+    -webkit-text-fill-color: #168bc0 !important;
+  }
+
+  .button-secondary {
+    background-color: transparent !important;
+    border-color: #a9b8c0 !important;
+    color: #18222a !important;
+    -webkit-text-fill-color: #18222a !important;
+  }
+
+  .dark .button-secondary,
+  .hero .button-secondary,
+  .explorer .button-secondary,
+  .accuracy .button-secondary,
+  .lifecycle .button-secondary,
+  .footer .button-secondary {
+    border-color: #43535d !important;
+    color: #f5f7f8 !important;
+    -webkit-text-fill-color: #f5f7f8 !important;
+  }
+}

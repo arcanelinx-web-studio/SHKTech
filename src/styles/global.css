@@ -6150,3 +6150,28 @@ textarea {
     gap: 5px;
   }
 }
+
+/* === ACCURACY MOBILE STACK FIX V5.2 === */
+
+@media (max-width: 700px) {
+  .accuracy-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .plot-card,
+  .accuracy-steps,
+  .accuracy-steps > div,
+  .accuracy-steps > div > div {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .accuracy-steps > div {
+    grid-template-columns: 30px minmax(0, 1fr);
+  }
+
+  .accuracy-steps p {
+    overflow-wrap: anywhere;
+  }
+}

@@ -10,34 +10,23 @@ const links = [
 ];
 ---
 
-<a class="skip-link" href="#main">
-  Skip to content
-</a>
+<a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
   <div class="header-inner">
-    <Logo dark />
+    <Logo />
     <nav class="desktop-nav" aria-label="Primary">
-      {links.map(([name, href]) => (
-        <a href={href}>{name}</a>
-      ))}
+      {links.map(([name, href]) => <a href={href}>{name}</a>)}
     </nav>
     <div class="header-actions">
       <a class="enquiry-link" href="/enquiry/" aria-label="Enquiry list">
-        <ClipboardList size={17} />
+        <ClipboardList size={16} />
         <span class="enquiry-label">Enquiry list</span>
-        <span class="enquiry-count" data-enquiry-count hidden>
-          0
-        </span>
+        <span class="enquiry-count" data-enquiry-count hidden>0</span>
       </a>
       <a class="header-cta" href="/#requirement">
-        Talk to an Engineer <ArrowUpRight size={16} />
+        Talk to an engineer <ArrowUpRight size={15} />
       </a>
-      <button
-        class="menu-toggle"
-        aria-expanded="false"
-        aria-controls="mobile-menu"
-        aria-label="Open navigation"
-      >
+      <button class="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open navigation">
         <Menu class="menu-icon" />
         <X class="close-icon" />
       </button>
@@ -51,9 +40,7 @@ const links = [
         <ArrowUpRight size={18} />
       </a>
     ))}
-    <a href="/#requirement">
-      Talk to an Engineer <ArrowUpRight size={18} />
-    </a>
+    <a href="/#requirement">Talk to an engineer <ArrowUpRight size={18} /></a>
   </nav>
 </header>
 <script>

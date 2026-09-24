@@ -6770,3 +6770,14 @@ body {
     margin-top: 18px;
   }
 }
+
+/* === EXPLORER CONTRAST FIX V6.1 === */
+
+@media (min-width: 1101px) {
+  .hotspot.active {
+    background: #006b96;
+    border-color: #69c7f3;
+    color: #fff;
+    box-shadow: 0 0 0 5px rgba(0,107,150,.2);
+  }
+}

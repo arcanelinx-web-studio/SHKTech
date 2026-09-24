@@ -16,7 +16,7 @@ page.on('console', (m) => {
 await page.goto(base + '/');
 await page.evaluate(() => document.fonts.ready);
 const report = { responsive: [], routeResponsive: [], accessibility: [], errors };
-for (const width of [1920, 1728, 1440, 1280, 1024, 768, 430, 390, 360]) {
+for (const width of [1920, 1728, 1440, 1366, 1280, 1024, 768, 430, 412, 390, 375, 360]) {
   await page.setViewportSize({ width, height: 1000 });
   await page.evaluate(async () => {
     for (const img of document.images) {
@@ -44,7 +44,7 @@ const criticalRoutes = [
   '/enquiry/',
   '/about/',
 ];
-for (const width of [1920, 1728, 1440, 1024, 768, 430, 390, 360]) {
+for (const width of [1920, 1728, 1440, 1366, 1024, 768, 430, 412, 390, 375, 360]) {
   await page.setViewportSize({ width, height: 1000 });
   for (const route of criticalRoutes) {
     await page.goto(base + route);
@@ -68,6 +68,81 @@ for (const [route, width] of [
     fullPage: true,
   });
 }
+
+// Realistic viewport-height checks across desktop, tablet and phone classes.
+report.deviceProfiles = [];
+for (const profile of [
+  { name: 'desktop-1366x768', width: 1366, height: 768 },
+  { name: 'desktop-1440x900', width: 1440, height: 900 },
+  { name: 'tablet-1024x768', width: 1024, height: 768 },
+  { name: 'tablet-768x1024', width: 768, height: 1024 },
+  { name: 'phone-430x932', width: 430, height: 932 },
+  { name: 'phone-412x915', width: 412, height: 915 },
+  { name: 'phone-390x844', width: 390, height: 844 },
+  { name: 'phone-375x812', width: 375, height: 812 },
+  { name: 'phone-360x800', width: 360, height: 800 },
+]) {
+  await page.setViewportSize({ width: profile.width, height: profile.height });
+  await page.emulateMedia({ colorScheme: 'light' });
+  await page.goto(base + '/');
+  const metrics = await page.evaluate(() => {
+    const header = document.querySelector('.site-header')?.getBoundingClientRect();
+    const hero = document.querySelector('.hero')?.getBoundingClientRect();
+    const contactBar = document.querySelector('.contact-bar')?.getBoundingClientRect();
+    return {
+      scroll: document.documentElement.scrollWidth,
+      viewport: innerWidth,
+      headerHeight: header?.height || 0,
+      heroWidth: hero?.width || 0,
+      contactBarWidth: contactBar?.width || 0,
+    };
+  });
+  report.deviceProfiles.push({ ...profile, ...metrics });
+}
+
+// Ensure OS dark mode cannot auto-recolour the intentionally mixed SHK art direction.
+report.darkMode = [];
+for (const profile of [
+  { name: 'desktop', width: 1440, height: 900 },
+  { name: 'phone', width: 390, height: 844 },
+]) {
+  await page.setViewportSize({ width: profile.width, height: profile.height });
+
+  await page.emulateMedia({ colorScheme: 'light' });
+  await page.goto(base + '/');
+  const light = await page.evaluate(() => {
+    const requirement = getComputedStyle(document.querySelector('.requirement'));
+    const header = getComputedStyle(document.querySelector('.site-header'));
+    const form = getComputedStyle(document.querySelector('.requirement-form'));
+    return {
+      requirementBg: requirement.backgroundColor,
+      requirementColor: requirement.color,
+      headerBg: header.backgroundColor,
+      headerColor: header.color,
+      formBg: form.backgroundColor,
+      formColor: form.color,
+    };
+  });
+
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.reload();
+  const dark = await page.evaluate(() => {
+    const requirement = getComputedStyle(document.querySelector('.requirement'));
+    const header = getComputedStyle(document.querySelector('.site-header'));
+    const form = getComputedStyle(document.querySelector('.requirement-form'));
+    return {
+      requirementBg: requirement.backgroundColor,
+      requirementColor: requirement.color,
+      headerBg: header.backgroundColor,
+      headerColor: header.color,
+      formBg: form.backgroundColor,
+      formColor: form.color,
+    };
+  });
+
+  report.darkMode.push({ ...profile, light, dark, same: JSON.stringify(light) === JSON.stringify(dark) });
+}
+await page.emulateMedia({ colorScheme: 'light' });
 
 await page.setViewportSize({ width: 1440, height: 1000 });
 await page.goto(base + '/');
@@ -197,6 +272,8 @@ if (
   report.responsive.some((r) => r.scroll > r.viewport) ||
   report.routeResponsive.some((r) => r.scroll > r.viewport) ||
   report.accessibility.some((a) => a.violations.length) ||
+  report.deviceProfiles.some((r) => r.scroll > r.viewport) ||
+  report.darkMode.some((r) => !r.same) ||
   errors.length
 )
   process.exitCode = 1;

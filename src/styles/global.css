@@ -7014,3 +7014,21 @@ body {
     padding-right: 56px;
   }
 }
+
+/* === CATALOGUE INTRO LINK CLEANUP V6.6 === */
+
+/* The products intro link sits inside a sentence; an underline across wrapped lines looks awkward.
+   Keep it identifiable through weight and SHK blue instead. */
+.catalogue-intro .lead a {
+  color: #0878ac;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 0;
+  transition: color .16s ease;
+}
+
+.catalogue-intro .lead a:hover,
+.catalogue-intro .lead a:focus-visible {
+  color: #005f88;
+  text-decoration: none;
+}

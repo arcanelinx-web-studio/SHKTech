@@ -1,13 +1,16 @@
 ---
 import { site } from '../../config/site';
+import { MessageCircle } from '@lucide/astro';
 interface Props {
   label?: string;
 }
 ---
 
 <a
-  class="text-link"
+  class="whatsapp-cta"
   href={`https://wa.me/${site.contact.whatsapp}?text=${encodeURIComponent('Hello SHK Tech Services, I would like to discuss a CNC manufacturing requirement.')}`}
 >
-  {Astro.props.label || 'Chat on WhatsApp'} ↗
+  <MessageCircle size={17} stroke-width={2} />
+  {Astro.props.label || 'Chat on WhatsApp'}
+  <span aria-hidden="true">↗</span>
 </a>

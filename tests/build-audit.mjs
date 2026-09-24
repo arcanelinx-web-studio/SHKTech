@@ -51,7 +51,7 @@ const report = {
   totalJavaScriptBytes: bytes,
   failures,
 };
-await mkdir('../../outputs/review', { recursive: true });
-await writeFile('../../outputs/review/build-audit.json', JSON.stringify(report, null, 2));
+await mkdir('outputs/review', { recursive: true });
+await writeFile('outputs/review/build-audit.json', JSON.stringify(report, null, 2));
 console.log(JSON.stringify(report, null, 2));
 if (failures.length) process.exitCode = 1;

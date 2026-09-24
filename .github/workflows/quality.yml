@@ -66,5 +66,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: shk-design-refinement-v2-qa
-          path: ../../outputs/review
+          path: outputs/review
           if-no-files-found: warn

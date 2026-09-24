@@ -1,0 +1,70 @@
+name: SHK quality gate
+
+on:
+  push:
+    branches:
+      - design-refinement-v2
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      ASTRO_TELEMETRY_DISABLED: 1
+      SITE_URL: https://shktech.pages.dev
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type and Astro checks
+        run: npm run check
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Production build
+        run: npm run build
+
+      - name: Audit generated site
+        run: node tests/build-audit.mjs
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Start preview server
+        run: |
+          npm run preview -- --port 4321 > /tmp/shk-preview.log 2>&1 &
+          for i in {1..40}; do
+            if curl -fsS http://127.0.0.1:4321/ > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/shk-preview.log
+          exit 1
+
+      - name: Responsive, interaction and accessibility QA
+        run: npm run test:browser
+
+      - name: Upload QA screenshots and reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shk-design-refinement-v2-qa
+          path: ../../outputs/review
+          if-no-files-found: warn

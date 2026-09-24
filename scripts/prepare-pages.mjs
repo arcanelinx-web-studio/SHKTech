@@ -1,7 +1,8 @@
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { join, extname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const dist = new URL('../dist/', import.meta.url);
+const dist = fileURLToPath(new URL('../dist/', import.meta.url));
 const rawBase = process.env.BASE_PATH || '/SHKTech';
 const base = '/' + rawBase.split('/').filter(Boolean).join('/');
 const attrPattern = /(\b(?:href|src|action|poster)=["'])\/(?!\/|SHKTech(?:\/|["']))/g;

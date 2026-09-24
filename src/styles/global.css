@@ -9125,3 +9125,318 @@ button {
     padding-left: .22em !important;
   }
 }
+
+/* === MOBILE EXPLORER + BRAND POLISH V9.3 === */
+
+/* Slightly stronger SERVICES line while keeping the visiting-card hierarchy. */
+.site-header .brand-sub {
+  font-size: 10.5px !important;
+  letter-spacing: .26em !important;
+  padding-left: .26em !important;
+}
+
+@media (min-width: 601px) and (max-width: 1100px) {
+  .site-header .brand-sub {
+    font-size: 10px !important;
+    letter-spacing: .24em !important;
+    padding-left: .24em !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .site-header .brand-sub {
+    font-size: 9.4px !important;
+    letter-spacing: .21em !important;
+    padding-left: .21em !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .site-header .brand-sub {
+    font-size: 8.8px !important;
+    letter-spacing: .19em !important;
+    padding-left: .19em !important;
+  }
+}
+
+/*
+  Mobile section 02 now uses the same interaction model as desktop/tablet:
+  schematic + active zone panel. The long accordion is retained in markup only
+  as a fallback but is not part of the phone presentation.
+*/
+@media (max-width: 600px) {
+  .explorer.section {
+    padding-block: 44px 50px !important;
+  }
+
+  .explorer .section-heading {
+    margin-bottom: 22px !important;
+  }
+
+  .explorer .section-heading h2 {
+    max-width: 360px;
+    font-size: clamp(30px, 7.9vw, 35px) !important;
+    line-height: 1.07 !important;
+  }
+
+  .explorer .section-heading > p {
+    max-width: 360px;
+    margin-top: 12px !important;
+    font-size: 13px !important;
+    line-height: 1.55 !important;
+  }
+
+  .explorer-layout {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .machine-drawing {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    aspect-ratio: 660 / 540 !important;
+    border: 1px solid #2c3a43 !important;
+    border-radius: 6px !important;
+    overflow: hidden !important;
+    background: #10191f !important;
+  }
+
+  .machine-drawing > svg {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .drawing-heading {
+    top: 9px !important;
+    left: 10px !important;
+    right: 10px !important;
+    z-index: 3 !important;
+    font-size: 7px !important;
+    line-height: 1.2 !important;
+    letter-spacing: .025em !important;
+  }
+
+  .drawing-heading > span:last-child {
+    display: none;
+  }
+
+  .hotspot {
+    width: 28px !important;
+    height: 28px !important;
+    border-width: 1px !important;
+    border-radius: 4px !important;
+    font-size: 8.5px !important;
+    box-shadow: 0 0 0 3px rgba(11,17,21,.62) !important;
+  }
+
+  .hotspot.active {
+    background: #8cc63f !important;
+    border-color: #b9db84 !important;
+    color: #0b1115 !important;
+    box-shadow: 0 0 0 4px rgba(140,198,63,.16) !important;
+  }
+
+  .zone-stage {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    padding: 18px 17px 16px !important;
+    border: 1px solid #2c3a43 !important;
+    border-radius: 6px !important;
+    background: #151f26 !important;
+  }
+
+  .zone-detail-panel:not([hidden]) {
+    min-height: 0 !important;
+  }
+
+  .zone-panel-meta {
+    gap: 10px !important;
+    margin-bottom: 13px !important;
+  }
+
+  .zone-panel-meta .mono {
+    font-size: 8px !important;
+  }
+
+  .zone-detail-panel h3 {
+    margin-bottom: 10px !important;
+    font-size: 24px !important;
+    line-height: 1.08 !important;
+  }
+
+  .zone-panel-description {
+    margin-bottom: 14px !important;
+    font-size: 12.5px !important;
+    line-height: 1.55 !important;
+  }
+
+  .zone-panel-list {
+    margin-bottom: 16px !important;
+  }
+
+  .zone-panel-list li {
+    grid-template-columns: 7px minmax(0,1fr) !important;
+    gap: 8px !important;
+    padding: 10px 0 !important;
+  }
+
+  .zone-panel-list li > span {
+    width: 5px !important;
+    height: 5px !important;
+    margin-top: 6px !important;
+  }
+
+  .zone-panel-list a {
+    font-size: 12px !important;
+    line-height: 1.45 !important;
+  }
+
+  .zone-panel-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    padding-top: 2px !important;
+  }
+
+  .zone-panel-actions .button {
+    min-height: 42px !important;
+    padding: 10px 9px !important;
+    justify-content: center !important;
+    font-size: 10.5px !important;
+  }
+
+  .zone-panel-nav {
+    grid-column: 1 / -1;
+    margin-left: 0 !important;
+    justify-content: flex-end !important;
+    padding-top: 2px;
+  }
+
+  .zone-panel-nav button {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .mobile-zone-list {
+    display: none !important;
+  }
+}
+
+/* Extra-small phones: preserve tap targets without letting the diagram feel cramped. */
+@media (max-width: 380px) {
+  .drawing-heading {
+    font-size: 6.5px !important;
+  }
+
+  .hotspot {
+    width: 26px !important;
+    height: 26px !important;
+    font-size: 8px !important;
+  }
+
+  .zone-detail-panel h3 {
+    font-size: 22px !important;
+  }
+
+  .zone-panel-actions {
+    grid-template-columns: 1fr !important;
+  }
+
+  .zone-panel-nav {
+    grid-column: 1;
+  }
+}
+
+/*
+  Hard theme lock: the site is intentionally art-directed with both dark and light
+  surfaces. OS/browser dark mode must not reinterpret those colors.
+*/
+html,
+body,
+main,
+section,
+header,
+footer,
+nav,
+form,
+fieldset,
+input,
+textarea,
+select,
+button {
+  color-scheme: only light !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html,
+  body {
+    background-color: #f6f7f5 !important;
+    color: #18222a !important;
+  }
+
+  .site-header,
+  #mobile-menu,
+  .hero,
+  .explorer,
+  .accuracy,
+  .lifecycle,
+  .footer,
+  .contact-bar {
+    background-color: #0b1115 !important;
+    color: #f6f7f5 !important;
+  }
+
+  .problems-source,
+  .product-range,
+  .chip-coolant-source,
+  .industries-source,
+  .catalogue-page,
+  .service-index-page,
+  .about-page {
+    background-color: #f6f7f5 !important;
+    color: #18222a !important;
+  }
+
+  .problem-source-card,
+  .source-product-card,
+  .catalogue-card,
+  .detail-card {
+    background-color: #ffffff !important;
+    color: #18222a !important;
+  }
+
+  .requirement {
+    background-color: #eaf0f3 !important;
+    color: #18222a !important;
+  }
+
+  .requirement-form,
+  .selected-items,
+  .compact-selected,
+  .empty-enquiry {
+    background-color: #ffffff !important;
+    color: #18222a !important;
+  }
+
+  input:not([type='radio']),
+  textarea,
+  select {
+    background-color: #fbfcfc !important;
+    color: #17222a !important;
+    -webkit-text-fill-color: #17222a !important;
+    border-color: #cbd6de !important;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #6b7880 !important;
+    -webkit-text-fill-color: #6b7880 !important;
+    opacity: 1 !important;
+  }
+}

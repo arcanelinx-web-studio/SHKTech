@@ -211,6 +211,45 @@ for (const profile of [
 
 await page.emulateMedia({ colorScheme: 'light' });
 
+// Product-detail visual QA: this catches the exact issues found in final review
+// (undersized specifications and awkward application-first callout).
+report.productDetailVisual = [];
+for (const profile of [
+  { name: 'detail-1440', width: 1440, height: 1000 },
+  { name: 'detail-768', width: 768, height: 1024 },
+  { name: 'detail-390', width: 390, height: 844 },
+]) {
+  await page.setViewportSize({ width: profile.width, height: profile.height });
+  await page.goto(base + '/products/chip-compactors/');
+
+  const state = await page.evaluate(() => {
+    const container = document.querySelector('.technical-details')?.getBoundingClientRect();
+    const tableWrap = document.querySelector('.technical-details .table-scroll')?.getBoundingClientRect();
+    const aside = document.querySelector('.application-aside')?.getBoundingClientRect();
+    const action = document.querySelector('.application-aside .button')?.getBoundingClientRect();
+    const whatsapp = document.querySelector('.application-aside .whatsapp-cta')?.getBoundingClientRect();
+    return {
+      viewport: innerWidth,
+      scroll: document.documentElement.scrollWidth,
+      technicalWidth: container?.width || 0,
+      tableWidth: tableWrap?.width || 0,
+      tableRatio: container && tableWrap ? tableWrap.width / container.width : 0,
+      asideWidth: aside?.width || 0,
+      asideRight: aside?.right || 0,
+      actionHeight: action?.height || 0,
+      whatsappHeight: whatsapp?.height || 0,
+    };
+  });
+
+  report.productDetailVisual.push({ ...profile, ...state });
+  await page.screenshot({
+    path: fileURLToPath(new URL(`${profile.name}.png`, out)),
+    fullPage: true,
+  });
+}
+
+await page.emulateMedia({ colorScheme: 'light' });
+
 await page.setViewportSize({ width: 1440, height: 1000 });
 await page.goto(base + '/');
 await page.locator('[data-zone="05"]').click();
@@ -348,6 +387,13 @@ if (
     r.accordionVisible ||
     r.metaGap < 8 ||
     (r.width <= 600 ? !r.contactBarVisible : r.contactBarVisible)
+  ) ||
+  report.productDetailVisual.some((r) =>
+    r.scroll > r.viewport ||
+    r.tableRatio < 0.82 ||
+    r.asideRight > r.viewport + 1 ||
+    r.actionHeight > 64 ||
+    r.whatsappHeight > 56
   ) ||
   errors.length
 )

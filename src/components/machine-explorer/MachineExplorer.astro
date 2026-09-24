@@ -97,7 +97,6 @@ const relatedFor = (zone: MachineZone) => [
             <ul class="zone-panel-list">
               {relatedFor(zone).map((item) => (
                 <li>
-                  <span aria-hidden="true"></span>
                   <a href={item.href}>{item.title}</a>
                 </li>
               ))}

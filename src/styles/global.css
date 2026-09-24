@@ -6954,3 +6954,19 @@ body {
     flex: 0 0 auto;
   }
 }
+
+/* === HEADER NAV HOVER CLEANUP V6.4 === */
+
+/* Keep the header premium and quiet: no floating underline beneath nav items. */
+.desktop-nav a::after {
+  display: none;
+}
+
+.desktop-nav a {
+  transition: color .16s ease, opacity .16s ease;
+}
+
+.desktop-nav a:hover,
+.desktop-nav a:focus-visible {
+  color: #f5f8fa;
+}

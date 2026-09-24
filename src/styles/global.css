@@ -7804,3 +7804,78 @@ textarea {
   color: #f13b43;
   font-weight: 700;
 }
+
+/* === SHK LOCKUP ALIGNMENT V7.2 === */
+
+.brand-wordmark {
+  display: inline-flex;
+  align-items: flex-start;
+  line-height: 1;
+}
+
+.brand-name-line {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.brand-shk-stack {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 0 0 auto;
+}
+
+.brand-shk-stack > strong {
+  display: block;
+  line-height: .9;
+}
+
+.brand-name-line > b {
+  display: block;
+  line-height: .9;
+}
+
+.brand-shk-stack .brand-sub {
+  display: block;
+  width: auto;
+  margin: 5px 0 0;
+  padding: 0;
+  font-family: var(--font-technical);
+  font-size: 8px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: .18em;
+  white-space: nowrap;
+}
+
+/* Header scale */
+@media (min-width: 761px) {
+  .site-header .brand-shk-stack .brand-sub {
+    font-size: 8.5px;
+    letter-spacing: .18em;
+  }
+}
+
+/* Phone scale */
+@media (max-width: 760px) {
+  .site-header .brand-name-line {
+    gap: 4px;
+  }
+
+  .site-header .brand-shk-stack .brand-sub {
+    display: block;
+    margin-top: 5px;
+    font-size: 7.5px;
+    letter-spacing: .16em;
+  }
+}
+
+@media (max-width: 380px) {
+  .site-header .brand-shk-stack .brand-sub {
+    display: block;
+    font-size: 7px;
+    letter-spacing: .14em;
+  }
+}

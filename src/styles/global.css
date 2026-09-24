@@ -7790,3 +7790,17 @@ textarea {
     color: #f6f7f5;
   }
 }
+
+/* === FINAL DEVICE CONSISTENCY FIX V7.1 === */
+
+/* Use a solid header surface everywhere so OS colour-scheme changes cannot alter it. */
+.site-header {
+  background: #0b1115;
+  backdrop-filter: none;
+}
+
+/* Keep the requested red footer heading, but use an accessible SHK-adjacent red on the dark footer. */
+.footer-top > div:nth-child(4) h3 {
+  color: #f13b43;
+  font-weight: 700;
+}

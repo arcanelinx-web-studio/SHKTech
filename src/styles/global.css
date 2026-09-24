@@ -7941,3 +7941,645 @@ textarea {
     letter-spacing: .16em;
   }
 }
+
+/* === CANONICAL RESPONSIVE SYSTEM V8 === */
+
+/*
+  Final responsive contract:
+  >=1101 desktop
+  901–1100 compact desktop / landscape tablet
+  601–900 tablet portrait
+  <=600 phone
+  This layer intentionally comes last so older experimental breakpoints cannot override it.
+*/
+
+:root {
+  color-scheme: only light !important;
+}
+
+html,
+body {
+  color-scheme: only light !important;
+}
+
+/* Preserve the authored mixed light/dark palette under OS/browser dark mode. */
+body,
+main,
+section,
+header,
+footer,
+nav,
+form,
+fieldset,
+input,
+textarea,
+select,
+button {
+  color-scheme: only light;
+}
+
+/* LANDSCAPE TABLET / COMPACT DESKTOP */
+@media (min-width: 901px) and (max-width: 1100px) {
+  .container {
+    width: calc(100% - 72px);
+  }
+
+  .header-inner {
+    width: calc(100% - 64px);
+    min-height: 80px;
+  }
+
+  .site-header .brand img {
+    width: 50px;
+    height: 49px;
+  }
+
+  .site-header .brand-wordmark {
+    font-size: 22px;
+  }
+
+  .site-header .brand-sub {
+    font-size: 8px;
+  }
+
+  .hero {
+    padding-top: 38px;
+  }
+
+  .hero > .hero-grid,
+  .hero > .technology-strip {
+    width: 100% !important;
+    max-width: none !important;
+    padding-left: 36px !important;
+    padding-right: 36px !important;
+  }
+
+  .hero-grid {
+    grid-template-columns: minmax(0,.95fr) minmax(0,1.05fr);
+    gap: 38px;
+    padding-bottom: 38px;
+  }
+
+  .hero h1 {
+    font-size: clamp(48px, 5.2vw, 58px);
+    line-height: 1.01;
+  }
+
+  .hero-description {
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .hero-visual {
+    height: 440px;
+  }
+
+  .section {
+    padding-block: 62px;
+  }
+
+  .section-heading h2 {
+    font-size: clamp(37px,4.2vw,44px);
+  }
+
+  .problem-card-grid {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 12px;
+  }
+
+  .problem-source-card {
+    min-height: 205px;
+    padding: 20px;
+  }
+
+  .problem-source-card h3 {
+    font-size: 21px;
+  }
+
+  .source-product-grid {
+    grid-template-columns: repeat(4,minmax(0,1fr));
+    gap: 12px;
+  }
+
+  .source-product-body h3 {
+    font-size: 19px;
+  }
+
+  .accuracy-grid {
+    gap: 42px;
+  }
+
+  .coolant-source-grid {
+    gap: 26px;
+  }
+
+  .source-lifecycle {
+    grid-template-columns: repeat(4,minmax(0,1fr));
+  }
+
+  .requirement-grid {
+    grid-template-columns: minmax(0,.85fr) minmax(0,1.15fr);
+    gap: 42px;
+  }
+
+  .contact-bar {
+    display: none !important;
+  }
+
+  body {
+    padding-bottom: 0 !important;
+  }
+}
+
+/* TABLET PORTRAIT */
+@media (min-width: 601px) and (max-width: 900px) {
+  :root {
+    scroll-padding-top: 82px;
+  }
+
+  .container {
+    width: calc(100% - 56px);
+  }
+
+  .section {
+    padding-block: 60px;
+  }
+
+  .header-inner {
+    width: calc(100% - 40px);
+    min-height: 80px;
+  }
+
+  .site-header .brand img {
+    width: 52px;
+    height: 50px;
+  }
+
+  .site-header .brand-wordmark {
+    font-size: 22px;
+  }
+
+  .site-header .brand-sub {
+    display: block;
+    margin-top: 4px;
+    font-size: 8px;
+    letter-spacing: .18em;
+  }
+
+  .header-cta,
+  .enquiry-label {
+    display: none;
+  }
+
+  .header-actions {
+    gap: 12px;
+  }
+
+  .enquiry-link {
+    padding: 10px;
+  }
+
+  .menu-toggle {
+    width: 46px;
+    height: 46px;
+  }
+
+  .hero {
+    padding-top: 36px;
+  }
+
+  .hero > .hero-grid,
+  .hero > .technology-strip {
+    width: 100% !important;
+    max-width: none !important;
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding-bottom: 34px;
+  }
+
+  .hero-copy {
+    max-width: 680px;
+  }
+
+  .hero-copy .eyebrow {
+    margin-bottom: 18px;
+  }
+
+  .hero h1 {
+    max-width: 680px;
+    font-size: clamp(46px,7.2vw,56px);
+    line-height: 1;
+  }
+
+  .hero-description {
+    max-width: 650px;
+    margin: 21px 0 24px;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  .hero .button {
+    min-height: 48px;
+    font-size: 12px;
+  }
+
+  .hero-values {
+    margin-top: 25px;
+    font-size: 10px;
+  }
+
+  .hero-visual {
+    width: 100%;
+    height: clamp(360px,55vw,470px);
+  }
+
+  .hero-visual figcaption strong {
+    font-size: clamp(27px,4vw,34px);
+  }
+
+  .technology-strip {
+    padding-block: 20px 26px;
+  }
+
+  .technology-strip > div {
+    grid-template-columns: repeat(4,minmax(0,1fr));
+    gap: 12px 22px;
+  }
+
+  .technology-strip > div > span {
+    font-size: 13px;
+  }
+
+  .section-heading {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) minmax(220px,.55fr);
+    gap: 32px;
+    margin-bottom: 34px;
+  }
+
+  .section-heading h2 {
+    font-size: clamp(36px,5.8vw,44px);
+  }
+
+  .section-heading > p {
+    max-width: 320px;
+    font-size: 14px;
+  }
+
+  .problem-card-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 12px;
+  }
+
+  .problem-source-card {
+    min-height: 198px;
+    padding: 20px 20px 18px;
+  }
+
+  .problem-source-card h3 {
+    font-size: 22px;
+  }
+
+  .problem-source-card > p {
+    font-size: 13px;
+  }
+
+  /* Explorer becomes a deliberate full-width tablet accordion. */
+  .explorer-layout {
+    display: block !important;
+  }
+
+  .machine-drawing,
+  .zone-stage {
+    display: none !important;
+  }
+
+  .mobile-zone-list {
+    display: block !important;
+    max-width: 760px;
+  }
+
+  .zone summary {
+    min-height: 66px;
+    font-size: 18px;
+  }
+
+  .zone-content {
+    padding: 0 12px 24px 44px;
+  }
+
+  .zone-content p,
+  .zone-content li {
+    font-size: 14px;
+  }
+
+  .source-product-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 14px;
+  }
+
+  .source-product-card {
+    display: block;
+  }
+
+  .source-product-image {
+    height: 205px;
+  }
+
+  .source-product-body {
+    padding: 19px;
+  }
+
+  .source-product-body h3 {
+    font-size: 21px;
+  }
+
+  .source-product-body > p:not(.eyebrow) {
+    font-size: 13px;
+    min-height: 0;
+  }
+
+  .accuracy-grid {
+    grid-template-columns: 1fr !important;
+    gap: 28px;
+  }
+
+  .plot-card svg {
+    width: min(100%,520px);
+    margin-inline: auto;
+  }
+
+  .accuracy-steps {
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 0;
+  }
+
+  .accuracy-steps > div {
+    padding: 18px 16px;
+    border-top: 1px solid #2a3942;
+    border-bottom: 0;
+  }
+
+  .accuracy-steps h3 {
+    font-size: 23px;
+  }
+
+  .accuracy-steps p {
+    font-size: 12.5px;
+  }
+
+  .coolant-source-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 24px;
+  }
+
+  .coolant-source-grid .spec-panel {
+    grid-column: 1 / -1;
+  }
+
+  .source-lifecycle {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+
+  .source-lifecycle > a {
+    min-height: 128px;
+  }
+
+  .industries-source {
+    padding-block: 38px 42px;
+  }
+
+  .industry-strip-list a {
+    font-size: 13px;
+  }
+
+  .requirement-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px;
+  }
+
+  .requirement-intro {
+    max-width: 680px;
+  }
+
+  .requirement-intro h2 {
+    max-width: 650px;
+    font-size: clamp(39px,6vw,48px);
+  }
+
+  .requirement-intro > p:not(.eyebrow) {
+    max-width: 620px;
+    font-size: 14px;
+  }
+
+  .requirement-form {
+    max-width: 720px;
+    padding: 28px;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 34px;
+  }
+
+  .footer-top > div:first-child,
+  .footer-top > div:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .contact-bar {
+    display: none !important;
+  }
+
+  body {
+    padding-bottom: 0 !important;
+  }
+}
+
+/* PHONE */
+@media (max-width: 600px) {
+  :root {
+    scroll-padding-top: 76px;
+  }
+
+  .container {
+    width: calc(100% - 30px);
+  }
+
+  .section {
+    padding-block: 50px;
+  }
+
+  .header-inner {
+    width: calc(100% - 22px);
+    min-height: 74px;
+  }
+
+  .site-header .brand img {
+    width: 44px;
+    height: 43px;
+  }
+
+  .site-header .brand-wordmark {
+    font-size: 19px;
+  }
+
+  .site-header .brand-sub {
+    display: block;
+    font-size: 7.5px;
+    letter-spacing: .16em;
+  }
+
+  .header-cta,
+  .enquiry-label {
+    display: none !important;
+  }
+
+  .hero {
+    padding-top: 28px;
+  }
+
+  .hero > .hero-grid,
+  .hero > .technology-strip {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+
+  .hero h1 {
+    font-size: clamp(37px,10.4vw,45px);
+  }
+
+  .hero-description {
+    font-size: 14px;
+  }
+
+  .hero .button {
+    font-size: 11px;
+  }
+
+  .section-heading {
+    display: block;
+    margin-bottom: 28px;
+  }
+
+  .section-heading h2 {
+    font-size: clamp(31px,8.3vw,38px);
+  }
+
+  .section-heading > p {
+    margin-top: 14px;
+    font-size: 14px;
+  }
+
+  .problem-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .source-product-card {
+    grid-template-columns: 108px minmax(0,1fr);
+  }
+
+  .accuracy-steps {
+    display: block;
+  }
+
+  .coolant-source-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .coolant-source-grid .spec-panel {
+    grid-column: auto;
+  }
+
+  .source-lifecycle {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+
+  .requirement.section {
+    padding-block: 46px 42px;
+    background: #eaf0f3 !important;
+    color: #18222a !important;
+  }
+
+  .requirement-intro h2 {
+    font-size: clamp(33px,8.8vw,39px);
+  }
+
+  .requirement-form {
+    background: #fff !important;
+    color: #18222a !important;
+  }
+
+  .contact-bar {
+    display: grid !important;
+  }
+
+  body {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* Browser/OS dark mode must not mutate SHK's authored palette. */
+@media (prefers-color-scheme: dark) {
+  :root,
+  html,
+  body,
+  main,
+  section,
+  header,
+  footer,
+  nav,
+  form,
+  fieldset,
+  input,
+  textarea,
+  select,
+  button {
+    color-scheme: only light !important;
+  }
+
+  .paper,
+  .problems-source,
+  .product-range,
+  .chip-coolant-source,
+  .industries-source {
+    background-color: #f6f7f5 !important;
+    color: #18222a !important;
+  }
+
+  .requirement {
+    background-color: #eaf0f3 !important;
+    color: #18222a !important;
+  }
+
+  .requirement-form {
+    background-color: #ffffff !important;
+    color: #18222a !important;
+  }
+
+  input:not([type='radio']),
+  textarea,
+  select {
+    background-color: #fbfcfc !important;
+    color: #17222a !important;
+    border-color: #cbd6de !important;
+  }
+
+  .hero,
+  .explorer,
+  .accuracy,
+  .lifecycle,
+  .footer,
+  .site-header,
+  #mobile-menu,
+  .contact-bar {
+    background-color: #0b1115 !important;
+    color: #f6f7f5 !important;
+  }
+}

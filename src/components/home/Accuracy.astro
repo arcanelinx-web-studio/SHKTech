@@ -15,7 +15,6 @@ const plot = (compensated: boolean) =>
     <SectionHeader
       eyebrow="04 — MACHINE ACCURACY SERVICE"
       title="Measure. Compensate. Verify."
-      description="Understand what the machine is doing before deciding what to change."
     />
     <div class="accuracy-grid">
       <div class="plot-card">
@@ -78,17 +77,17 @@ const plot = (compensated: boolean) =>
           [
             '01',
             'Measure',
-            'Laser calibration and ball-bar testing help identify positioning and circularity errors.',
+            'Laser and ball-bar tests measure the machine for positioning and circularity errors.',
           ],
           [
             '02',
             'Compensate',
-            'Assess measured errors for compensation in the machine control, where applicable.',
+            'Measured errors can be compensated in the control to restore machine accuracy.',
           ],
           [
             '03',
             'Verify',
-            'Review the result through repeat measurement and agree any further corrective work.',
+            'A repeat test verifies the result and confirms the improvement.',
           ],
         ].map(([n, title, copy]) => (
           <div>

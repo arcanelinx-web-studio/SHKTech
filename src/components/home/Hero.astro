@@ -6,7 +6,7 @@ import { brands } from '../../data/brands';
 ---
 
 <section class="hero dark">
-  <div class="container hero-grid">
+  <div class="container hero-grid" style="width:100%;max-width:none;box-sizing:border-box;padding-left:clamp(20px,3.25vw,68px);padding-right:clamp(20px,3.25vw,68px);">
     <div class="hero-copy">
       <p class="eyebrow hero-kicker">WORKHOLDING · METROLOGY · CHIP &amp; COOLANT · MACHINE SERVICES</p>
       <h1>
@@ -43,7 +43,7 @@ import { brands } from '../../data/brands';
       </figcaption>
     </figure>
   </div>
-  <div class="container technology-strip">
+  <div class="container technology-strip" style="width:100%;max-width:none;box-sizing:border-box;padding-left:clamp(20px,3.25vw,68px);padding-right:clamp(20px,3.25vw,68px);">
     <span class="mono">TECHNOLOGY WE WORK WITH</span>
     <div>
       {brands.map((b) => <span>{b.name}</span>)}

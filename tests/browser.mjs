@@ -15,7 +15,7 @@ page.on('console', (m) => {
 });
 await page.goto(base + '/');
 await page.evaluate(() => document.fonts.ready);
-const report = { responsive: [], accessibility: [], errors };
+const report = { responsive: [], routeResponsive: [], accessibility: [], errors };
 for (const width of [1440, 1280, 1024, 768, 430, 390, 360]) {
   await page.setViewportSize({ width, height: 1000 });
   await page.evaluate(async () => {
@@ -34,7 +34,43 @@ for (const width of [1440, 1280, 1024, 768, 430, 390, 360]) {
   }));
   report.responsive.push({ width, ...overflow });
 }
+
+const criticalRoutes = [
+  '/',
+  '/products/',
+  '/products/chip-compactors/',
+  '/services/laser-calibration/',
+  '/solutions/accuracy/',
+  '/enquiry/',
+  '/about/',
+];
+for (const width of [1440, 1024, 768, 430, 390, 360]) {
+  await page.setViewportSize({ width, height: 1000 });
+  for (const route of criticalRoutes) {
+    await page.goto(base + route);
+    const overflow = await page.evaluate(() => ({
+      scroll: document.documentElement.scrollWidth,
+      viewport: innerWidth,
+    }));
+    report.routeResponsive.push({ route, width, ...overflow });
+  }
+}
+for (const [route, width] of [
+  ['/products/', 1440],
+  ['/products/', 390],
+  ['/enquiry/', 1440],
+  ['/enquiry/', 390],
+]) {
+  await page.setViewportSize({ width, height: 1000 });
+  await page.goto(base + route);
+  await page.screenshot({
+    path: fileURLToPath(new URL(`${route.replaceAll('/', '') || 'home'}-${width}.png`, out)),
+    fullPage: true,
+  });
+}
+
 await page.setViewportSize({ width: 1440, height: 1000 });
+await page.goto(base + '/');
 await page.locator('[data-zone="05"]').click();
 if (
   !(await page
@@ -163,6 +199,7 @@ console.log(
 await browser.close();
 if (
   report.responsive.some((r) => r.scroll > r.viewport) ||
+  report.routeResponsive.some((r) => r.scroll > r.viewport) ||
   report.accessibility.some((a) => a.violations.length) ||
   errors.length
 )

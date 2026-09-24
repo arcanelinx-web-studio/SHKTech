@@ -10230,3 +10230,70 @@ button {
     background: #0775ad !important;
   }
 }
+
+/* === PRODUCT DETAIL FINAL SCALE V11.2 === */
+
+/* Final product-detail readability pass after visual review. */
+.application-aside .eyebrow {
+  color: #066a9d !important;
+  font-weight: 700;
+}
+
+.technical-details caption {
+  font-size: 15px !important;
+}
+
+.technical-details thead th {
+  font-size: 14px !important;
+  padding-top: 19px !important;
+  padding-bottom: 19px !important;
+}
+
+.technical-details tbody th {
+  font-size: 15px !important;
+}
+
+.technical-details tbody td.mono {
+  font-size: 14px !important;
+}
+
+.technical-details tbody th,
+.technical-details tbody td {
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+}
+
+.technical-details > p {
+  font-size: 14.5px !important;
+}
+
+@media (max-width: 600px) {
+  .technical-details caption {
+    font-size: 12.5px !important;
+  }
+
+  .technical-details thead th {
+    font-size: 11.5px !important;
+  }
+
+  .technical-details tbody th {
+    font-size: 13px !important;
+  }
+
+  .technical-details tbody td.mono {
+    font-size: 12.5px !important;
+  }
+
+  .technical-details tbody th,
+  .technical-details tbody td {
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .application-aside .eyebrow {
+    color: #066a9d !important;
+    -webkit-text-fill-color: #066a9d !important;
+  }
+}

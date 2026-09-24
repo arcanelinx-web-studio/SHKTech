@@ -5080,3 +5080,280 @@ textarea {
     width: 100%;
   }
 }
+
+/* === DESKTOP 100% WIDTH CALIBRATION V4 === */
+
+/* Calibrated for a normal 100% browser zoom on 1440–1920px displays.
+   The page should use the viewport, not sit inside a narrow 1160px island. */
+:root {
+  --content-max: 1480px;
+}
+
+@media (min-width: 1280px) {
+  .container {
+    width: min(var(--content-max), calc(100% - 112px));
+  }
+
+  .header-inner {
+    width: min(1540px, calc(100% - 96px));
+    min-height: 84px;
+  }
+
+  .site-header .brand {
+    gap: 13px;
+  }
+
+  .site-header .brand img {
+    width: 52px;
+    height: 50px;
+  }
+
+  .site-header .brand-wordmark {
+    font-size: 20px;
+  }
+
+  .site-header .brand-sub {
+    margin-top: 7px;
+    font-size: 8px;
+  }
+
+  .desktop-nav {
+    gap: 28px;
+  }
+
+  .desktop-nav a {
+    padding-block: 25px;
+    font-size: 13.5px;
+  }
+
+  .header-actions {
+    gap: 18px;
+  }
+
+  .enquiry-link {
+    font-size: 12.5px;
+  }
+
+  .header-cta {
+    min-height: 48px;
+    padding: 13px 19px;
+    font-size: 12.5px;
+  }
+
+  .hero {
+    padding-top: 48px;
+  }
+
+  .hero-grid {
+    grid-template-columns: minmax(0, .93fr) minmax(0, 1.07fr);
+    gap: clamp(46px, 4vw, 70px);
+    padding-bottom: 46px;
+  }
+
+  .hero h1 {
+    max-width: 690px;
+    font-size: clamp(58px, 4.1vw, 70px);
+  }
+
+  .hero-description {
+    max-width: 590px;
+    font-size: 15px;
+    margin: 24px 0 28px;
+  }
+
+  .hero-visual {
+    height: clamp(470px, 36vw, 570px);
+  }
+
+  .hero-visual figcaption {
+    left: 34px;
+    right: 34px;
+    bottom: 30px;
+  }
+
+  .hero-visual figcaption strong {
+    font-size: clamp(25px, 2vw, 32px);
+  }
+
+  .technology-strip {
+    min-height: 82px;
+    gap: 48px;
+  }
+
+  .technology-strip > div {
+    gap: 20px 38px;
+  }
+
+  .technology-strip > div > span {
+    font-size: 13px;
+  }
+
+  .section {
+    padding-block: 66px;
+  }
+
+  .section-heading {
+    margin-bottom: 38px;
+  }
+
+  .section-heading > div {
+    max-width: 760px;
+  }
+
+  .section-heading h2 {
+    font-size: clamp(36px, 2.7vw, 46px);
+  }
+
+  .section-heading > p {
+    max-width: 380px;
+    font-size: 13.5px;
+  }
+
+  .problem-row {
+    grid-template-columns: 58px minmax(220px, .82fr) minmax(300px, 1.15fr) minmax(230px, .85fr) 28px;
+    padding-block: 18px;
+  }
+
+  .problem-row h3 {
+    font-size: 23px;
+  }
+
+  .problem-row p {
+    font-size: 12.5px;
+  }
+
+  .explorer-layout {
+    gap: 64px;
+  }
+
+  .source-product-grid {
+    gap: 16px;
+  }
+
+  .source-product-image {
+    height: 172px;
+  }
+
+  .source-product-body {
+    padding: 19px 19px 17px;
+  }
+
+  .source-product-body h3 {
+    font-size: 19px;
+  }
+
+  .source-product-body > p:not(.eyebrow) {
+    font-size: 11px;
+  }
+
+  .accuracy-grid {
+    gap: 62px;
+  }
+
+  .coolant-grid {
+    gap: 48px;
+  }
+
+  .source-lifecycle > a {
+    padding-right: 18px;
+  }
+
+  .source-lifecycle h3 {
+    font-size: 19px;
+  }
+
+  .industry-strip-list a {
+    font-size: 12.5px;
+  }
+
+  .requirement-grid {
+    grid-template-columns: minmax(340px, .72fr) minmax(0, 1.28fr);
+    gap: 72px;
+  }
+
+  .requirement-intro h2 {
+    max-width: 520px;
+    font-size: clamp(40px, 3.4vw, 52px);
+  }
+
+  .requirement-form {
+    padding: 28px 30px;
+  }
+
+  /* Inner pages: use the same wider desktop canvas but keep the vertical rhythm tight. */
+  .breadcrumb {
+    margin-bottom: 24px;
+  }
+
+  .detail-hero {
+    grid-template-columns: minmax(0, 1.02fr) minmax(420px, .98fr);
+    gap: 58px;
+    align-items: center;
+  }
+
+  .detail-hero .page-title {
+    font-size: clamp(44px, 3.8vw, 60px);
+  }
+
+  .detail-hero .lead {
+    max-width: 720px;
+    font-size: 16px;
+  }
+
+  .detail-image {
+    min-height: 330px;
+    padding: 32px;
+  }
+
+  .detail-image img {
+    max-height: 320px;
+  }
+
+  .detail-columns {
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr);
+    gap: 70px;
+    margin: 46px 0;
+  }
+
+  .catalogue-intro {
+    grid-template-columns: minmax(0, 1.35fr) minmax(360px, .65fr);
+  }
+
+  .catalogue-row {
+    grid-template-columns: 54px minmax(0, 1fr) minmax(220px, 320px);
+  }
+
+  .service-row {
+    grid-template-columns: 54px minmax(0, 1fr) auto;
+  }
+
+  .footer .container {
+    width: min(1480px, calc(100% - 112px));
+  }
+}
+
+@media (min-width: 1680px) {
+  .container {
+    width: min(1520px, calc(100% - 144px));
+  }
+
+  .header-inner {
+    width: min(1580px, calc(100% - 120px));
+  }
+
+  .hero-grid {
+    gap: 72px;
+  }
+
+  .hero h1 {
+    font-size: 72px;
+  }
+
+  .hero-visual {
+    height: 580px;
+  }
+
+  .footer .container {
+    width: min(1520px, calc(100% - 144px));
+  }
+}

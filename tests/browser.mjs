@@ -114,6 +114,11 @@ for (const profile of [
     const requirement = getComputedStyle(document.querySelector('.requirement'));
     const header = getComputedStyle(document.querySelector('.site-header'));
     const form = getComputedStyle(document.querySelector('.requirement-form'));
+    const problems = getComputedStyle(document.querySelector('.problems-source'));
+    const problemCard = getComputedStyle(document.querySelector('.problem-source-card'));
+    const explorer = getComputedStyle(document.querySelector('.explorer'));
+    const zoneStage = getComputedStyle(document.querySelector('.zone-stage'));
+    const primary = getComputedStyle(document.querySelector('.button-primary'));
     return {
       requirementBg: requirement.backgroundColor,
       requirementColor: requirement.color,
@@ -121,6 +126,14 @@ for (const profile of [
       headerColor: header.color,
       formBg: form.backgroundColor,
       formColor: form.color,
+      problemsBg: problems.backgroundColor,
+      problemCardBg: problemCard.backgroundColor,
+      explorerBg: explorer.backgroundColor,
+      explorerColor: explorer.color,
+      zoneStageBg: zoneStage.backgroundColor,
+      zoneStageColor: zoneStage.color,
+      primaryBg: primary.backgroundColor,
+      primaryColor: primary.color,
     };
   });
 
@@ -130,6 +143,11 @@ for (const profile of [
     const requirement = getComputedStyle(document.querySelector('.requirement'));
     const header = getComputedStyle(document.querySelector('.site-header'));
     const form = getComputedStyle(document.querySelector('.requirement-form'));
+    const problems = getComputedStyle(document.querySelector('.problems-source'));
+    const problemCard = getComputedStyle(document.querySelector('.problem-source-card'));
+    const explorer = getComputedStyle(document.querySelector('.explorer'));
+    const zoneStage = getComputedStyle(document.querySelector('.zone-stage'));
+    const primary = getComputedStyle(document.querySelector('.button-primary'));
     return {
       requirementBg: requirement.backgroundColor,
       requirementColor: requirement.color,
@@ -137,11 +155,60 @@ for (const profile of [
       headerColor: header.color,
       formBg: form.backgroundColor,
       formColor: form.color,
+      problemsBg: problems.backgroundColor,
+      problemCardBg: problemCard.backgroundColor,
+      explorerBg: explorer.backgroundColor,
+      explorerColor: explorer.color,
+      zoneStageBg: zoneStage.backgroundColor,
+      zoneStageColor: zoneStage.color,
+      primaryBg: primary.backgroundColor,
+      primaryColor: primary.color,
     };
   });
 
   report.darkMode.push({ ...profile, light, dark, same: JSON.stringify(light) === JSON.stringify(dark) });
 }
+await page.emulateMedia({ colorScheme: 'light' });
+
+// Final visual consistency checks for the brand lockup and section 02.
+report.visualConsistency = [];
+for (const profile of [
+  { name: 'tablet-768', width: 768, height: 1024 },
+  { name: 'phone-430', width: 430, height: 932 },
+  { name: 'phone-390', width: 390, height: 844 },
+  { name: 'phone-360', width: 360, height: 800 },
+]) {
+  await page.setViewportSize({ width: profile.width, height: profile.height });
+  await page.goto(base + '/');
+  const state = await page.evaluate(() => {
+    const visible = (el) => {
+      if (!el) return false;
+      const s = getComputedStyle(el);
+      const r = el.getBoundingClientRect();
+      return s.display !== 'none' && s.visibility !== 'hidden' && r.width > 0 && r.height > 0;
+    };
+    const brandSub = document.querySelector('.site-header .brand-sub');
+    const meta = document.querySelector('.zone-panel-meta');
+    const metaItems = meta ? [...meta.querySelectorAll('.mono')] : [];
+    const left = metaItems[0]?.getBoundingClientRect();
+    const right = metaItems[1]?.getBoundingClientRect();
+    return {
+      brandSubSize: brandSub ? parseFloat(getComputedStyle(brandSub).fontSize) : 0,
+      machineVisible: visible(document.querySelector('.machine-drawing')),
+      zoneStageVisible: visible(document.querySelector('.zone-stage')),
+      accordionVisible: visible(document.querySelector('.mobile-zone-list')),
+      metaGap: left && right ? right.left - left.right : 0,
+      contactBarVisible: visible(document.querySelector('.contact-bar')),
+    };
+  });
+  report.visualConsistency.push({ ...profile, ...state });
+
+  const explorer = page.locator('.explorer');
+  await explorer.screenshot({
+    path: fileURLToPath(new URL(`explorer-${profile.name}.png`, out)),
+  });
+}
+
 await page.emulateMedia({ colorScheme: 'light' });
 
 await page.setViewportSize({ width: 1440, height: 1000 });
@@ -274,6 +341,14 @@ if (
   report.accessibility.some((a) => a.violations.length) ||
   report.deviceProfiles.some((r) => r.scroll > r.viewport) ||
   report.darkMode.some((r) => !r.same) ||
+  report.visualConsistency.some((r) =>
+    r.brandSubSize < 8 ||
+    !r.machineVisible ||
+    !r.zoneStageVisible ||
+    r.accordionVisible ||
+    r.metaGap < 8 ||
+    (r.width <= 600 ? !r.contactBarVisible : r.contactBarVisible)
+  ) ||
   errors.length
 )
   process.exitCode = 1;

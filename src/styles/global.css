@@ -8583,3 +8583,341 @@ button {
     color: #f6f7f5 !important;
   }
 }
+
+/* === FINAL MOBILE + TABLET POLISH V9 === */
+
+/* Brand lockup: SERVICES is a true second line of SHK, not tiny metadata. */
+.brand-shk-stack {
+  align-items: flex-start !important;
+}
+
+.site-header .brand-sub,
+.footer .brand-sub {
+  width: auto !important;
+  text-align: left !important;
+  font-family: var(--font-primary) !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  color: #d9e2e7;
+}
+
+.site-header .brand-sub {
+  margin-top: 5px !important;
+  font-size: 10px !important;
+  letter-spacing: .12em !important;
+}
+
+.footer .brand-sub {
+  margin-top: 5px !important;
+  font-size: 9px !important;
+  letter-spacing: .12em !important;
+}
+
+/* Compact desktop / landscape tablet */
+@media (min-width: 901px) and (max-width: 1100px) {
+  .site-header .brand-wordmark {
+    font-size: 24px !important;
+  }
+
+  .site-header .brand-sub {
+    font-size: 9.5px !important;
+  }
+}
+
+/* Tablet portrait: retain the visual language of desktop instead of replacing the explorer with a long list. */
+@media (min-width: 601px) and (max-width: 900px) {
+  .site-header .brand-wordmark {
+    font-size: 24px !important;
+  }
+
+  .site-header .brand-sub {
+    margin-top: 5px !important;
+    font-size: 9.5px !important;
+    letter-spacing: .11em !important;
+  }
+
+  .explorer-layout {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 22px !important;
+  }
+
+  .machine-drawing {
+    display: block !important;
+    width: 100%;
+    max-width: 760px;
+    margin: 0 !important;
+  }
+
+  .zone-stage {
+    display: block !important;
+    width: 100%;
+    max-width: 760px;
+    padding: 24px !important;
+  }
+
+  .mobile-zone-list {
+    display: none !important;
+  }
+
+  .drawing-heading {
+    font-size: 8.5px !important;
+  }
+
+  .hotspot {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 10px !important;
+  }
+
+  .zone-detail-panel h3 {
+    font-size: 28px !important;
+  }
+
+  .zone-panel-description {
+    font-size: 14px !important;
+  }
+
+  .zone-panel-list a {
+    font-size: 13px !important;
+  }
+}
+
+/* Phones: compact, deliberate accordion rather than a scaled desktop block. */
+@media (max-width: 600px) {
+  .site-header .brand {
+    gap: 9px !important;
+  }
+
+  .site-header .brand img {
+    width: 45px !important;
+    height: 44px !important;
+  }
+
+  .site-header .brand-wordmark {
+    font-size: 21px !important;
+  }
+
+  .site-header .brand-sub {
+    margin-top: 4px !important;
+    font-size: 9px !important;
+    letter-spacing: .1em !important;
+  }
+
+  .explorer.section {
+    padding-block: 44px 48px !important;
+  }
+
+  .explorer .section-heading {
+    margin-bottom: 20px !important;
+  }
+
+  .explorer .section-heading h2 {
+    max-width: 360px;
+    font-size: clamp(30px, 7.8vw, 35px) !important;
+    line-height: 1.07 !important;
+  }
+
+  .explorer .section-heading > p {
+    max-width: 360px;
+    margin-top: 12px !important;
+    font-size: 13px !important;
+    line-height: 1.55 !important;
+  }
+
+  .explorer .eyebrow {
+    font-size: 9px !important;
+  }
+
+  .explorer-layout {
+    display: block !important;
+  }
+
+  .machine-drawing,
+  .zone-stage {
+    display: none !important;
+  }
+
+  .mobile-zone-list {
+    display: block !important;
+    max-width: none !important;
+  }
+
+  .zone {
+    border-color: #2b3942 !important;
+  }
+
+  .zone summary {
+    min-height: 56px !important;
+    padding: 10px 0 !important;
+    grid-template-columns: 46px minmax(0,1fr) 24px !important;
+    gap: 12px !important;
+    font-size: 16px !important;
+    line-height: 1.25 !important;
+  }
+
+  .zone-number {
+    width: 40px !important;
+    height: 40px !important;
+    display: grid !important;
+    place-items: center !important;
+    border: 1px solid #334652 !important;
+    border-radius: 4px !important;
+    font-size: 10px !important;
+  }
+
+  .zone[open] .zone-number {
+    color: #f7fbf2 !important;
+    border-color: #8cc63f !important;
+    background: rgba(140,198,63,.14) !important;
+  }
+
+  .zone-sign {
+    font-size: 22px !important;
+  }
+
+  .zone-content {
+    padding: 2px 6px 20px 58px !important;
+  }
+
+  .zone-content p {
+    margin: 0 0 13px !important;
+    font-size: 13px !important;
+    line-height: 1.55 !important;
+  }
+
+  .zone-content ul {
+    margin-bottom: 14px !important;
+  }
+
+  .zone-content li,
+  .zone-content li a {
+    font-size: 12.5px !important;
+    line-height: 1.5 !important;
+  }
+
+  .zone-content .button-row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 12px 20px !important;
+  }
+
+  .zone-content .text-link {
+    font-size: 12px !important;
+  }
+
+  .contact-bar {
+    min-height: 58px;
+    gap: 5px !important;
+    padding: 6px 6px calc(6px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .contact-bar > a {
+    min-height: 44px !important;
+    font-size: 10.5px !important;
+  }
+
+  body {
+    padding-bottom: calc(58px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* Extra narrow phones keep brand readable without letting the action area collapse. */
+@media (max-width: 380px) {
+  .site-header .brand img {
+    width: 42px !important;
+    height: 41px !important;
+  }
+
+  .site-header .brand-wordmark {
+    font-size: 19px !important;
+  }
+
+  .site-header .brand-sub {
+    font-size: 8px !important;
+    letter-spacing: .09em !important;
+  }
+}
+
+/*
+  Samsung Internet / Chrome / Android may aggressively auto-darken sites.
+  Explicitly repaint every major authored surface so dark mode never changes the design palette.
+*/
+@media (prefers-color-scheme: dark) {
+  html,
+  body,
+  main {
+    background: #f6f7f5 !important;
+    color: #18222a !important;
+  }
+
+  .site-header,
+  #mobile-menu,
+  .hero,
+  .explorer,
+  .accuracy,
+  .lifecycle,
+  .footer,
+  .contact-bar {
+    background: #0b1115 !important;
+    color: #f6f7f5 !important;
+  }
+
+  .problems-source,
+  .product-range,
+  .chip-coolant-source,
+  .industries-source,
+  .catalogue-page,
+  .service-index-page {
+    background: #f6f7f5 !important;
+    color: #18222a !important;
+  }
+
+  .problem-source-card,
+  .source-product-card,
+  .catalogue-card,
+  .detail-card {
+    background: #ffffff !important;
+    color: #18222a !important;
+  }
+
+  .requirement {
+    background: #eaf0f3 !important;
+    color: #18222a !important;
+  }
+
+  .requirement-form,
+  .selected-items,
+  .compact-selected,
+  .empty-enquiry {
+    background: #ffffff !important;
+    color: #18222a !important;
+  }
+
+  input:not([type='radio']),
+  textarea,
+  select {
+    background: #fbfcfc !important;
+    color: #17222a !important;
+    border-color: #cbd6de !important;
+    -webkit-text-fill-color: #17222a !important;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #6b7880 !important;
+    -webkit-text-fill-color: #6b7880 !important;
+    opacity: 1 !important;
+  }
+
+  .type-options span {
+    background: #f6f8f9 !important;
+    color: #24323b !important;
+  }
+
+  .type-options input:checked + span {
+    background: #0b6fa4 !important;
+    color: #ffffff !important;
+    border-color: #0b6fa4 !important;
+  }
+}

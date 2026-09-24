@@ -1,15 +1,14 @@
 ---
 import SectionHeader from '../global/SectionHeader.astro';
-import { Search, Wrench, Crosshair, Gauge, Settings2, RefreshCw, Cpu } from '@lucide/astro';
 
 const stages = [
-  ['Select', 'The right technology for the part.', '/products/', Search],
-  ['Install', 'Integrated on your machine.', '/services/retrofit/', Wrench],
-  ['Calibrate', 'Geometry and accuracy verified.', '/services/laser-calibration/', Crosshair],
-  ['Optimise', 'Workholding, tooling and CAM.', '/solutions/capability/', Gauge],
-  ['Maintain', 'Chips, coolant and clean air.', '/solutions/coolant/', Settings2],
-  ['Recondition', 'Spindles, screws and guideways.', '/services/machine-reconditioning/', RefreshCw],
-  ['Retrofit', 'New subsystems, longer life.', '/services/retrofit/', Cpu],
+  ['Select', 'The right technology for the part.', '/products/'],
+  ['Install', 'Integrated on your machine.', '/services/retrofit/'],
+  ['Calibrate', 'Geometry and accuracy verified.', '/services/laser-calibration/'],
+  ['Optimise', 'Workholding, tooling and CAM.', '/solutions/capability/'],
+  ['Maintain', 'Chips, coolant and clean air.', '/solutions/coolant/'],
+  ['Recondition', 'Spindles, screws and guideways.', '/services/machine-reconditioning/'],
+  ['Retrofit', 'New subsystems, longer life.', '/services/retrofit/'],
 ];
 ---
 
@@ -17,14 +16,12 @@ const stages = [
   <div class="container">
     <SectionHeader eyebrow="06 — THE LIFE OF YOUR MACHINE" title="From first setup to second life." />
     <div class="source-lifecycle">
-      {stages.map(([name, copy, href, Icon], i) => (
-        <a href={href as string}>
-          <div class="lifecycle-marker">
-            <span class="lifecycle-icon"><Icon size={15} stroke-width={1.8} /></span>
-            <span class="source-stage-number mono">0{i + 1}</span>
-          </div>
-          <h3>{name as string}</h3>
-          <p>{copy as string}</p>
+      {stages.map(([name, copy, href], i) => (
+        <a href={href}>
+          <span class="lifecycle-node" aria-hidden="true"></span>
+          <span class="source-stage-number mono">0{i + 1}</span>
+          <h3>{name}</h3>
+          <p>{copy}</p>
         </a>
       ))}
     </div>

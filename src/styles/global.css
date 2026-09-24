@@ -5030,3 +5030,53 @@ textarea {
     transition: none;
   }
 }
+
+/* === MOBILE OVERFLOW + CONTRAST FIX V3.1 === */
+
+.requirement-advanced > summary small {
+  color: #566970;
+}
+
+@media (max-width: 1000px) {
+  .requirement-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .requirement-intro {
+    max-width: 620px;
+  }
+
+  .requirement-intro h2 {
+    max-width: 560px;
+  }
+}
+
+@media (max-width: 600px) {
+  .requirement-grid {
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+  }
+
+  .requirement-form,
+  .requirement-intro,
+  .requirement-utility-row,
+  .requirement-advanced,
+  .requirement-submit-row {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .type-options {
+    max-width: 100%;
+  }
+
+  .type-options label {
+    max-width: 100%;
+  }
+
+  .attachment,
+  .compact-selected {
+    width: 100%;
+  }
+}

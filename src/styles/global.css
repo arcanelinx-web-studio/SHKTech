@@ -6781,3 +6781,157 @@ body {
     box-shadow: 0 0 0 5px rgba(0,107,150,.2);
   }
 }
+
+/* === HERO WIDTH + WORDMARK ALIGNMENT V6.2 === */
+
+.brand-wordmark {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1;
+}
+
+.brand-name-line {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.brand-name-line strong,
+.brand-name-line b {
+  line-height: 1;
+}
+
+.site-header .brand-sub {
+  margin-top: 4px;
+  padding-top: 0;
+  font-size: 10px;
+  letter-spacing: .26em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.footer .brand-sub {
+  margin-top: 4px;
+  padding-top: 0;
+  font-size: 9px;
+  letter-spacing: .26em;
+  line-height: 1;
+}
+
+.hero-line-one,
+.hero-line-two {
+  display: block;
+}
+
+/* SHK lime belongs to active technical states in the explorer. */
+.hotspot.active {
+  background: rgba(140, 198, 63, .18);
+  border-color: #8cc63f;
+  color: #f7fbf2;
+  box-shadow: 0 0 0 5px rgba(140, 198, 63, .18);
+}
+
+.illuminated {
+  stroke: #8cc63f !important;
+  fill: rgba(140, 198, 63, .10) !important;
+}
+
+.zone-panel-meta .mono:first-child {
+  color: #8cc63f;
+}
+
+/* WhatsApp should read as one clean horizontal action. */
+.whatsapp-cta {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.whatsapp-cta svg {
+  flex: 0 0 auto;
+}
+
+@media (min-width: 1400px) {
+  /* Let the hero use the desktop canvas instead of sitting inside the normal page width. */
+  .hero > .hero-grid,
+  .hero > .technology-strip {
+    width: min(1660px, calc(100% - 64px));
+    max-width: none;
+  }
+
+  .hero-grid {
+    grid-template-columns: minmax(0, .96fr) minmax(0, 1.04fr);
+    gap: clamp(40px, 3vw, 58px);
+  }
+
+  .hero h1 {
+    max-width: none;
+    font-size: clamp(56px, 3.45vw, 62px);
+  }
+
+  .hero-line-one {
+    white-space: nowrap;
+  }
+
+  .hero-visual {
+    height: clamp(480px, 31vw, 540px);
+  }
+
+  .technology-strip {
+    padding-inline: 0;
+  }
+}
+
+@media (min-width: 1680px) {
+  .header-inner {
+    width: min(1640px, calc(100% - 72px));
+  }
+
+  .hero > .hero-grid,
+  .hero > .technology-strip {
+    width: min(1680px, calc(100% - 64px));
+  }
+
+  .site-header .brand img {
+    width: 58px;
+    height: 56px;
+  }
+
+  .site-header .brand-wordmark {
+    font-size: 26px;
+  }
+
+  .site-header .brand-sub {
+    font-size: 10.5px;
+  }
+
+  .hero h1 {
+    font-size: 62px;
+  }
+}
+
+/* Keep the explorer active state green after all older desktop overrides. */
+@media (min-width: 1101px) {
+  .hotspot.active {
+    background: rgba(140, 198, 63, .18);
+    border-color: #8cc63f;
+    color: #f7fbf2;
+    box-shadow: 0 0 0 5px rgba(140, 198, 63, .18);
+  }
+
+  .illuminated {
+    stroke: #8cc63f !important;
+    fill: rgba(140, 198, 63, .10) !important;
+  }
+}
+
+@media (max-width: 1399px) {
+  .hero-line-one {
+    white-space: normal;
+  }
+}

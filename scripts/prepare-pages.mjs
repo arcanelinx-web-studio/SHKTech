@@ -3,12 +3,8 @@ import { join, extname } from 'node:path';
 
 const dist = new URL('../dist/', import.meta.url);
 const rawBase = process.env.BASE_PATH || '/SHKTech';
-const base = '/' + rawBase.replace(/^\\/+|\\/+$/g, '');
-const segment = base.slice(1).replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&');
-const attrPattern = new RegExp(
-  '(\\\\b(?:href|src|action|poster)=["\\\'])\\\\/(?!\\\\/|' + segment + '(?:\\\\/|["\\\']))',
-  'g',
-);
+const base = '/' + rawBase.split('/').filter(Boolean).join('/');
+const attrPattern = /(\b(?:href|src|action|poster)=["'])\/(?!\/|SHKTech(?:\/|["']))/g;
 
 async function walk(dir) {
   const entries = await readdir(dir, { withFileTypes: true });

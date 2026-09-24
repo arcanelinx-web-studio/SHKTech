@@ -6935,3 +6935,22 @@ body {
     white-space: normal;
   }
 }
+
+/* === HERO VIEWPORT FILL V6.3 === */
+
+@media (min-width: 1400px) and (min-height: 820px) {
+  .hero {
+    min-height: calc(100svh - 84px);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero > .hero-grid {
+    flex: 1 0 auto;
+    align-items: center;
+  }
+
+  .hero > .technology-strip {
+    flex: 0 0 auto;
+  }
+}

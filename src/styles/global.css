@@ -8921,3 +8921,85 @@ button {
     border-color: #0b6fa4 !important;
   }
 }
+
+/* === WORDMARK GEOMETRY FIX V9.1 === */
+
+/*
+  Keep SHK and TECH tightly paired.
+  SERVICES sits under SHK but must not participate in the width calculation,
+  otherwise its longer word pushes TECH too far to the right.
+*/
+.brand-wordmark {
+  display: inline-flex !important;
+  align-items: flex-start !important;
+  gap: 4px !important;
+  padding-bottom: 14px;
+  line-height: 1;
+}
+
+.brand-shk-stack {
+  position: relative;
+  display: inline-block !important;
+  flex: 0 0 auto;
+  line-height: 1;
+}
+
+.brand-shk-stack > strong {
+  display: block;
+  line-height: 1;
+}
+
+.brand-wordmark > b {
+  display: block;
+  line-height: 1;
+}
+
+.site-header .brand-sub,
+.footer .brand-sub {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: center !important;
+  white-space: nowrap;
+  font-family: var(--font-primary) !important;
+  font-weight: 700 !important;
+  color: #d9e2e7;
+  line-height: 1 !important;
+  transform-origin: 50% 0;
+}
+
+.site-header .brand-sub {
+  font-size: 9px !important;
+  letter-spacing: .06em !important;
+}
+
+.footer .brand-sub {
+  font-size: 8px !important;
+  letter-spacing: .06em !important;
+}
+
+@media (min-width: 901px) {
+  .site-header .brand-wordmark {
+    gap: 5px !important;
+  }
+
+  .site-header .brand-sub {
+    font-size: 9.5px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .site-header .brand-wordmark {
+    gap: 3px !important;
+    padding-bottom: 13px;
+  }
+
+  .site-header .brand-sub {
+    top: calc(100% + 3px);
+    font-size: 8px !important;
+    letter-spacing: .045em !important;
+  }
+}

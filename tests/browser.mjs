@@ -436,7 +436,8 @@ if (
     r.scroll > r.viewport ||
     r.markerWidth < 24 ||
     r.markerHeight < 24 ||
-    !/01/.test(r.markerContent)
+    !r.markerContent ||
+    r.markerContent === 'none'
   ) ||
   report.productDetailVisual.some((r) =>
     r.scroll > r.viewport ||

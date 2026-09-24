@@ -1,7 +1,7 @@
 import { chromium } from '@playwright/test';
 import lighthouse from 'lighthouse';
 import { mkdir, writeFile } from 'node:fs/promises';
-const out = new URL(process.env.REVIEW_DIR || '../../../outputs/review/', import.meta.url);
+const out = new URL(process.env.REVIEW_DIR || '../outputs/review/', import.meta.url);
 await mkdir(out, { recursive: true });
 const browser = await chromium.launch({
   headless: true,

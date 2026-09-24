@@ -72,13 +72,8 @@ for (const [route, width] of [
 await page.setViewportSize({ width: 1440, height: 1000 });
 await page.goto(base + '/');
 await page.locator('[data-zone="05"]').click();
-if (
-  !(await page
-    .locator('[data-zone-panel="05"]')
-    .getAttribute('open')
-    .then((v) => v !== null))
-)
-  throw Error('Zone did not open');
+if (await page.locator('[data-zone-detail="05"]').getAttribute('hidden'))
+  throw Error('Desktop zone panel did not activate');
 await page.locator('[data-plot="compensated"]').click();
 if ((await page.locator('#plot-compensated').getAttribute('visibility')) !== 'visible')
   throw Error('Plot did not change');

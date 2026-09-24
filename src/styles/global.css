@@ -3229,7 +3229,7 @@ p {
 }
 
 .product-index-row > .mono {
-  color: #5f7480;
+  color: #465e6a;
   font-size: 10px;
 }
 
@@ -4027,7 +4027,7 @@ select:focus {
 
 .catalogue-number {
   padding-top: 7px;
-  color: #607681;
+  color: #465e6a;
   font-size: 10px;
 }
 
@@ -4086,7 +4086,7 @@ select:focus {
   text-align: center;
   font-size: 9px;
   line-height: 1.8;
-  color: #647883;
+  color: #455b66;
 }
 
 .service-row {
@@ -4099,7 +4099,7 @@ select:focus {
 }
 
 .service-row > .mono {
-  color: #607681;
+  color: #465e6a;
   font-size: 10px;
 }
 

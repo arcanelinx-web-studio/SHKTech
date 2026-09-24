@@ -7032,3 +7032,9 @@ body {
   color: #005f88;
   text-decoration: none;
 }
+
+/* === FOOTER CONTACT HEADING RED V6.7 === */
+
+.footer-top > div:nth-child(4) h3 {
+  color: #e91e28;
+}

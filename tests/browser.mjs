@@ -2,7 +2,7 @@ import { chromium } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-const out = new URL(process.env.REVIEW_DIR || '../../../outputs/review/', import.meta.url);
+const out = new URL(process.env.REVIEW_DIR || '../outputs/review/', import.meta.url);
 await mkdir(out, { recursive: true });
 const base = process.env.BASE_URL || 'http://127.0.0.1:4321';
 const browser = await chromium.launch({ headless: true });
@@ -190,6 +190,7 @@ console.log(
       accessibility: report.accessibility.map((a) => ({
         route: a.route,
         violations: a.violations.length,
+        ids: a.violations.map((v) => v.id),
       })),
     },
     null,

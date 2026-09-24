@@ -10297,3 +10297,128 @@ button {
     -webkit-text-fill-color: #066a9d !important;
   }
 }
+
+/* === LIST MARKER RELEASE FIX V11.3 === */
+
+/*
+  Explorer bullets are generated with ::before rather than an empty span.
+  This is more robust across Chromium/Samsung Internet and cannot disappear
+  because of inline-span rendering or inherited styles.
+*/
+.zone-panel-list {
+  padding: 0 !important;
+  margin-left: 0 !important;
+  list-style: none !important;
+}
+
+.zone-panel-list li {
+  position: relative !important;
+  display: block !important;
+  padding-left: 22px !important;
+}
+
+.zone-panel-list li::before {
+  content: '' !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 1.02em !important;
+  width: 7px !important;
+  height: 7px !important;
+  border-radius: 2px !important;
+  background-color: #8cc63f !important;
+  box-shadow: 0 0 0 1px rgba(140,198,63,.16);
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.zone-panel-list a {
+  display: block;
+}
+
+/* Old span markers are intentionally disabled if a cached component ever leaves one behind. */
+.zone-panel-list li > span {
+  display: none !important;
+}
+
+/*
+  Service process steps should read as an intentional sequence, not plain paragraphs.
+  The ordered list now gets visible numbered markers across all devices.
+*/
+.process-list {
+  counter-reset: shk-process;
+  margin: 16px 0 22px !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.process-list li {
+  counter-increment: shk-process;
+  position: relative;
+  display: grid;
+  grid-template-columns: 34px minmax(0,1fr);
+  gap: 14px;
+  align-items: start;
+  padding: 13px 0 !important;
+  border-bottom: 1px solid #cfd9de;
+  font-size: 14px !important;
+  line-height: 1.55;
+}
+
+.process-list li::before {
+  content: counter(shk-process, decimal-leading-zero);
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #168bc0;
+  border-radius: 50%;
+  color: #066a9d;
+  font-family: var(--font-technical);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+@media (max-width: 600px) {
+  .zone-panel-list li {
+    padding-left: 19px !important;
+  }
+
+  .zone-panel-list li::before {
+    top: .95em !important;
+    width: 6px !important;
+    height: 6px !important;
+  }
+
+  .process-list li {
+    grid-template-columns: 31px minmax(0,1fr);
+    gap: 12px;
+    padding: 12px 0 !important;
+    font-size: 13.5px !important;
+  }
+
+  .process-list li::before {
+    width: 26px;
+    height: 26px;
+    font-size: 8.5px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .zone-panel-list li::before {
+    background-color: #8cc63f !important;
+    box-shadow: 0 0 0 1px rgba(140,198,63,.18) !important;
+  }
+
+  .paper .process-list li,
+  .detail-aside .process-list li {
+    border-bottom-color: #cfd9de !important;
+  }
+
+  .paper .process-list li::before,
+  .detail-aside .process-list li::before {
+    border-color: #168bc0 !important;
+    color: #066a9d !important;
+    -webkit-text-fill-color: #066a9d !important;
+  }
+}

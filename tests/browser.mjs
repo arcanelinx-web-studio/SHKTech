@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 const out = new URL(process.env.REVIEW_DIR || '../../../outputs/review/', import.meta.url);
 await mkdir(out, { recursive: true });
 const base = process.env.BASE_URL || 'http://127.0.0.1:4321';
-const browser = await chromium.launch({ channel: 'chrome', headless: true });
+const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext();
 const page = await context.newPage();
 const errors = [];

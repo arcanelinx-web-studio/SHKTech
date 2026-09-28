@@ -1,5 +1,6 @@
 ---
 import { products } from '../../data/products';
+import { brands } from '../../data/brands';
 import { site } from '../../config/site';
 import WhatsAppCTA from '../global/WhatsAppCTA.astro';
 import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
@@ -68,6 +69,78 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
         </label>
       </div>
       <p id="contact-hint" class="field-hint">Provide a phone number or email so SHK can contact you.</p>
+
+      <div class="marketplace-enquiry-fields" aria-labelledby="enquiry-details-heading">
+        <p class="eyebrow" id="enquiry-details-heading">ENQUIRY DETAILS</p>
+
+        <div class="form-pair">
+          <label>
+            Location
+            <input
+              name="location"
+              autocomplete="address-level2"
+              maxlength="120"
+              placeholder="City / region"
+            />
+          </label>
+          <label>
+            Product condition
+            <select name="productCondition">
+              <option>New</option>
+              <option>Replacement</option>
+              <option>Retrofit / upgrade</option>
+              <option>Not sure</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="form-pair">
+          <label>
+            Quantity
+            <span class="quantity-control">
+              <input name="quantity" type="number" inputmode="numeric" min="1" step="1" value="1" />
+              <select name="quantityUnit" aria-label="Quantity unit">
+                <option>Piece</option>
+                <option>Set</option>
+                <option>No.</option>
+                <option>Lot</option>
+              </select>
+            </span>
+          </label>
+          <label>
+            Usage / application
+            <input
+              name="usageApplication"
+              maxlength="180"
+              placeholder="Example: installation, retrofit, machining application"
+            />
+          </label>
+        </div>
+
+        <div class="form-pair">
+          <label>
+            Brand / preferred make
+            <input
+              name="brand"
+              list="brand-options"
+              maxlength="120"
+              placeholder="If specified"
+            />
+          </label>
+          <label>
+            Size / model / specification
+            <input
+              name="specification"
+              maxlength="180"
+              placeholder="Example: BT40, 10.1 inch, model number"
+            />
+          </label>
+        </div>
+
+        <datalist id="brand-options">
+          {brands.map((brand) => <option value={brand.name} />)}
+        </datalist>
+      </div>
 
       <label>
         Machine, part or requirement <span aria-hidden="true">*</span>
@@ -253,6 +326,13 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
         email,
         machineType: value('machineType'),
         machineModel: value('machineModel'),
+        location: value('location'),
+        productCondition: value('productCondition'),
+        quantity: value('quantity'),
+        quantityUnit: value('quantityUnit'),
+        usageApplication: value('usageApplication'),
+        brand: value('brand'),
+        specification: value('specification'),
         category: value('category'),
         details: value('details'),
         preferred: value('preferred'),

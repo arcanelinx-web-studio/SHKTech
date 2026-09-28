@@ -7,6 +7,7 @@ export const site = {
     phone: '+91 86600 36390',
     phoneHref: '+918660036390',
     whatsapp: '918660036390',
+    whatsappCatalog: 'https://wa.me/c/918660036390',
     email: 'shktechservices@gmail.com',
     address:
       'No. 46, 2nd Floor, 14th Cross Road, Opp. CLAAS Agricultural Machinery Pvt. Ltd., 2nd Stage Peenya, Bengaluru – 560058',

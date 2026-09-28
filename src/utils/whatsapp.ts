@@ -89,7 +89,7 @@ export function buildMessage(r: Requirement, items: EnquiryItem[], reference = c
 
   if (clean(r.details)) sections.push(`Requirement / Notes:\n${clean(r.details)}`);
 
-  if (selectedItems && items.length > 1) sections.push(`Selected Items:\n${selectedItems}`);
+  if (selectedItems) sections.push(`Selected Items:\n${selectedItems}`);
 
   if (contact.length) sections.push(contact.join('\n'));
 

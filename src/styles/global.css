@@ -10469,3 +10469,205 @@ button {
     color: #596a73 !important;
   }
 }
+
+/* === WHATSAPP CATALOGUE + CLIENT ENQUIRY V12 === */
+
+/* WhatsApp catalogue is a commerce/contact action, so keep it recognisably green but restrained. */
+.whatsapp-catalog-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  width: max-content;
+  max-width: 100%;
+  color: #117b39;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color .16s ease, border-color .16s ease, background .16s ease, transform .16s ease;
+}
+
+.whatsapp-catalog-cta svg {
+  flex: 0 0 auto;
+  color: #159447;
+}
+
+.whatsapp-catalog-cta:hover,
+.whatsapp-catalog-cta:focus-visible {
+  color: #0d6630;
+}
+
+.whatsapp-catalog-cta:hover {
+  transform: translateY(-1px);
+}
+
+.whatsapp-catalog-cta.compact {
+  min-height: 34px;
+  font-size: 10.5px;
+  gap: 5px;
+}
+
+.whatsapp-catalog-cta.compact svg {
+  width: 14px;
+  height: 14px;
+}
+
+.whatsapp-catalog-cta.button-like {
+  min-height: 49px;
+  padding: 13px 17px;
+  border: 1px solid #8fbca0;
+  border-radius: 3px;
+  background: #f4faf6;
+  font-size: 12px;
+}
+
+.whatsapp-catalog-cta.button-like:hover {
+  background: #eaf6ee;
+  border-color: #6fa883;
+}
+
+/* Keep three product actions readable instead of compressing them onto one line. */
+.source-product-actions,
+.product-actions,
+.catalogue-actions {
+  flex-wrap: wrap;
+  row-gap: 9px;
+}
+
+.source-product-actions .whatsapp-catalog-cta.compact,
+.product-actions .whatsapp-catalog-cta.compact {
+  margin-left: auto;
+}
+
+.source-product-actions .enquiry-button,
+.product-actions .enquiry-button {
+  flex: 0 0 auto;
+}
+
+/* Client-requested structured enquiry details — visually part of one engineering form. */
+.marketplace-enquiry-fields {
+  margin: 20px 0 22px;
+  padding: 18px 0 5px;
+  border-top: 1px solid #d6dfe4;
+  border-bottom: 1px solid #d6dfe4;
+}
+
+.marketplace-enquiry-fields > .eyebrow {
+  margin: 0 0 13px;
+  color: #066a9d !important;
+  font-size: 9.5px;
+  font-weight: 700;
+}
+
+.quantity-control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 105px;
+  gap: 8px;
+  margin-top: 7px;
+}
+
+.quantity-control input,
+.quantity-control select {
+  margin-top: 0 !important;
+}
+
+.marketplace-enquiry-fields input,
+.marketplace-enquiry-fields select {
+  width: 100%;
+}
+
+/* Product detail hero with a third action should wrap deliberately. */
+.detail-hero .button-row {
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 10px;
+}
+
+/* Dark mode must not restyle the form or catalogue action unpredictably. */
+@media (prefers-color-scheme: dark) {
+  .whatsapp-catalog-cta {
+    color: #117b39 !important;
+    -webkit-text-fill-color: #117b39 !important;
+  }
+
+  .whatsapp-catalog-cta svg {
+    color: #159447 !important;
+  }
+
+  .whatsapp-catalog-cta.button-like {
+    background: #f4faf6 !important;
+    border-color: #8fbca0 !important;
+    color: #117b39 !important;
+    -webkit-text-fill-color: #117b39 !important;
+  }
+
+  .marketplace-enquiry-fields {
+    border-color: #d6dfe4 !important;
+  }
+
+  .marketplace-enquiry-fields > .eyebrow {
+    color: #066a9d !important;
+    -webkit-text-fill-color: #066a9d !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .detail-hero .button-row {
+    gap: 9px;
+  }
+
+  .whatsapp-catalog-cta.button-like {
+    min-height: 47px;
+  }
+}
+
+@media (max-width: 600px) {
+  .marketplace-enquiry-fields {
+    margin: 17px 0 20px;
+    padding-top: 16px;
+  }
+
+  .marketplace-enquiry-fields > .eyebrow {
+    margin-bottom: 11px;
+    font-size: 9px;
+  }
+
+  .quantity-control {
+    grid-template-columns: minmax(0, 1fr) 96px;
+  }
+
+  .whatsapp-catalog-cta.compact {
+    min-height: 32px;
+    font-size: 10px;
+  }
+
+  .whatsapp-catalog-cta.button-like {
+    width: 100%;
+    min-height: 46px;
+    justify-content: space-between;
+    padding-inline: 15px;
+  }
+
+  .detail-hero .button-row {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .detail-hero .button-row > * {
+    width: 100%;
+  }
+
+  .source-product-actions .whatsapp-catalog-cta.compact,
+  .product-actions .whatsapp-catalog-cta.compact {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .quantity-control {
+    grid-template-columns: 1fr;
+  }
+}

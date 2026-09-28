@@ -1,0 +1,23 @@
+---
+import { site } from '../../config/site';
+import { ShoppingBag } from '@lucide/astro';
+
+interface Props {
+  label?: string;
+  class?: string;
+}
+
+const { label = 'WhatsApp catalogue', class: className = '' } = Astro.props;
+---
+
+<a
+  class:list={['whatsapp-catalog-cta', className]}
+  href={site.contact.whatsappCatalog}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label={`${label} — opens WhatsApp`}
+>
+  <ShoppingBag size={17} stroke-width={2} />
+  <span>{label}</span>
+  <span aria-hidden="true">↗</span>
+</a>

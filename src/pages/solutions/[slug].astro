@@ -52,7 +52,10 @@ const { problem: p } = Astro.props;
               return (
                 <article class="problem-card">
                   <h3>
-                    <a href={`/services/${s.id}/`}>{s.title} ↗</a>
+                    <a class="service-card-title" href={`/services/${s.id}/`}>
+                      <span>{s.title}</span>
+                      <span class="service-card-arrow" aria-hidden="true">↗</span>
+                    </a>
                   </h3>
                   <p>{s.description}</p>
                   <EnquiryButton id={s.id} title={s.title} kind="service" />

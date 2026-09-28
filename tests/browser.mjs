@@ -313,6 +313,11 @@ if ((await page.locator('.enquiry-row textarea').inputValue()) !== 'Review inter
   throw Error('Note persistence failed');
 await page.locator('[name="name"]').fill('QA Engineer');
 await page.locator('[name="phone"]').fill('9999999999');
+await page.locator('[name="location"]').fill('Bengaluru');
+await page.locator('[name="quantity"]').fill('2');
+await page.locator('[name="usageApplication"]').fill('Installation');
+await page.locator('[name="brand"]').fill('Weintek');
+await page.locator('[name="specification"]').fill('10.1 inch');
 await page.locator('[name="details"]').fill('Check fixture compatibility & bore Ø100.');
 await page.evaluate(() => {
   window.open = (url) => {
@@ -325,10 +330,17 @@ const msg = await page.evaluate(() => new URL(window.__opened).searchParams.get(
 if (
   !msg.includes('Rotary & tilting tables') ||
   !msg.includes('Review interface') ||
-  !msg.includes('Ø100')
+  !msg.includes('Ø100') ||
+  !msg.includes('Location: Bengaluru') ||
+  !msg.includes('Product Condition: New') ||
+  !msg.includes('Quantity: 2 Piece') ||
+  !msg.includes('Usage / Application: Installation') ||
+  !msg.includes('Brand / Preferred Make: Weintek') ||
+  !msg.includes('Size / Model / Specification: 10.1 inch') ||
+  !msg.includes('Please reply to confirm these details.')
 )
-  throw Error('WhatsApp missing requirement');
-report.whatsapp = 'Pass: selected items, notes, encoding and reference';
+  throw Error('WhatsApp missing structured enquiry details');
+report.whatsapp = 'Pass: marketplace-style details, selected items, notes, encoding and reference';
 await page.locator('.enquiry-row button').click();
 if (await page.locator('.enquiry-row').count()) throw Error('Remove failed');
 for (const route of [
@@ -371,6 +383,9 @@ report.accessibility.push({
   })),
 });
 await page.goto(base + '/products/rotary-tables/');
+const catalogueHref = await page.locator('.whatsapp-catalog-cta').first().getAttribute('href');
+if (catalogueHref !== 'https://wa.me/c/918660036390')
+  throw Error('WhatsApp catalogue link missing or incorrect');
 await page.getByRole('link', { name: 'Ask an Engineer', exact: true }).click();
 await page.waitForURL((url) => url.hash === '#requirement');
 if ((await page.locator('[name="category"]').inputValue()) !== 'Rotary & tilting tables')

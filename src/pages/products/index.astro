@@ -5,6 +5,26 @@ import Breadcrumb from '../../components/global/Breadcrumb.astro';
 import EnquiryButton from '../../components/enquiry/EnquiryButton.astro';
 import WhatsAppCatalogCTA from '../../components/global/WhatsAppCatalogCTA.astro';
 import { products } from '../../data/products';
+
+const productOrder = [
+  'chip-conveyors',
+  'coolant-filtration',
+  'chip-compactors',
+  'mist-collectors',
+  'rotary-tables',
+  'fixtures-clamping',
+  'tool-holders',
+  'angle-heads',
+  'probing',
+  'mandrels-chucks',
+  'measuring-equipment',
+  'cam-programming',
+  'ultrasonic-cleaning',
+];
+
+const orderedProducts = productOrder
+  .map((id) => products.find((product) => product.id === id))
+  .filter((product): product is (typeof products)[number] => Boolean(product));
 ---
 
 <BaseLayout title="CNC products & accessories" crumbs={[{ name: 'Products', path: '/products/' }]}>
@@ -26,7 +46,7 @@ import { products } from '../../data/products';
       </div>
 
       <div class="catalogue-list">
-        {products.map((product, i) => (
+        {orderedProducts.map((product, i) => (
           <article class="catalogue-row">
             <span class="catalogue-number mono">{String(i + 1).padStart(2, '0')}</span>
             <div class="catalogue-copy">

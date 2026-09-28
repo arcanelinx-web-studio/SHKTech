@@ -382,6 +382,75 @@ report.accessibility.push({
     nodes: v.nodes.map((n) => ({ target: n.target, summary: n.failureSummary })),
   })),
 });
+// Final inner-page visual QA for issues reported during client review.
+report.finalInnerPageQA = {};
+
+// Product index order: previous items 7–10 first; previous item 12 last.
+await page.setViewportSize({ width: 1440, height: 1000 });
+await page.goto(base + '/products/');
+const orderedProductLinks = await page
+  .locator('.catalogue-row .catalogue-copy h2 a')
+  .evaluateAll((links) => links.map((a) => a.getAttribute('href')));
+const expectedOrder = [
+  '/products/chip-conveyors/',
+  '/products/coolant-filtration/',
+  '/products/chip-compactors/',
+  '/products/mist-collectors/',
+  '/products/rotary-tables/',
+  '/products/fixtures-clamping/',
+  '/products/tool-holders/',
+  '/products/angle-heads/',
+  '/products/probing/',
+  '/products/mandrels-chucks/',
+  '/products/measuring-equipment/',
+  '/products/cam-programming/',
+  '/products/ultrasonic-cleaning/',
+];
+if (JSON.stringify(orderedProductLinks) !== JSON.stringify(expectedOrder))
+  throw Error('Product index priority order is incorrect');
+report.finalInnerPageQA.productOrder = 'Pass';
+
+// Technical table caption must sit above the table, with no blank band inside the bordered table.
+await page.goto(base + '/products/chip-compactors/');
+const tableGeometry = await page.evaluate(() => {
+  const wrap = document.querySelector('.technical-details .table-scroll')?.getBoundingClientRect();
+  const firstHeader = document.querySelector('.technical-details thead th')?.getBoundingClientRect();
+  const caption = document.querySelector('.spec-table-caption')?.getBoundingClientRect();
+  return {
+    internalTopGap: wrap && firstHeader ? firstHeader.top - wrap.top : 999,
+    captionGap: caption && wrap ? wrap.top - caption.bottom : -1,
+  };
+});
+if (tableGeometry.internalTopGap > 3 || tableGeometry.captionGap < 6 || tableGeometry.captionGap > 20)
+  throw Error('Technical table caption/header spacing is incorrect');
+report.finalInnerPageQA.specTable = tableGeometry;
+
+// Relevant service-card arrow must remain beside/top-aligned with its title, not wrap below.
+await page.goto(base + '/solutions/accuracy/');
+const serviceTitleGeometry = await page.evaluate(() =>
+  [...document.querySelectorAll('.service-card-title')].map((link) => {
+    const title = link.querySelector('span:first-child')?.getBoundingClientRect();
+    const arrow = link.querySelector('.service-card-arrow')?.getBoundingClientRect();
+    return title && arrow
+      ? {
+          titleTop: title.top,
+          titleBottom: title.bottom,
+          arrowTop: arrow.top,
+          arrowBottom: arrow.bottom,
+          deltaTop: Math.abs(arrow.top - title.top),
+          arrowBelowTitle: arrow.top >= title.bottom,
+        }
+      : null;
+  }),
+);
+if (
+  serviceTitleGeometry.some(
+    (g) => !g || g.arrowBelowTitle || g.deltaTop > 12,
+  )
+)
+  throw Error('Service-card arrow wrapped below its title');
+report.finalInnerPageQA.serviceCardArrows = 'Pass';
+
 await page.goto(base + '/products/rotary-tables/');
 const catalogueHref = await page.locator('.whatsapp-catalog-cta').first().getAttribute('href');
 if (catalogueHref !== 'https://wa.me/c/918660036390')

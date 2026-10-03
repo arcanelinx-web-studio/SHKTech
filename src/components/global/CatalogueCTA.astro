@@ -13,7 +13,10 @@ const { href, label = 'Catalogue', class: className = '' } = Astro.props;
 <a
   class:list={['catalogue-cta', className]}
   href={href}
-  aria-label={`${label} — view product catalogue`}
+  target="_blank"
+  rel="noopener noreferrer"
+  type="application/pdf"
+  aria-label={`${label} — open PDF catalogue`}
 >
   <BookOpen size={16} stroke-width={2} />
   <span>{label}</span>

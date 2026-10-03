@@ -451,10 +451,29 @@ if (
   throw Error('Service-card arrow wrapped below its title');
 report.finalInnerPageQA.serviceCardArrows = 'Pass';
 
+// Supplied catalogue actions must appear only on products with an actual mapped brochure.
+await page.goto(base + '/products/coolant-filtration/');
+const oilmaxCatalogueHref = await page.locator('.catalogue-cta').first().getAttribute('href');
+if (oilmaxCatalogueHref !== '/catalogues/oilmax-sump-cleaner/')
+  throw Error('Oilmax catalogue link missing or incorrect');
+
+await page.goto(base + '/catalogues/oilmax-sump-cleaner/');
+if (!(await page.locator('h1').innerText()).includes('Coolant / Sump Cleaning System'))
+  throw Error('Oilmax catalogue page missing');
+
+await page.goto(base + '/products/mist-collectors/');
+const airSeikiCatalogueHref = await page.locator('.catalogue-cta').first().getAttribute('href');
+if (airSeikiCatalogueHref !== '/catalogues/air-seiki-mist-collectors/')
+  throw Error('Air Seiki catalogue link missing or incorrect');
+
+await page.goto(base + '/catalogues/air-seiki-mist-collectors/');
+if (!(await page.locator('h1').innerText()).includes('Air Seiki Industrial Mist Filtration Systems'))
+  throw Error('Air Seiki catalogue page missing');
+
 await page.goto(base + '/products/rotary-tables/');
-const catalogueHref = await page.locator('.whatsapp-catalog-cta').first().getAttribute('href');
-if (catalogueHref !== 'https://wa.me/c/918660036390')
-  throw Error('WhatsApp catalogue link missing or incorrect');
+if (await page.locator('.catalogue-cta').count())
+  throw Error('Catalogue CTA shown for a product with no mapped brochure');
+
 await page.getByRole('link', { name: 'Ask an Engineer', exact: true }).click();
 await page.waitForURL((url) => url.hash === '#requirement');
 if ((await page.locator('[name="category"]').inputValue()) !== 'Rotary & tilting tables')

@@ -15,5 +15,5 @@ export const industries: Industry[] = [
 ].map(([name, applications]) => ({
   name: name!,
   applications: applications!,
-  source: { document: 'catalogue', pages: [55] },
+  source: { document: 'concept' },
 }));

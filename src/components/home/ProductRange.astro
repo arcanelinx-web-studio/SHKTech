@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import SectionHeader from '../global/SectionHeader.astro';
 import EnquiryButton from '../enquiry/EnquiryButton.astro';
-import WhatsAppCatalogCTA from '../global/WhatsAppCatalogCTA.astro';
+import CatalogueCTA from '../global/CatalogueCTA.astro';
 import { products } from '../../data/products';
 
 const shown = products.slice(0, 8);
@@ -43,7 +43,7 @@ const shown = products.slice(0, 8);
             <p>{product.description}</p>
             <div class="source-product-actions">
               <a class="text-link" href={`/products/${product.id}/`}>View range ↗</a>
-              <WhatsAppCatalogCTA label="Catalogue" class="compact" />
+              {product.catalogueHref && <CatalogueCTA href={product.catalogueHref} class="compact" />}
               <EnquiryButton id={product.id} title={product.title} />
             </div>
           </div>

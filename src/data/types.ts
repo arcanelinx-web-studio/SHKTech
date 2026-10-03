@@ -25,6 +25,7 @@ export interface ProductCategory {
   technicalSourceLabel?: string;
   compatibility?: string;
   downloads?: { title: string; href: string }[];
+  catalogueHref?: string;
   source: Source;
 }
 export interface Product extends ProductCategory {

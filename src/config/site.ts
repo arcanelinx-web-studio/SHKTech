@@ -3,6 +3,10 @@ export const site = {
   signature: 'Responsible Engineering.',
   description:
     'Engineering solutions for CNC manufacturing in Bengaluru. Explore workholding, tooling, probing, calibration, chip and coolant systems, reconditioning and retrofit.',
+  downloads: {
+    companyProfile: '/downloads/shk-tech-services-company-profile.pdf',
+    productPortfolio: '/downloads/shk-products-services-current.pdf',
+  },
   contact: {
     phone: '+91 86600 36390',
     phoneHref: '+918660036390',

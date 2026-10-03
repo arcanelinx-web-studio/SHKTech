@@ -7,7 +7,7 @@ import Button from '../../components/global/Button.astro';
 import ProductCard from '../../components/products/ProductCard.astro';
 import SpecTable from '../../components/products/SpecTable.astro';
 import WhatsAppCTA from '../../components/global/WhatsAppCTA.astro';
-import WhatsAppCatalogCTA from '../../components/global/WhatsAppCatalogCTA.astro';
+import CatalogueCTA from '../../components/global/CatalogueCTA.astro';
 import { products, compactorSpecs } from '../../data/products';
 export function getStaticPaths() {
   return products.map((product) => ({ params: { slug: product.id }, props: { product } }));
@@ -36,7 +36,9 @@ const { product: p } = Astro.props;
             <Button href={`/?category=${encodeURIComponent(p.title)}#requirement`}>
               Ask an Engineer
             </Button>
-            <WhatsAppCatalogCTA label="View WhatsApp catalogue" class="button-like" />
+            {p.catalogueHref && (
+        <CatalogueCTA href={p.catalogueHref} label="View catalogue" class="button-like" />
+      )}
           </div>
         </div>
         {p.image && (

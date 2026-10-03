@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/global/Breadcrumb.astro';
+import CatalogueCTA from '../../components/global/CatalogueCTA.astro';
+import { catalogues } from '../../data/catalogues';
+---
+
+<BaseLayout
+  title="Product catalogues"
+  description="Available SHK product catalogues and technical brochures."
+  crumbs={[{ name: 'Catalogues', path: '/catalogues/' }]}
+>
+  <section class="section paper catalogue-library-page">
+    <div class="container">
+      <Breadcrumb items={[{ title: 'Catalogues' }]} />
+      <div class="catalogue-intro">
+        <div>
+          <p class="eyebrow">TECHNICAL LIBRARY</p>
+          <h1 class="page-title">Product catalogues.</h1>
+        </div>
+        <p class="lead">
+          Review the currently available technical brochures, then share the machine and application details with SHK to confirm selection.
+        </p>
+      </div>
+
+      <div class="catalogue-library-grid">
+        {catalogues.map((catalogue) => (
+          <article class="catalogue-library-card">
+            <p class="eyebrow">{catalogue.brand}</p>
+            <h2>{catalogue.title}</h2>
+            <p>{catalogue.description}</p>
+            <CatalogueCTA href={`/catalogues/${catalogue.id}/`} label="Open catalogue" />
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

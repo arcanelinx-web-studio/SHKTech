@@ -77,17 +77,23 @@ const { product: p } = Astro.props;
       </div>
       <div class="technical-details">
         <h2>Technical details & compatibility</h2>
-        {p.specifications ? (
+        {p.technicalTable ? (
+          <SpecTable
+            headers={p.technicalTable.headers}
+            rows={p.technicalTable.rows}
+            caption={p.technicalTable.caption}
+          />
+        ) : p.specifications ? (
           <SpecTable
             headers={['Parameter', 'Details']}
             rows={Object.entries(p.specifications)}
-            caption={`${p.title} — source specifications`}
+            caption={`${p.title} specifications`}
           />
         ) : p.id === 'chip-compactors' ? (
           <SpecTable
             headers={['Model', 'VCC 12-110', 'VCC 10-150']}
             rows={compactorSpecs}
-            caption="Chip compactor specifications — catalogue page 43"
+            caption="Chip compactor specifications"
           />
         ) : (
           <p>Technical details available on request.</p>

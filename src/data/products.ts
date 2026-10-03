@@ -153,7 +153,7 @@ export const products: ProductCategory[] = [
     },
     compatibility:
       'Confirm sump capacity, contamination type, suction arrangement and machine layout with SHK before selection.',
-    catalogueHref: '/catalogues/oilmax-sump-cleaner/',
+    catalogueHref: '/downloads/oilmax-sump-cleaner.pdf',
     source: { document: 'oilmax-sump-cleaner', pages: [1, 2] },
   },
   {
@@ -210,7 +210,7 @@ export const products: ProductCategory[] = [
     },
     compatibility:
       'Confirm required air flow, machine enclosure, mist loading and installation arrangement with SHK before selection.',
-    catalogueHref: '/catalogues/air-seiki-mist-collectors/',
+    catalogueHref: '/downloads/air-seiki-mist-collectors.pdf',
     source: { document: 'air-seiki-brochure', pages: [1, 2, 3, 4, 5] },
   },
   {

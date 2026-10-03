@@ -451,24 +451,36 @@ if (
   throw Error('Service-card arrow wrapped below its title');
 report.finalInnerPageQA.serviceCardArrows = 'Pass';
 
-// Supplied catalogue actions must appear only on products with an actual mapped brochure.
+// Supplied catalogue actions must open actual PDF files and only appear on mapped products.
 await page.goto(base + '/products/coolant-filtration/');
 const oilmaxCatalogueHref = await page.locator('.catalogue-cta').first().getAttribute('href');
-if (oilmaxCatalogueHref !== '/catalogues/oilmax-sump-cleaner/')
-  throw Error('Oilmax catalogue link missing or incorrect');
+const oilmaxTarget = await page.locator('.catalogue-cta').first().getAttribute('target');
+if (oilmaxCatalogueHref !== '/downloads/oilmax-sump-cleaner.pdf' || oilmaxTarget !== '_blank')
+  throw Error('Oilmax PDF catalogue link missing or incorrect');
 
-await page.goto(base + '/catalogues/oilmax-sump-cleaner/');
-if (!(await page.locator('h1').innerText()).includes('Coolant / Sump Cleaning System'))
-  throw Error('Oilmax catalogue page missing');
+const oilmaxPdf = await page.request.get(base + '/downloads/oilmax-sump-cleaner.pdf');
+const oilmaxBytes = await oilmaxPdf.body();
+if (
+  oilmaxPdf.status() !== 200 ||
+  !oilmaxPdf.headers()['content-type']?.includes('application/pdf') ||
+  oilmaxBytes.subarray(0, 4).toString() !== '%PDF'
+)
+  throw Error('Oilmax PDF catalogue is not being served correctly');
 
 await page.goto(base + '/products/mist-collectors/');
 const airSeikiCatalogueHref = await page.locator('.catalogue-cta').first().getAttribute('href');
-if (airSeikiCatalogueHref !== '/catalogues/air-seiki-mist-collectors/')
-  throw Error('Air Seiki catalogue link missing or incorrect');
+const airSeikiTarget = await page.locator('.catalogue-cta').first().getAttribute('target');
+if (airSeikiCatalogueHref !== '/downloads/air-seiki-mist-collectors.pdf' || airSeikiTarget !== '_blank')
+  throw Error('Air Seiki PDF catalogue link missing or incorrect');
 
-await page.goto(base + '/catalogues/air-seiki-mist-collectors/');
-if (!(await page.locator('h1').innerText()).includes('Air Seiki Industrial Mist Filtration Systems'))
-  throw Error('Air Seiki catalogue page missing');
+const airSeikiPdf = await page.request.get(base + '/downloads/air-seiki-mist-collectors.pdf');
+const airSeikiBytes = await airSeikiPdf.body();
+if (
+  airSeikiPdf.status() !== 200 ||
+  !airSeikiPdf.headers()['content-type']?.includes('application/pdf') ||
+  airSeikiBytes.subarray(0, 4).toString() !== '%PDF'
+)
+  throw Error('Air Seiki PDF catalogue is not being served correctly');
 
 await page.goto(base + '/products/rotary-tables/');
 if (await page.locator('.catalogue-cta').count())

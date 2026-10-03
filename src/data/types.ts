@@ -1,6 +1,11 @@
 import type { ImageMetadata } from 'astro';
 export interface Source {
-  document: 'catalogue' | 'business-card' | 'concept';
+  document:
+    | 'catalogue'
+    | 'business-card'
+    | 'concept'
+    | 'oilmax-sump-cleaner'
+    | 'air-seiki-brochure';
   pages?: number[];
 }
 export interface ProductCategory {
@@ -12,6 +17,12 @@ export interface ProductCategory {
   features: string[];
   applications: string[];
   specifications?: Record<string, string>;
+  technicalTable?: {
+    caption: string;
+    headers: string[];
+    rows: string[][];
+  };
+  technicalSourceLabel?: string;
   compatibility?: string;
   downloads?: { title: string; href: string }[];
   source: Source;

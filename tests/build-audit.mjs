@@ -18,6 +18,18 @@ for (const file of files.filter((f) => f.endsWith('.html'))) {
   htmlCount++;
   if ((html.match(/<h1[\s>]/g) || []).length !== 1) failures.push(`${file}: H1 count`);
   if (html.includes('\uFFFD')) failures.push(`${file}: invalid encoding`);
+
+  const forbiddenCustomerFacingSourceNotes = [
+    'catalogue page',
+    'source specifications',
+    'source: shk catalogue',
+    'catalogue image · application context',
+  ];
+  const lowerHtml = html.toLowerCase();
+  for (const phrase of forbiddenCustomerFacingSourceNotes) {
+    if (lowerHtml.includes(phrase))
+      failures.push(`${file}: internal source note exposed to customer — ${phrase}`);
+  }
   const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
   if (new Set(ids).size !== ids.length) failures.push(`${file}: duplicate IDs`);
   for (const match of html.matchAll(/href="(\/(?!\/)[^"]*)"/g)) {

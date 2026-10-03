@@ -1,0 +1,21 @@
+---
+import { BookOpen } from '@lucide/astro';
+
+interface Props {
+  href: string;
+  label?: string;
+  class?: string;
+}
+
+const { href, label = 'Catalogue', class: className = '' } = Astro.props;
+---
+
+<a
+  class:list={['catalogue-cta', className]}
+  href={href}
+  aria-label={`${label} — view product catalogue`}
+>
+  <BookOpen size={16} stroke-width={2} />
+  <span>{label}</span>
+  <span aria-hidden="true">↗</span>
+</a>

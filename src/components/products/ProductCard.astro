@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import type { ProductCategory } from '../../data/types';
 import EnquiryButton from '../enquiry/EnquiryButton.astro';
-import WhatsAppCatalogCTA from '../global/WhatsAppCatalogCTA.astro';
+import CatalogueCTA from '../global/CatalogueCTA.astro';
 interface Props {
   product: ProductCategory;
 }
@@ -37,7 +37,7 @@ const { product: p } = Astro.props;
       <a class="text-link" href={`/products/${p.id}/`}>
         View Range ↗
       </a>
-      <WhatsAppCatalogCTA label="Catalogue" class="compact" />
+      {p.catalogueHref && <CatalogueCTA href={p.catalogueHref} class="compact" />}
       <EnquiryButton id={p.id} title={p.title} />
     </div>
   </div>

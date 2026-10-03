@@ -11115,3 +11115,27 @@ button {
     color: #18222a !important;
   }
 }
+
+/* === TRUTHFUL APPLICATION CONTEXT NOTE V15 === */
+
+.industry-context-note {
+  max-width: 560px;
+  margin: 5px 0 0;
+  color: #687984;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+@media (max-width: 760px) {
+  .industry-context-note {
+    max-width: 100%;
+    font-size: 10.5px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .industry-context-note {
+    color: #687984 !important;
+    -webkit-text-fill-color: #687984 !important;
+  }
+}

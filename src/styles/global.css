@@ -11229,3 +11229,90 @@ button {
     height: 43px;
   }
 }
+
+
+/* === ENQUIRY FORM + ADMIN POLISH V17 === */
+
+.requirement-form select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background-color: #fbfcfc !important;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #40515d 50%),
+    linear-gradient(135deg, #40515d 50%, transparent 50%);
+  background-position:
+    calc(100% - 17px) calc(50% - 2px),
+    calc(100% - 12px) calc(50% - 2px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 38px !important;
+}
+
+.requirement-form input:not([type='radio']):hover,
+.requirement-form textarea:hover,
+.requirement-form select:hover {
+  border-color: #9eb2bf;
+}
+
+.requirement-form input:not([type='radio']):focus,
+.requirement-form textarea:focus,
+.requirement-form select:focus {
+  border-color: #1e8fe1;
+  box-shadow: 0 0 0 1px #1e8fe1;
+}
+
+.contact-preference-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 260px);
+  gap: 22px;
+  align-items: end;
+  margin: -2px 0 18px;
+  padding: 13px 0 17px;
+  border-bottom: 1px solid #e0e7eb;
+}
+
+.contact-preference-row > .field-hint {
+  margin: 0;
+  align-self: center;
+}
+
+.preferred-contact {
+  margin: 0 !important;
+}
+
+.optional-label {
+  color: #778791;
+  font-size: 9px;
+  font-weight: 500;
+  margin-left: 4px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.footer-admin-link {
+  min-height: 34px;
+  padding: 7px 11px;
+  border: 1px solid #384751;
+  border-radius: 3px;
+  color: #b9c6ce !important;
+  font-size: 10.5px !important;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+.footer-admin-link:hover {
+  border-color: #5a7180;
+  color: #fff !important;
+  background: #142029;
+}
+
+@media (max-width: 700px) {
+  .contact-preference-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .preferred-contact {
+    max-width: none;
+  }
+}

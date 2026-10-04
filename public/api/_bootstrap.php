@@ -170,6 +170,17 @@ function shk_catalogues_for_lead(array $payload): array {
         if ($category !== '' && strtolower($catalogue['title']) === $category) $ids[$id] = true;
     }
 
+    // Only use brand mappings directly supported by the supplied SHK material.
+    $brand = strtolower(trim((string)($payload['brand'] ?? '')));
+    $brandMap = [
+        'oilmax' => 'coolant-filtration',
+        'air seiki' => 'mist-collectors',
+        'solidcam' => 'cam-programming',
+    ];
+    if ($brand !== '' && isset($brandMap[$brand])) {
+        $ids[$brandMap[$brand]] = true;
+    }
+
     $type = strtolower(trim((string)($payload['type'] ?? '')));
     if (!$ids && in_array($type, ['calibration', 'reconditioning', 'retrofit', 'technical consultation'], true)) {
         $ids['machine-services'] = true;
@@ -178,15 +189,14 @@ function shk_catalogues_for_lead(array $payload): array {
     $selected = [];
     foreach (array_keys($ids) as $id) {
         $selected[] = $map[$id];
-        if (count($selected) >= 4) break;
+        if (count($selected) >= 3) break;
     }
 
-    if (!$selected) {
-        $selected[] = [
-            'title' => 'SHK Tech Services Company Profile',
-            'path' => '/downloads/SHK-Tech-Services-Company-Profile.pdf',
-        ];
-    }
+    // Standard handoff: technical catalogue(s) first, corporate profile last.
+    $selected[] = [
+        'title' => 'SHK Tech Services Company Profile',
+        'path' => '/downloads/SHK-Tech-Services-Company-Profile.pdf',
+    ];
 
     $base = shk_base_url();
     return array_map(static fn(array $item): array => [

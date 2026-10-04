@@ -492,7 +492,7 @@ if (servicePdf.status() !== 200 || serviceBytes.subarray(0, 4).toString() !== '%
   throw Error('Machine Services catalogue is not served correctly');
 
 await page.goto(base + '/about/');
-const profileHref = await page.getByRole('link', { name: /Company profile PDF/i }).getAttribute('href');
+const profileHref = await page.locator('main').getByRole('link', { name: /Company profile PDF/i }).getAttribute('href');
 if (profileHref !== '/downloads/SHK-Tech-Services-Company-Profile.pdf')
   throw Error('Company profile download link missing or incorrect');
 const profilePdf = await page.request.get(base + profileHref);

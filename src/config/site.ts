@@ -4,8 +4,8 @@ export const site = {
   description:
     'Engineering solutions for CNC manufacturing in Bengaluru. Explore workholding, tooling, probing, calibration, chip and coolant systems, reconditioning and retrofit.',
   downloads: {
-    companyProfile: '/downloads/shk-tech-services-company-profile.pdf',
-    productPortfolio: '/downloads/shk-products-services-current.pdf',
+    companyProfile: '/downloads/SHK-Tech-Services-Company-Profile.pdf',
+    productPortfolio: '/downloads/SHK-Tech-Services-Company-Profile.pdf',
   },
   contact: {
     phone: '+91 86600 36390',

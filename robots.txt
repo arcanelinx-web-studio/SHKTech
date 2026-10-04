@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /enquiry/
+Sitemap: https://arcanelinx-web-studio.github.io/sitemap-index.xml

@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - design-refinement-v2
+      - client-crm-admin-v1
   workflow_dispatch:
 
 permissions:

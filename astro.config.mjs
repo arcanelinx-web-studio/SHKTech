@@ -13,7 +13,12 @@ export default defineConfig({
   output: 'static',
   devToolbar: { enabled: false },
   integrations: [
-    sitemap({ filter: (page) => !page.endsWith('/enquiry/') && !page.endsWith('/404/') }),
+    sitemap({
+      filter: (page) =>
+        !page.endsWith('/enquiry/') &&
+        !page.endsWith('/404/') &&
+        !page.includes('/admin/'),
+    }),
   ],
   vite: { plugins: [tailwindcss()] },
 });

@@ -208,6 +208,14 @@ export async function onRequestPost(context) {
     attachmentNames: Array.isArray(raw.attachmentNames)
       ? raw.attachmentNames.slice(0, 10).map((v) => cleanText(v, 200))
       : [],
+    attachments: Array.isArray(raw.attachments)
+      ? raw.attachments.slice(0, 10).map((v) => ({
+          key: cleanText(v && v.key, 500),
+          name: cleanText(v && v.name, 200),
+          type: cleanText(v && v.type, 120),
+          size: Number(v && v.size) || 0,
+        })).filter((v) => v.key && v.name)
+      : [],
     items: cleanItems(raw.items),
     whatsappOptIn: Boolean(raw.whatsappOptIn),
   };
@@ -236,7 +244,7 @@ export async function onRequestPost(context) {
     payload.phone, payload.email, payload.location, payload.productCondition, payload.quantity,
     payload.quantityUnit, payload.usageApplication, payload.brand, payload.specification,
     payload.category, payload.details, payload.machineType, payload.machineModel,
-    payload.preferred, JSON.stringify(payload.attachmentNames), JSON.stringify(payload.items),
+    payload.preferred, JSON.stringify(payload.attachments.length ? payload.attachments : payload.attachmentNames), JSON.stringify(payload.items),
     JSON.stringify(catalogues), '{}', ''
   ).run();
 

@@ -1,0 +1,93 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+---
+
+<AdminLayout title="Admin sign in" login>
+  <main class="admin-login">
+    <section class="admin-login-brand">
+      <a class="admin-brand-lockup" href="/" aria-label="Return to SHK Tech Services">
+        <img src="/images/logos/SHK-logo-white.svg" alt="" />
+        <span>
+          <strong>SHK <b>TECH</b></strong>
+          <small>SERVICES</small>
+        </span>
+      </a>
+      <div class="admin-login-copy">
+        <p class="admin-kicker">PRIVATE WORKSPACE</p>
+        <h1>Every enquiry.<br />One clear <em>pipeline.</em></h1>
+        <p>
+          Customer requirements from the SHK website are organised for follow-up, quotation and
+          conversion without changing the public website experience.
+        </p>
+      </div>
+      <div class="admin-login-signal" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
+    </section>
+
+    <section class="admin-login-panel">
+      <div class="admin-login-card">
+        <p class="admin-kicker">SHK ADMIN</p>
+        <h2>Sign in to enquiries.</h2>
+        <p class="admin-login-help">For authorised SHK staff only.</p>
+
+        <form id="admin-login-form">
+          <label>
+            Email
+            <input name="email" type="email" autocomplete="username" required />
+          </label>
+          <label>
+            Password
+            <input name="password" type="password" autocomplete="current-password" required />
+          </label>
+          <p id="login-error" class="admin-form-error" role="alert"></p>
+          <button class="button button-primary admin-login-submit" type="submit">
+            Open workspace <span aria-hidden="true">↗</span>
+          </button>
+        </form>
+
+        <a class="admin-back-link" href="/">← Back to SHK website</a>
+      </div>
+    </section>
+  </main>
+</AdminLayout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#admin-login-form')!;
+  const error = document.querySelector<HTMLElement>('#login-error')!;
+  const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+
+  fetch('/api/admin/session', { credentials: 'same-origin' })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.authenticated) location.replace('/admin/');
+    })
+    .catch(() => {});
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    error.textContent = '';
+    submit.disabled = true;
+    submit.textContent = 'Signing in…';
+
+    const data = new FormData(form);
+    try {
+      const response = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          email: String(data.get('email') || ''),
+          password: String(data.get('password') || ''),
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Unable to sign in.');
+      location.replace('/admin/');
+    } catch (err) {
+      error.textContent = err instanceof Error ? err.message : 'Unable to sign in.';
+      submit.disabled = false;
+      submit.innerHTML = 'Open workspace <span aria-hidden="true">↗</span>';
+    }
+  });
+</script>

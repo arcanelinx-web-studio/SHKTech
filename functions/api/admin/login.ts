@@ -1,4 +1,4 @@
-import { createSessionCookie, json, type CRMEnv } from '../../_lib/auth';
+import { createSessionCookie, json, type CRMEnv, type PagesFunction } from '../../_lib/auth';
 
 export const onRequestPost: PagesFunction<CRMEnv> = async ({ request, env }) => {
   if (!env.ADMIN_EMAIL || !env.ADMIN_PASSWORD || !env.SESSION_SECRET) {

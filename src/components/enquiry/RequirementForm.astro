@@ -27,6 +27,10 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
     </div>
 
     <form id="requirement-form" class="requirement-form">
+      <label style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+        Website
+        <input name="website" type="text" tabindex="-1" autocomplete="off" />
+      </label>
       <fieldset>
         <legend>What do you need?</legend>
         <div class="type-options">
@@ -388,6 +392,7 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
       attachments: uploadedAttachments,
       items,
       whatsappOptIn: data.get('whatsappOptIn') === 'yes',
+      website: value('website'),
     };
 
     submit.textContent = 'Submitting enquiry…';

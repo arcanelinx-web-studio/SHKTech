@@ -27,6 +27,10 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
     </div>
 
     <form id="requirement-form" class="requirement-form">
+      <label class="form-trap" aria-hidden="true">
+        Website
+        <input name="website" tabindex="-1" autocomplete="off" />
+      </label>
       <fieldset>
         <legend>What do you need?</legend>
         <div class="type-options">
@@ -226,7 +230,7 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
         <button class="button button-primary form-submit" type="submit" disabled>
           Send requirement <ArrowUpRight size={18} />
         </button>
-        <span class="field-hint">Opens WhatsApp for review. Nothing is sent automatically.</span>
+        <span class="field-hint">Creates an SHK enquiry record and opens WhatsApp for confirmation.</span>
       </div>
 
       <div id="whatsapp-result" hidden>
@@ -258,6 +262,61 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
   const attachment = document.querySelector<HTMLInputElement>('#attachment')!;
   let message = '';
   let reference = '';
+
+  const reviewHost =
+    location.hostname.endsWith('github.io') ||
+    ['localhost', '127.0.0.1'].includes(location.hostname);
+
+  async function recordEnquiry(payload: Record<string, unknown>) {
+    try {
+      const response = await fetch('/api/enquiries', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) throw new Error('Enquiry API unavailable');
+      const body = await response.json();
+      if (body.reference) reference = body.reference;
+      return 'saved';
+    } catch {
+      if (!reviewHost) return 'unavailable';
+      const key = 'shk-preview-enquiries';
+      const existing = JSON.parse(localStorage.getItem(key) || '[]');
+      const previewLead = {
+        id: `preview-${reference}`,
+        reference,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        name: payload.name || '',
+        company: payload.company || '',
+        phone: payload.phone || '',
+        email: payload.email || '',
+        location: payload.location || '',
+        type: payload.type || '',
+        product_condition: payload.productCondition || '',
+        quantity: payload.quantity || '',
+        quantity_unit: payload.quantityUnit || '',
+        usage_application: payload.usageApplication || '',
+        brand: payload.brand || '',
+        specification: payload.specification || '',
+        machine_type: payload.machineType || '',
+        machine_model: payload.machineModel || '',
+        category: payload.category || '',
+        details: payload.details || '',
+        preferred: payload.preferred || '',
+        selected_items: JSON.stringify(payload.selectedItems || []),
+        source_page: payload.sourcePage || '',
+        source_channel: 'Website review',
+        stage: 'new',
+        priority: 'normal',
+        owner: '',
+        next_follow_up: '',
+        internal_notes: '',
+      };
+      localStorage.setItem(key, JSON.stringify([previewLead, ...existing].slice(0, 100)));
+      return 'preview';
+    }
+  }
   attachment.addEventListener('change', () => {
     document.getElementById('file-status')!.textContent = Array.from(attachment.files || [])
       .map((f) => f.name)
@@ -282,7 +341,7 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
   }
   context();
   window.addEventListener('hashchange', context);
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const data = new FormData(form);
     const value = (key: string) => String(data.get(key) || '').trim();
@@ -317,37 +376,47 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
       return;
     }
     reference ||= createReference();
-    message = buildMessage(
-      {
-        type: value('type'),
-        name: value('name'),
-        company: value('company'),
-        phone,
-        email,
-        machineType: value('machineType'),
-        machineModel: value('machineModel'),
-        location: value('location'),
-        productCondition: value('productCondition'),
-        quantity: value('quantity'),
-        quantityUnit: value('quantityUnit'),
-        usageApplication: value('usageApplication'),
-        brand: value('brand'),
-        specification: value('specification'),
-        category: value('category'),
-        details: value('details'),
-        preferred: value('preferred'),
-        attachmentNames: Array.from(attachment.files || []).map((f) => f.name),
-      },
-      getItems(),
+    const submission = {
+      type: value('type'),
+      name: value('name'),
+      company: value('company'),
+      phone,
+      email,
+      machineType: value('machineType'),
+      machineModel: value('machineModel'),
+      location: value('location'),
+      productCondition: value('productCondition'),
+      quantity: value('quantity'),
+      quantityUnit: value('quantityUnit'),
+      usageApplication: value('usageApplication'),
+      brand: value('brand'),
+      specification: value('specification'),
+      category: value('category'),
+      details: value('details'),
+      preferred: value('preferred'),
+      attachmentNames: Array.from(attachment.files || []).map((f) => f.name),
+    };
+    const saveState = await recordEnquiry({
+      ...submission,
+      website: value('website'),
       reference,
-    );
+      selectedItems: getItems(),
+      sourcePage: location.pathname,
+    });
+    message = buildMessage(submission, getItems(), reference);
     const href = whatsappUrl(message);
     const longMessage = href.length > 7000;
     const destination = longMessage ? href.split('?')[0]! : href;
     (document.getElementById('whatsapp-open') as HTMLAnchorElement).href = destination;
-    document.getElementById('handoff-status')!.textContent = longMessage
+    const handoff = longMessage
       ? 'This requirement is too long for a reliable WhatsApp link. Copy the requirement below, open WhatsApp, paste it into the conversation and attach your files.'
-      : 'Your requirement is ready. Review it in WhatsApp, attach any files, then send.';
+      : 'WhatsApp is ready. Review the message, attach any files, then send.';
+    document.getElementById('handoff-status')!.textContent =
+      saveState === 'saved'
+        ? `Enquiry ${reference} has been recorded for SHK. ${handoff}`
+        : saveState === 'preview'
+          ? `Review mode: enquiry ${reference} is visible in the SHK Admin preview. ${handoff}`
+          : `The online enquiry inbox could not be reached. ${handoff}`;
     document.getElementById('message-preview')!.textContent = message;
     document.getElementById('whatsapp-result')!.hidden = false;
     if (!longMessage) window.open(destination, '_blank', 'noopener,noreferrer');

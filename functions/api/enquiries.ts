@@ -1,4 +1,4 @@
-import { isAdmin, json, type CRMEnv } from '../_lib/auth';
+import { isAdmin, json, type CRMEnv, type PagesFunction } from '../_lib/auth';
 
 const STATUSES = ['New', 'Contacted', 'Qualified', 'Quotation', 'Follow-up', 'Won', 'Lost'];
 

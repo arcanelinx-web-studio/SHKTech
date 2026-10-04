@@ -5,6 +5,7 @@ on:
     branches:
       - design-refinement-v2
       - client-review-v3-shk-crm
+      - client-review-v4-hostinger-crm
   pull_request:
     branches:
       - main
@@ -43,6 +44,9 @@ jobs:
 
       - name: Audit generated site
         run: node tests/build-audit.mjs
+
+      - name: Lint Hostinger PHP
+        run: find dist/api -name '*.php' -print0 | xargs -0 -n1 php -l
 
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium

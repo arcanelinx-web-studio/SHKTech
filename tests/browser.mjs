@@ -319,14 +319,10 @@ await page.locator('[name="usageApplication"]').fill('Installation');
 await page.locator('[name="brand"]').fill('Weintek');
 await page.locator('[name="specification"]').fill('10.1 inch');
 await page.locator('[name="details"]').fill('Check fixture compatibility & bore Ø100.');
-await page.evaluate(() => {
-  window.open = (url) => {
-    window.__opened = url;
-    return null;
-  };
-});
 await page.locator('.form-submit').click();
-const msg = await page.evaluate(() => new URL(window.__opened).searchParams.get('text'));
+await page.locator('#whatsapp-result').waitFor({ state: 'visible' });
+const whatsappHref = await page.locator('#whatsapp-open').getAttribute('href');
+const msg = whatsappHref ? new URL(whatsappHref).searchParams.get('text') : '';
 if (
   !msg.includes('Rotary & tilting tables') ||
   !msg.includes('Review interface') ||
@@ -451,41 +447,62 @@ if (
   throw Error('Service-card arrow wrapped below its title');
 report.finalInnerPageQA.serviceCardArrows = 'Pass';
 
-// Supplied catalogue actions must open actual PDF files and only appear on mapped products.
-await page.goto(base + '/products/coolant-filtration/');
-const oilmaxCatalogueHref = await page.locator('.catalogue-cta').first().getAttribute('href');
-const oilmaxTarget = await page.locator('.catalogue-cta').first().getAttribute('target');
-if (oilmaxCatalogueHref !== '/downloads/oilmax-sump-cleaner.pdf' || oilmaxTarget !== '_blank')
-  throw Error('Oilmax PDF catalogue link missing or incorrect');
+// Every product family now has its own client-approved SHK catalogue.
+const productCatalogues = [
+  ['/products/rotary-tables/', '/downloads/SHK-Catalogue-01-Rotary-Tilting-Tables.pdf'],
+  ['/products/fixtures-clamping/', '/downloads/SHK-Catalogue-02-Fixtures-Clamping.pdf'],
+  ['/products/tool-holders/', '/downloads/SHK-Catalogue-03-Tool-Holders-Pull-Studs.pdf'],
+  ['/products/angle-heads/', '/downloads/SHK-Catalogue-04-Custom-Angle-Heads.pdf'],
+  ['/products/probing/', '/downloads/SHK-Catalogue-05-Probing-Tool-Breakage.pdf'],
+  ['/products/mandrels-chucks/', '/downloads/SHK-Catalogue-06-Mandrels-Chucks.pdf'],
+  ['/products/chip-conveyors/', '/downloads/SHK-Catalogue-07-Chip-Conveyors.pdf'],
+  ['/products/coolant-filtration/', '/downloads/SHK-Catalogue-08-Coolant-Sump-Cleaning-Filtration.pdf'],
+  ['/products/chip-compactors/', '/downloads/SHK-Catalogue-09-Chip-Compactors.pdf'],
+  ['/products/mist-collectors/', '/downloads/SHK-Catalogue-10-Oil-Mist-Collection.pdf'],
+  ['/products/measuring-equipment/', '/downloads/SHK-Catalogue-11-Measuring-Test-Equipment.pdf'],
+  ['/products/cam-programming/', '/downloads/SHK-Catalogue-12-CAM-Programming.pdf'],
+  ['/products/ultrasonic-cleaning/', '/downloads/SHK-Catalogue-13-Ultrasonic-Cleaning.pdf'],
+];
 
-const oilmaxPdf = await page.request.get(base + '/downloads/oilmax-sump-cleaner.pdf');
-const oilmaxBytes = await oilmaxPdf.body();
-if (
-  oilmaxPdf.status() !== 200 ||
-  !oilmaxPdf.headers()['content-type']?.includes('application/pdf') ||
-  oilmaxBytes.subarray(0, 4).toString() !== '%PDF'
-)
-  throw Error('Oilmax PDF catalogue is not being served correctly');
+for (const [route, expectedHref] of productCatalogues) {
+  await page.goto(base + route);
+  const cta = page.locator('.catalogue-cta').first();
+  if ((await cta.count()) !== 1) throw Error('Catalogue CTA missing on ' + route);
+  if ((await cta.getAttribute('href')) !== expectedHref || (await cta.getAttribute('target')) !== '_blank')
+    throw Error('Catalogue link incorrect on ' + route);
 
-await page.goto(base + '/products/mist-collectors/');
-const airSeikiCatalogueHref = await page.locator('.catalogue-cta').first().getAttribute('href');
-const airSeikiTarget = await page.locator('.catalogue-cta').first().getAttribute('target');
-if (airSeikiCatalogueHref !== '/downloads/air-seiki-mist-collectors.pdf' || airSeikiTarget !== '_blank')
-  throw Error('Air Seiki PDF catalogue link missing or incorrect');
+  const pdf = await page.request.get(base + expectedHref);
+  const bytes = await pdf.body();
+  if (
+    pdf.status() !== 200 ||
+    !pdf.headers()['content-type']?.includes('application/pdf') ||
+    bytes.subarray(0, 4).toString() !== '%PDF'
+  )
+    throw Error('Catalogue PDF is not served correctly: ' + expectedHref);
+}
 
-const airSeikiPdf = await page.request.get(base + '/downloads/air-seiki-mist-collectors.pdf');
-const airSeikiBytes = await airSeikiPdf.body();
-if (
-  airSeikiPdf.status() !== 200 ||
-  !airSeikiPdf.headers()['content-type']?.includes('application/pdf') ||
-  airSeikiBytes.subarray(0, 4).toString() !== '%PDF'
-)
-  throw Error('Air Seiki PDF catalogue is not being served correctly');
+await page.goto(base + '/services/laser-calibration/');
+const serviceCatalogue = page.locator('.catalogue-cta').first();
+if ((await serviceCatalogue.getAttribute('href')) !== '/downloads/SHK-Catalogue-14-Machine-Services.pdf')
+  throw Error('Machine Services catalogue link missing or incorrect');
+
+const servicePdf = await page.request.get(base + '/downloads/SHK-Catalogue-14-Machine-Services.pdf');
+const serviceBytes = await servicePdf.body();
+if (servicePdf.status() !== 200 || serviceBytes.subarray(0, 4).toString() !== '%PDF')
+  throw Error('Machine Services catalogue is not served correctly');
+
+await page.goto(base + '/about/');
+const profileHref = await page.getByRole('link', { name: /Company profile PDF/i }).getAttribute('href');
+if (profileHref !== '/downloads/SHK-Tech-Services-Company-Profile.pdf')
+  throw Error('Company profile download link missing or incorrect');
+const profilePdf = await page.request.get(base + profileHref);
+const profileBytes = await profilePdf.body();
+if (profilePdf.status() !== 200 || profileBytes.subarray(0, 4).toString() !== '%PDF')
+  throw Error('Company profile PDF is not served correctly');
+
+report.finalInnerPageQA.catalogues = 'Pass: 13 product catalogues, Machine Services and company profile';
 
 await page.goto(base + '/products/rotary-tables/');
-if (await page.locator('.catalogue-cta').count())
-  throw Error('Catalogue CTA shown for a product with no mapped brochure');
-
 await page.getByRole('link', { name: 'Ask an Engineer', exact: true }).click();
 await page.waitForURL((url) => url.hash === '#requirement');
 if ((await page.locator('[name="category"]').inputValue()) !== 'Rotary & tilting tables')

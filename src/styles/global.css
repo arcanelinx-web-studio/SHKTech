@@ -11139,3 +11139,51 @@ button {
     -webkit-text-fill-color: #687984 !important;
   }
 }
+
+
+/* === CLIENT TECHNOLOGY LOGOS + ADMIN ACCESS V16 === */
+.technology-strip .technology-brand-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.technology-logo,
+.technology-wordmark {
+  height: 38px;
+  min-width: 72px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 1px solid rgba(255,255,255,.14);
+  background: #f6f7f5;
+}
+.technology-logo { padding: 4px 8px; }
+.technology-logo img {
+  display: block;
+  width: auto;
+  max-width: 128px;
+  height: 27px;
+  object-fit: contain;
+  filter: saturate(.88) contrast(1.03);
+  transition: filter .18s ease, transform .18s ease;
+}
+.technology-logo:hover img { filter: saturate(1.08) contrast(1.05); transform: translateY(-1px); }
+.technology-wordmark {
+  padding: 0 13px;
+  background: transparent;
+  color: #d4dde2;
+  font: 700 11px/1 var(--font-primary);
+}
+.footer-utility-links { display: inline-flex; align-items: center; gap: 16px; }
+.footer-admin-link { color: #7f919b !important; font-size: 10px !important; }
+.footer-admin-link:hover { color: #c9d7de !important; }
+.form-trap { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
+
+@media (max-width: 760px) {
+  .technology-strip .technology-brand-grid { gap: 6px; }
+  .technology-logo,
+  .technology-wordmark { height: 34px; min-width: 62px; }
+  .technology-logo img { max-width: 105px; height: 23px; }
+}

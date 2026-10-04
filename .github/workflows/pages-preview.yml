@@ -3,7 +3,7 @@ name: SHK GitHub Pages preview
 on:
   push:
     branches:
-      - design-refinement-v2
+      - client-review-v4-hostinger-crm
   workflow_dispatch:
 
 permissions:

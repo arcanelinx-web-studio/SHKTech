@@ -455,6 +455,15 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
         link.textContent = catalogue.title + ' ↗';
         catalogueLinks.append(link);
       });
+
+      if (serverResult.delivery?.showcase) {
+        const adminLink = document.createElement('a');
+        adminLink.className = 'button button-primary';
+        const base = import.meta.env.BASE_URL || '/';
+        adminLink.href = new URL((base === '/' ? '/' : base) + 'admin/', window.location.origin).href;
+        adminLink.textContent = 'View in SHK Lead Desk ↗';
+        catalogueLinks.append(adminLink);
+      }
     } else {
       catalogueBox.hidden = true;
     }

@@ -36,13 +36,14 @@ export async function onRequestGet(context) {
   const sql =
     'SELECT id, reference, created_at, updated_at, stage, source, type, name, company, phone, email, ' +
     'location, product_condition, quantity, quantity_unit, usage_application, brand, specification, ' +
-    'category, details, machine_type, machine_model, preferred, items_json, catalogue_json, delivery_json, notes ' +
+    'category, details, machine_type, machine_model, preferred, attachment_names_json, items_json, catalogue_json, delivery_json, notes ' +
     'FROM leads ' + (where.length ? 'WHERE ' + where.join(' AND ') + ' ' : '') +
     'ORDER BY created_at DESC LIMIT 500';
 
   const result = await context.env.DB.prepare(sql).bind(...params).all();
   const leads = (result.results || []).map((row) => ({
     ...row,
+    attachments: safeJson(row.attachment_names_json, []),
     items: safeJson(row.items_json, []),
     catalogues: safeJson(row.catalogue_json, []),
     delivery: safeJson(row.delivery_json, {}),

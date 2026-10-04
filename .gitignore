@@ -4,3 +4,5 @@ dist/
 .env
 test-results/
 playwright-report/
+shk-private/
+public/.shk-private/

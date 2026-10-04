@@ -72,7 +72,18 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
           <input name="email" type="email" autocomplete="email" maxlength="150" aria-describedby="contact-hint" />
         </label>
       </div>
-      <p id="contact-hint" class="field-hint">Provide a phone number or email so SHK can contact you.</p>
+      <div class="contact-preference-row">
+        <p id="contact-hint" class="field-hint">Provide a phone number or email so SHK can contact you.</p>
+        <label class="preferred-contact">
+          Preferred contact <span class="optional-label">optional</span>
+          <select name="preferred">
+            <option value="Auto">Use available contact</option>
+            <option value="WhatsApp">WhatsApp</option>
+            <option value="Phone">Phone</option>
+            <option value="Email">Email</option>
+          </select>
+        </label>
+      </div>
 
       <div class="marketplace-enquiry-fields" aria-labelledby="enquiry-details-heading">
         <p class="eyebrow" id="enquiry-details-heading">ENQUIRY DETAILS</p>
@@ -124,12 +135,10 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
         <div class="form-pair">
           <label>
             Brand / preferred make
-            <input
-              name="brand"
-              list="brand-options"
-              maxlength="120"
-              placeholder="If specified"
-            />
+            <select name="brand">
+              <option value="">Select if relevant</option>
+              {brands.map((brand) => <option value={brand.name}>{brand.name}</option>)}
+            </select>
           </label>
           <label>
             Size / model / specification
@@ -141,9 +150,6 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
           </label>
         </div>
 
-        <datalist id="brand-options">
-          {brands.map((brand) => <option value={brand.name} />)}
-        </datalist>
       </div>
 
       <label>
@@ -205,37 +211,22 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
               <input name="machineModel" maxlength="150" />
             </label>
           </div>
-          <div class="form-pair">
-            <label>
-              Product / category
-              <select name="category">
-                <option value="">Help me identify the right solution</option>
-                {products.map((p) => <option value={p.title}>{p.title}</option>)}
-              </select>
-            </label>
-            <label>
-              Preferred contact
-              <select name="preferred">
-                <option>WhatsApp</option>
-                <option>Phone</option>
-                <option>Email</option>
-              </select>
-            </label>
-          </div>
+          <label>
+            Product / category
+            <select name="category">
+              <option value="">Help me identify the right solution</option>
+              {products.map((p) => <option value={p.title}>{p.title}</option>)}
+            </select>
+          </label>
         </div>
       </details>
-
-      <label style="display:flex;gap:10px;align-items:flex-start;margin:4px 0 18px;font-size:12px;line-height:1.6;color:#53616b;">
-        <input name="whatsappOptIn" type="checkbox" value="yes" style="margin-top:3px;" />
-        <span>Also send my enquiry acknowledgement and catalogue link on WhatsApp when SHK's WhatsApp Business messaging is available.</span>
-      </label>
 
       <p id="form-error" class="form-error" role="alert" tabindex="-1"></p>
       <div class="requirement-submit-row">
         <button class="button button-primary form-submit" type="submit" disabled>
           Submit enquiry & get catalogue <ArrowUpRight size={18} />
         </button>
-        <span class="field-hint">Your enquiry is recorded first. Relevant catalogue links are then shown here and sent by email when provided.</span>
+        <span class="field-hint">Submit the requirement to receive the relevant SHK catalogue and continue the discussion with the engineering team.</span>
       </div>
 
       <div id="whatsapp-result" hidden>
@@ -342,16 +333,24 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
       error.focus();
       return;
     }
-    if (value('preferred') === 'Email' && !email) {
-      error.textContent = 'Enter an email address for your preferred contact method.';
+    const preferredChoice = value('preferred') || 'Auto';
+    if (preferredChoice === 'Email' && !email) {
+      error.textContent = 'Enter an email address or choose “Use available contact”.';
       error.focus();
       return;
     }
-    if (value('preferred') !== 'Email' && !phone) {
-      error.textContent = 'Enter a phone number for your preferred contact method, or select Email.';
+    if ((preferredChoice === 'WhatsApp' || preferredChoice === 'Phone') && !phone) {
+      error.textContent = 'Enter a phone number or choose “Use available contact”.';
       error.focus();
       return;
     }
+
+    const resolvedPreferred =
+      preferredChoice === 'Auto'
+        ? phone
+          ? 'WhatsApp'
+          : 'Email'
+        : preferredChoice;
 
     const items = getItems();
     const selectedFiles = Array.from(attachment.files || []);
@@ -393,11 +392,11 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
       specification: value('specification'),
       category: value('category'),
       details: value('details'),
-      preferred: value('preferred'),
+      preferred: resolvedPreferred,
       attachmentNames: selectedFiles.map((f) => f.name),
       attachments: uploadedAttachments,
       items,
-      whatsappOptIn: data.get('whatsappOptIn') === 'yes',
+      whatsappOptIn: false,
       website: value('website'),
     };
 
@@ -456,14 +455,7 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
         catalogueLinks.append(link);
       });
 
-      if (serverResult.delivery?.showcase) {
-        const adminLink = document.createElement('a');
-        adminLink.className = 'button button-primary';
-        const base = import.meta.env.BASE_URL || '/';
-        adminLink.href = new URL((base === '/' ? '/' : base) + 'admin/', window.location.origin).href;
-        adminLink.textContent = 'View in SHK Lead Desk ↗';
-        catalogueLinks.append(adminLink);
-      }
+
     } else {
       catalogueBox.hidden = true;
     }

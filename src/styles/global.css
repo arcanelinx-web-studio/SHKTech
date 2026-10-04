@@ -11316,3 +11316,56 @@ button {
     max-width: none;
   }
 }
+
+
+/* === BRAND STRIP + FOOTER ALIGNMENT V18 === */
+.technology-brand-rail {
+  min-height: 78px;
+  padding: 8px 14px;
+}
+
+.technology-brand-rail > img {
+  width: 100%;
+  height: auto;
+  max-height: 64px;
+  object-fit: contain;
+  object-position: center;
+}
+
+.footer-bottom {
+  align-items: center;
+}
+
+.footer-admin-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #7f939f !important;
+  font-size: 10px !important;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+.footer-admin-link:hover {
+  border: 0;
+  background: transparent;
+  color: #ffffff !important;
+}
+
+@media (max-width: 600px) {
+  .technology-brand-rail {
+    padding: 9px 10px;
+    overflow-x: auto;
+  }
+
+  .technology-brand-rail > img {
+    width: 980px;
+    max-width: none;
+    max-height: 54px;
+  }
+}

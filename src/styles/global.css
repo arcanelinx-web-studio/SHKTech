@@ -11141,7 +11141,7 @@ button {
 }
 
 
-/* === CLIENT SHOWCASE + TRANSPARENT BRAND RAIL V16 === */
+/* === CLIENT SHOWCASE V16 === */
 
 .hero-profile-link {
   display: inline-flex;
@@ -11164,69 +11164,10 @@ button {
   transform: translateX(2px);
 }
 
-.technology-strip {
-  gap: 26px;
-  min-height: 94px;
-  padding-top: 14px;
-  padding-bottom: 14px;
-}
-
-.technology-brand-rail {
-  flex: 1;
-  min-width: 0;
-  display: flex !important;
-  align-items: center;
-  justify-content: center !important;
-  padding: 10px 18px;
-  overflow: hidden;
-  border: 1px solid #34414a;
-  border-radius: 3px;
-  background: #f6f7f5;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.45);
-}
-
-.technology-brand-rail > img {
-  width: 100%;
-  height: 56px;
-  max-width: 1080px;
-  object-fit: contain;
-  object-position: center;
-}
-
-@media (max-width: 900px) {
-  .technology-strip {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 12px;
-    padding-top: 16px;
-    padding-bottom: 18px;
-  }
-
-  .technology-brand-rail {
-    width: 100%;
-    padding: 9px 12px;
-  }
-
-  .technology-brand-rail > img {
-    height: 46px;
-  }
-}
-
 @media (max-width: 600px) {
   .hero-profile-link {
     margin-top: 16px;
     font-size: 11px;
-  }
-
-  .technology-brand-rail {
-    overflow-x: auto;
-    justify-content: flex-start !important;
-  }
-
-  .technology-brand-rail > img {
-    width: 850px;
-    max-width: none;
-    height: 43px;
   }
 }
 
@@ -11318,73 +11259,13 @@ button {
 }
 
 
-/* === BRAND STRIP + FOOTER ALIGNMENT V18 === */
-.technology-brand-rail {
-  min-height: 78px;
-  padding: 8px 14px;
-}
-
-.technology-brand-rail > img {
-  width: 100%;
-  height: auto;
-  max-height: 64px;
-  object-fit: contain;
-  object-position: center;
-}
-
-.footer-bottom {
-  align-items: center;
-}
-
-.footer-admin-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 0;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  color: #7f939f !important;
-  font-size: 10px !important;
-  font-weight: 500;
-  line-height: 1.5;
-  letter-spacing: 0;
-}
-
-.footer-admin-link:hover {
-  border: 0;
-  background: transparent;
-  color: #ffffff !important;
-}
-
-@media (max-width: 600px) {
-  .technology-brand-rail {
-    padding: 9px 10px;
-    overflow-x: auto;
-  }
-
-  .technology-brand-rail > img {
-    width: 980px;
-    max-width: none;
-    max-height: 54px;
-  }
-}
 
 
-/* === LOGO STRIP RELIABILITY + FOOTER LOGIN BUTTON V19 === */
-.technology-brand-rail {
-  min-height: 76px;
-  padding: 8px 16px;
-  background: #f6f7f5;
-}
-
-.technology-brand-rail > img {
-  display: block;
-  width: min(100%, 980px);
-  height: auto;
-  max-height: 58px;
-  margin: 0 auto;
-  object-fit: contain;
+/* === FOOTER FINAL ALIGNMENT V20 === */
+/* Keep the original boxed team-login treatment; only align it with the bottom row. */
+.footer {
+  border-top: 0 !important;
+  border-image: none !important;
 }
 
 .footer-bottom {
@@ -11396,9 +11277,9 @@ button {
   align-items: center !important;
   justify-content: center !important;
   align-self: center !important;
-  min-height: 36px !important;
+  min-height: 34px !important;
   margin: 0 !important;
-  padding: 0 13px !important;
+  padding: 7px 11px !important;
   border: 1px solid #384751 !important;
   border-radius: 3px !important;
   background: transparent !important;
@@ -11412,17 +11293,5 @@ button {
 .footer-admin-link:hover {
   border-color: #5a7180 !important;
   background: #142029 !important;
-  color: #fff !important;
-}
-
-@media (max-width: 600px) {
-  .technology-brand-rail > img {
-    width: 900px;
-    max-width: none;
-    max-height: 48px;
-  }
-
-  .footer-admin-link {
-    min-height: 34px !important;
-  }
+  color: #ffffff !important;
 }

@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/global/Breadcrumb.astro';
 import Button from '../../components/global/Button.astro';
 import EnquiryButton from '../../components/enquiry/EnquiryButton.astro';
+import CatalogueCTA from '../../components/global/CatalogueCTA.astro';
 import { services } from '../../data/services';
 export function getStaticPaths() {
   return services.map((service) => ({ params: { slug: service.id }, props: { service } }));
@@ -37,6 +38,7 @@ const type =
           Discuss your machine
         </Button>
         <EnquiryButton id={s.id} title={s.title} kind="service" />
+        <CatalogueCTA href="/downloads/SHK-Catalogue-14-Machine-Services.pdf" label="Machine services catalogue" class="button-like" />
       </div>
       <div class="detail-columns">
         <div>

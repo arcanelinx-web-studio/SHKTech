@@ -11207,9 +11207,9 @@ button {
   grid-template-columns: minmax(0, 1fr) minmax(220px, 260px);
   gap: 22px;
   align-items: end;
-  margin: -2px 0 18px;
-  padding: 13px 0 17px;
-  border-bottom: 1px solid #e0e7eb;
+  margin: -2px 0 0;
+  padding: 13px 0 0;
+  border-bottom: 0;
 }
 
 .contact-preference-row > .field-hint {

@@ -1,0 +1,357 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+---
+<AdminLayout title="Enquiry Desk">
+  <section class="crm-shell">
+    <div class="crm-heading">
+      <div>
+        <p class="admin-kicker">SHK / BUSINESS DEVELOPMENT</p>
+        <h1>Enquiry desk</h1>
+        <p>See what needs attention now, then move every requirement towards a clear next action.</p>
+      </div>
+      <div class="crm-heading-actions">
+        <span class="crm-mode-badge" id="crm-mode-badge" hidden>REVIEW DATA</span>
+        <button class="admin-secondary-action" id="crm-export">Export CSV</button>
+      </div>
+    </div>
+
+    <div class="crm-stats" id="crm-stats" aria-live="polite"></div>
+
+    <section class="crm-section">
+      <div class="crm-section-heading">
+        <div><p class="admin-kicker">PIPELINE</p><h2>Where every enquiry stands</h2></div>
+        <p>Website → contact → qualification → quotation → follow-up → result</p>
+      </div>
+      <div class="crm-pipeline" id="crm-pipeline"></div>
+    </section>
+
+    <section class="crm-section crm-workspace">
+      <div class="crm-inbox">
+        <div class="crm-section-heading compact">
+          <div><p class="admin-kicker">ENQUIRIES</p><h2>Inbox</h2></div>
+          <span id="crm-result-count"></span>
+        </div>
+        <div class="crm-toolbar">
+          <label class="crm-search">
+            <span>Search</span>
+            <input id="crm-search" type="search" placeholder="Company, person, product, reference…" />
+          </label>
+          <label>
+            <span>Stage</span>
+            <select id="crm-stage-filter">
+              <option value="">All stages</option>
+              <option value="new">New</option>
+              <option value="contacted">Contacted</option>
+              <option value="qualified">Qualified</option>
+              <option value="quotation">Quotation</option>
+              <option value="follow-up">Follow-up</option>
+              <option value="won">Won</option>
+              <option value="lost">Lost</option>
+            </select>
+          </label>
+        </div>
+        <div class="crm-lead-list" id="crm-lead-list"></div>
+      </div>
+
+      <aside class="crm-detail" id="crm-detail">
+        <div class="crm-empty-state">
+          <span>↗</span>
+          <h2>Select an enquiry</h2>
+          <p>Contact details, requirement, notes and next follow-up will appear here.</p>
+        </div>
+      </aside>
+    </section>
+  </section>
+</AdminLayout>
+
+<script>
+  type Lead = Record<string, any>;
+
+  const stageMeta: Record<string, { label: string; short: string }> = {
+    new: { label: 'New', short: 'NEW' },
+    contacted: { label: 'Contacted', short: 'CONTACTED' },
+    qualified: { label: 'Qualified', short: 'QUALIFIED' },
+    quotation: { label: 'Quotation', short: 'QUOTATION' },
+    'follow-up': { label: 'Follow-up', short: 'FOLLOW-UP' },
+    won: { label: 'Won', short: 'WON' },
+    lost: { label: 'Lost', short: 'LOST' },
+  };
+
+  const demoLeads: Lead[] = [
+    {
+      id: 'demo-1', reference: 'SHK-DEMO-1042', created_at: new Date(Date.now()-1000*60*42).toISOString(),
+      updated_at: new Date().toISOString(), name: 'Demo enquiry', company: 'Precision Components — sample',
+      phone: '', email: '', location: 'Bengaluru', type: 'Product', category: 'Coolant, sump cleaning & filtration',
+      brand: 'Oilmax', specification: 'SC series', details: 'Sample requirement shown only for client review: coolant sump cleaning for a machining line.',
+      preferred: 'WhatsApp', stage: 'new', priority: 'high', owner: '', next_follow_up: '', internal_notes: '',
+      source_channel: 'Website', selected_items: '[]', demo: true
+    },
+    {
+      id: 'demo-2', reference: 'SHK-DEMO-1038', created_at: new Date(Date.now()-1000*60*60*8).toISOString(),
+      updated_at: new Date().toISOString(), name: 'Demo enquiry', company: 'Machine Tools — sample',
+      phone: '', email: '', location: 'Hosur', type: 'Quotation', category: 'Rotary & tilting tables',
+      brand: 'Detron', specification: '4th axis requirement', details: 'Sample requirement shown only for client review: rotary-table selection for a VMC.',
+      preferred: 'Email', stage: 'quotation', priority: 'normal', owner: 'Business Development', next_follow_up: '', internal_notes: 'Quotation under preparation.',
+      source_channel: 'Website', selected_items: '[]', demo: true
+    },
+    {
+      id: 'demo-3', reference: 'SHK-DEMO-1031', created_at: new Date(Date.now()-1000*60*60*28).toISOString(),
+      updated_at: new Date().toISOString(), name: 'Demo enquiry', company: 'Engineering Works — sample',
+      phone: '', email: '', location: 'Peenya', type: 'Calibration', category: 'Machine accuracy',
+      brand: '', specification: 'VMC', details: 'Sample requirement shown only for client review: laser calibration and ball-bar verification.',
+      preferred: 'Phone', stage: 'follow-up', priority: 'high', owner: 'Service', next_follow_up: new Date(Date.now()+86400000).toISOString().slice(0,10), internal_notes: 'Confirm site visit window.',
+      source_channel: 'Website', selected_items: '[]', demo: true
+    }
+  ];
+
+  let leads: Lead[] = [];
+  let selectedId = '';
+  let reviewMode = false;
+
+  const els = {
+    stats: document.getElementById('crm-stats')!,
+    pipeline: document.getElementById('crm-pipeline')!,
+    list: document.getElementById('crm-lead-list')!,
+    detail: document.getElementById('crm-detail')!,
+    search: document.getElementById('crm-search') as HTMLInputElement,
+    filter: document.getElementById('crm-stage-filter') as HTMLSelectElement,
+    count: document.getElementById('crm-result-count')!,
+    badge: document.getElementById('crm-mode-badge')!,
+  };
+
+  const esc = (value: unknown) => String(value ?? '').replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]!));
+  const prettyDate = (value?: string) => value ? new Intl.DateTimeFormat('en-IN',{day:'2-digit',month:'short',year:'numeric'}).format(new Date(value)) : '—';
+  const age = (value?: string) => {
+    if (!value) return '';
+    const mins = Math.max(1, Math.round((Date.now()-new Date(value).getTime())/60000));
+    if (mins < 60) return `${mins}m ago`;
+    const hours = Math.round(mins/60);
+    if (hours < 24) return `${hours}h ago`;
+    return `${Math.round(hours/24)}d ago`;
+  };
+  const parseItems = (value: unknown) => {
+    try { return typeof value === 'string' ? JSON.parse(value || '[]') : (Array.isArray(value) ? value : []); }
+    catch { return []; }
+  };
+
+  function previewLeads() {
+    const saved = JSON.parse(localStorage.getItem('shk-preview-enquiries') || '[]');
+    return [...saved, ...demoLeads];
+  }
+
+  async function load() {
+    const previewHost = location.hostname.endsWith('github.io') || ['localhost','127.0.0.1'].includes(location.hostname);
+    if (previewHost && sessionStorage.getItem('shk-admin-preview') !== '1') {
+      location.href = new URL('./login/', location.href).href;
+      return;
+    }
+    try {
+      const response = await fetch('/api/admin/enquiries', { credentials: 'include' });
+      if (response.status === 401) {
+        location.href = new URL('./login/', location.href).href;
+        return;
+      }
+      if (!response.ok) throw new Error('Admin API unavailable');
+      const body = await response.json();
+      leads = body.enquiries || [];
+    } catch {
+      if (!previewHost) {
+        els.detail.innerHTML = '<div class="crm-empty-state"><span>!</span><h2>Enquiry service unavailable</h2><p>The public website is unaffected. Check the Cloudflare D1 binding and admin environment secrets.</p></div>';
+        return;
+      }
+      reviewMode = true;
+      els.badge.hidden = false;
+      leads = previewLeads();
+    }
+    render();
+  }
+
+  function render() {
+    renderStats();
+    renderPipeline();
+    renderList();
+    if (selectedId) renderDetail(leads.find((l) => l.id === selectedId));
+  }
+
+  function renderStats() {
+    const open = leads.filter((l) => !['won','lost'].includes(l.stage || 'new'));
+    const followDue = open.filter((l) => l.next_follow_up && new Date(l.next_follow_up + 'T23:59:59').getTime() <= Date.now()).length;
+    const values = [
+      ['OPEN ENQUIRIES', open.length, 'Needs a next action'],
+      ['NEW', leads.filter((l) => (l.stage || 'new') === 'new').length, 'Not yet contacted'],
+      ['QUOTATIONS', leads.filter((l) => l.stage === 'quotation').length, 'Commercial stage'],
+      ['FOLLOW-UP DUE', followDue, followDue ? 'Attention today' : 'Nothing overdue'],
+    ];
+    els.stats.innerHTML = values.map(([label,value,note]) => `
+      <article><span>${label}</span><strong>${value}</strong><p>${note}</p></article>
+    `).join('');
+  }
+
+  function renderPipeline() {
+    const order = ['new','contacted','qualified','quotation','follow-up','won'];
+    els.pipeline.innerHTML = order.map((stage) => {
+      const items = leads.filter((l) => (l.stage || 'new') === stage).slice(0,4);
+      return `<div class="crm-pipeline-column" data-stage="${stage}">
+        <div class="crm-pipeline-head"><span>${stageMeta[stage].label}</span><b>${leads.filter((l)=>(l.stage||'new')===stage).length}</b></div>
+        <div class="crm-pipeline-cards">
+          ${items.length ? items.map((lead) => `<button class="crm-pipeline-card" data-lead="${esc(lead.id)}">
+            <span class="crm-priority ${esc(lead.priority || 'normal')}"></span>
+            <strong>${esc(lead.company || lead.name)}</strong>
+            <small>${esc(lead.category || lead.type || 'General enquiry')}</small>
+            <em>${age(lead.created_at)}</em>
+          </button>`).join('') : '<p class="crm-pipeline-empty">No enquiries</p>'}
+        </div>
+      </div>`;
+    }).join('');
+    els.pipeline.querySelectorAll<HTMLElement>('[data-lead]').forEach((node) => node.addEventListener('click', () => select(node.dataset.lead!)));
+  }
+
+  function filtered() {
+    const q = els.search.value.trim().toLowerCase();
+    const stage = els.filter.value;
+    return leads.filter((l) => {
+      const hay = [l.reference,l.name,l.company,l.category,l.type,l.brand,l.location,l.details].join(' ').toLowerCase();
+      return (!q || hay.includes(q)) && (!stage || (l.stage || 'new') === stage);
+    });
+  }
+
+  function renderList() {
+    const rows = filtered();
+    els.count.textContent = `${rows.length} result${rows.length === 1 ? '' : 's'}`;
+    els.list.innerHTML = rows.length ? rows.map((lead) => `
+      <button class="crm-lead-row ${lead.id === selectedId ? 'selected' : ''}" data-lead="${esc(lead.id)}">
+        <span class="crm-priority ${esc(lead.priority || 'normal')}"></span>
+        <span class="crm-lead-main">
+          <strong>${esc(lead.company || lead.name)}</strong>
+          <small>${esc(lead.name)} · ${esc(lead.location || 'Location not provided')}</small>
+          <em>${esc(lead.category || lead.type || 'General enquiry')}</em>
+        </span>
+        <span class="crm-lead-meta">
+          <b class="crm-stage-tag" data-stage="${esc(lead.stage || 'new')}">${stageMeta[lead.stage || 'new']?.short || 'NEW'}</b>
+          <small>${age(lead.created_at)}</small>
+        </span>
+      </button>
+    `).join('') : '<div class="crm-no-results">No enquiries match this view.</div>';
+    els.list.querySelectorAll<HTMLElement>('[data-lead]').forEach((node) => node.addEventListener('click', () => select(node.dataset.lead!)));
+  }
+
+  async function select(id: string) {
+    selectedId = id;
+    let lead = leads.find((l) => l.id === id);
+    if (!reviewMode && lead) {
+      try {
+        const response = await fetch(`/api/admin/enquiries?id=${encodeURIComponent(id)}`, { credentials: 'include' });
+        if (response.ok) lead = (await response.json()).enquiry;
+      } catch {}
+    }
+    renderList();
+    renderDetail(lead);
+    if (innerWidth < 980) els.detail.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+
+  function contactActions(lead: Lead) {
+    const phone = String(lead.phone || '').replace(/\D/g,'');
+    return [
+      phone ? `<a href="https://wa.me/${phone}" target="_blank" rel="noopener">WhatsApp ↗</a>` : '',
+      lead.phone ? `<a href="tel:${esc(lead.phone)}">Call</a>` : '',
+      lead.email ? `<a href="mailto:${esc(lead.email)}">Email</a>` : ''
+    ].filter(Boolean).join('');
+  }
+
+  function renderDetail(lead?: Lead) {
+    if (!lead) return;
+    const items = parseItems(lead.selected_items);
+    els.detail.innerHTML = `
+      <div class="crm-detail-head">
+        <div>
+          <p class="admin-kicker">${esc(lead.reference || 'ENQUIRY')}</p>
+          <h2>${esc(lead.company || lead.name)}</h2>
+          <p>${esc(lead.name)}${lead.location ? ' · ' + esc(lead.location) : ''}</p>
+        </div>
+        <span class="crm-stage-tag large" data-stage="${esc(lead.stage || 'new')}">${stageMeta[lead.stage || 'new']?.label || 'New'}</span>
+      </div>
+      ${lead.demo ? '<div class="crm-demo-note">Sample record for client review — not a real customer enquiry.</div>' : ''}
+      <div class="crm-contact-actions">${contactActions(lead) || '<span>No contact method supplied</span>'}</div>
+      <div class="crm-detail-grid">
+        <div><span>Requirement</span><strong>${esc(lead.type || '—')}</strong></div>
+        <div><span>Product / category</span><strong>${esc(lead.category || '—')}</strong></div>
+        <div><span>Brand / make</span><strong>${esc(lead.brand || '—')}</strong></div>
+        <div><span>Model / spec</span><strong>${esc(lead.specification || '—')}</strong></div>
+        <div><span>Machine</span><strong>${esc([lead.machine_type,lead.machine_model].filter(Boolean).join(' · ') || '—')}</strong></div>
+        <div><span>Received</span><strong>${prettyDate(lead.created_at)}</strong></div>
+      </div>
+      <section class="crm-requirement-copy">
+        <span>Customer requirement</span>
+        <p>${esc(lead.details || 'No description supplied.')}</p>
+        ${items.length ? `<div class="crm-selected-items"><b>Selected items</b>${items.map((i:any)=>`<span>${esc(i.title)}${i.note ? ' — '+esc(i.note) : ''}</span>`).join('')}</div>` : ''}
+      </section>
+      <form class="crm-follow-form" id="crm-follow-form">
+        <div class="crm-form-grid">
+          <label>Stage<select name="stage">
+            ${Object.entries(stageMeta).map(([key,meta])=>`<option value="${key}" ${(lead.stage||'new')===key?'selected':''}>${meta.label}</option>`).join('')}
+          </select></label>
+          <label>Priority<select name="priority">
+            ${['low','normal','high','urgent'].map((v)=>`<option value="${v}" ${(lead.priority||'normal')===v?'selected':''}>${v[0].toUpperCase()+v.slice(1)}</option>`).join('')}
+          </select></label>
+          <label>Owner<input name="owner" value="${esc(lead.owner || '')}" placeholder="Business Development / Service" /></label>
+          <label>Next follow-up<input name="next_follow_up" type="date" value="${esc(lead.next_follow_up || '')}" /></label>
+        </div>
+        <label>Internal notes<textarea name="internal_notes" rows="3" placeholder="Commercial status, technical clarification, next action…">${esc(lead.internal_notes || '')}</textarea></label>
+        <label>Add activity note<textarea name="activity_note" rows="2" placeholder="Example: Spoke to customer; drawing expected tomorrow."></textarea></label>
+        <div class="crm-save-row">
+          <button class="admin-primary-action" type="submit">Save follow-up</button>
+          <span id="crm-save-status"></span>
+        </div>
+      </form>
+      ${Array.isArray(lead.activities) && lead.activities.length ? `<section class="crm-activity"><span>Activity</span>${lead.activities.map((a:any)=>`<div><b>${prettyDate(a.created_at)}</b><p>${esc(a.note)}</p></div>`).join('')}</section>` : ''}
+    `;
+    document.getElementById('crm-follow-form')?.addEventListener('submit', (event) => saveLead(event, lead));
+  }
+
+  async function saveLead(event: Event, lead: Lead) {
+    event.preventDefault();
+    const form = event.currentTarget as HTMLFormElement;
+    const status = document.getElementById('crm-save-status')!;
+    const data = Object.fromEntries(new FormData(form));
+    status.textContent = 'Saving…';
+    if (reviewMode) {
+      Object.assign(lead, data, { updated_at: new Date().toISOString() });
+      if (data.activity_note) {
+        lead.activities = [{created_at:new Date().toISOString(),note:data.activity_note}, ...(lead.activities || [])];
+      }
+      localStorage.setItem('shk-preview-enquiries', JSON.stringify(leads.filter((l)=>!l.demo)));
+      status.textContent = 'Saved in review mode.';
+      render();
+      renderDetail(lead);
+      return;
+    }
+    try {
+      const response = await fetch('/api/admin/enquiries', {
+        method: 'PATCH', credentials: 'include', headers: {'content-type':'application/json'},
+        body: JSON.stringify({ id: lead.id, ...data })
+      });
+      if (!response.ok) throw new Error('Unable to save.');
+      const body = await response.json();
+      const index = leads.findIndex((l)=>l.id===lead.id);
+      if (index >= 0) leads[index] = body.enquiry;
+      status.textContent = 'Saved.';
+      render();
+      await select(lead.id);
+    } catch (e) {
+      status.textContent = e instanceof Error ? e.message : 'Unable to save.';
+    }
+  }
+
+  function exportCsv() {
+    const cols = ['reference','created_at','stage','priority','name','company','phone','email','location','type','category','brand','specification','details','owner','next_follow_up','internal_notes'];
+    const quote = (v: unknown) => '"' + String(v ?? '').replaceAll('"','""') + '"';
+    const csv = [cols.join(','), ...leads.map((l)=>cols.map((c)=>quote(l[c])).join(','))].join('\n');
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`shk-enquiries-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(a.href);
+  }
+
+  els.search.addEventListener('input', renderList);
+  els.filter.addEventListener('change', renderList);
+  document.getElementById('crm-export')?.addEventListener('click', exportCsv);
+  load();
+</script>

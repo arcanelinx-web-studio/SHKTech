@@ -43,7 +43,7 @@ For restricted Codex shells, use `npm install --cache ../npm-cache` and set `$en
 - `public/images/logos/`: exact, unmodified supplied SVG artwork.
 - `tests/`: message/storage unit checks and browser workflows, responsive screenshots and axe audits.
 
-React is deliberately absent: the interactions use small TypeScript modules and native HTML. There is no client routing framework, backend, analytics, upload service or customer data database.
+React is deliberately absent: the public interactions use small TypeScript modules and native HTML. On the CRM review branch, Cloudflare Pages Functions add the SHK lead desk, D1-backed enquiry storage, optional private R2 attachment storage, transactional catalogue delivery and protected admin APIs. There are still no analytics or advertising scripts.
 
 ## Content expansion
 
@@ -51,9 +51,11 @@ Add verified records to `products.ts` or `services.ts`; route generation is auto
 
 Do not publish an unrelated image for a category without a verified image. Ultrasonic cleaning is supported by the business card but has no identified product photo/specification; its card intentionally uses a text treatment.
 
-## WhatsApp and privacy
+## Enquiries, catalogue delivery and privacy
 
-The visitor reviews the message in WhatsApp and sends it themselves. Selected files stay on the device; their filenames can appear in the message, but the files must be attached manually. Contact form fields are not persisted. The enquiry list and optional notes stay in localStorage until cleared.
+The enquiry list and optional notes stay in localStorage until cleared. On the CRM-enabled deployment, form submissions are stored in SHK's D1 lead database before the visitor continues to WhatsApp. Matching catalogue links are returned immediately and can be sent by transactional email. When the R2 `FILES` binding is configured, supported attachments are stored privately and can only be downloaded through the authenticated SHK admin API. Optional WhatsApp Business acknowledgement requires Meta credentials, an approved template and customer opt-in.
+
+See `docs/LEAD-DESK-SETUP.md` for bindings, environment variables, catalogue filenames and rollback details.
 
 ## Cloudflare Pages / static hosting
 

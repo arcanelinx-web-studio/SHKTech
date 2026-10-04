@@ -1,0 +1,23 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  login?: boolean;
+}
+const { title, login = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex,nofollow,noarchive" />
+    <meta name="theme-color" content="#0b1115" />
+    <title>{title} · SHK Tech Services</title>
+  </head>
+  <body class:list={['admin-body', { 'admin-login-body': login }]}>
+    <slot />
+  </body>
+</html>

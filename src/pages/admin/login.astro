@@ -1,0 +1,84 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+---
+<AdminLayout title="Sign in" login>
+  <section class="admin-login-shell">
+    <div class="admin-login-copy">
+      <p class="admin-kicker">PRIVATE / SHK TEAM</p>
+      <h1>Every enquiry.<br />One clear <span>follow-up.</span></h1>
+      <p>
+        Review website enquiries, move leads through quotation and follow-up, and keep the next
+        action visible to the SHK team.
+      </p>
+      <div class="admin-login-points">
+        <span>Enquiry inbox</span><span>Pipeline</span><span>Follow-ups</span><span>Contact history</span>
+      </div>
+    </div>
+
+    <form class="admin-login-card" id="admin-login-form">
+      <div>
+        <p class="admin-kicker">SECURE ACCESS</p>
+        <h2>Sign in to SHK Admin</h2>
+        <p>Use the credentials configured for the SHK website.</p>
+      </div>
+      <label>
+        Username
+        <input name="username" autocomplete="username" value="shkadmin" required maxlength="80" />
+      </label>
+      <label>
+        Password
+        <input name="password" type="password" autocomplete="current-password" required maxlength="180" />
+      </label>
+      <p class="admin-login-error" id="admin-login-error" role="alert"></p>
+      <button class="admin-primary-action" type="submit">Open enquiry desk <span>↗</span></button>
+      <p class="admin-login-footnote">
+        This area is not indexed by search engines. Production access is protected by an encrypted session cookie.
+      </p>
+    </form>
+  </section>
+</AdminLayout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#admin-login-form')!;
+  const error = document.getElementById('admin-login-error')!;
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    error.textContent = '';
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    button.disabled = true;
+    button.textContent = 'Checking access…';
+    const data = Object.fromEntries(new FormData(form));
+    try {
+      const response = await fetch('/api/admin/login', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (response.ok) {
+        location.href = new URL('../', location.href).href;
+        return;
+      }
+      if (response.status !== 404 && response.status !== 405 && response.status !== 501) {
+        const body = await response.json().catch(() => ({}));
+        throw new Error(body.error || 'Sign-in failed.');
+      }
+      throw new Error('preview');
+    } catch (cause) {
+      const previewHost = location.hostname.endsWith('github.io') || ['localhost', '127.0.0.1'].includes(location.hostname);
+      if (previewHost && String((cause as Error)?.message || cause).includes('preview')) {
+        sessionStorage.setItem('shk-admin-preview', '1');
+        location.href = new URL('../', location.href).href;
+        return;
+      }
+      if (previewHost && !navigator.onLine) {
+        sessionStorage.setItem('shk-admin-preview', '1');
+        location.href = new URL('../', location.href).href;
+        return;
+      }
+      error.textContent = cause instanceof Error ? cause.message : 'Unable to sign in.';
+      button.disabled = false;
+      button.innerHTML = 'Open enquiry desk <span>↗</span>';
+    }
+  });
+</script>

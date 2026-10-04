@@ -21,7 +21,7 @@ export const products: ProductCategory[] = [
     image: rotary,
     features: ['CNC rotary tables', 'CNC tilting rotary tables', 'Support rotary tailstocks'],
     applications: ['Multi-face machining', 'VMC workholding'],
-    catalogueHref: '/downloads/rotary-tilting-tables.pdf',
+    catalogueHref: '/downloads/shk-products-services-current.pdf#page=10',
     source: { document: 'catalogue', pages: [5, 6, 9] },
   },
   {
@@ -37,7 +37,7 @@ export const products: ProductCategory[] = [
       'Vacuum clamping systems',
     ],
     applications: ['Machining centres', 'Repeat component setups'],
-    catalogueHref: '/downloads/fixtures-clamping.pdf',
+    catalogueHref: '/downloads/shk-products-services-current.pdf#page=11',
     source: { document: 'catalogue', pages: [7, 8, 10, 29] },
   },
   {
@@ -55,7 +55,7 @@ export const products: ProductCategory[] = [
     specifications: { 'Pull stud standards': 'MAS 403 BT (DIN ISO 7388-3); DIN 69872 A with TC' },
     compatibility:
       'Pull studs shown for MAS, DIN, ISO, Mazak, Brother, Doosan and Haas. Confirm the exact interface before selection.',
-    catalogueHref: '/downloads/tool-holders-pull-studs.pdf',
+    catalogueHref: '/downloads/shk-products-services-current.pdf#page=12',
     source: { document: 'catalogue', pages: [11, 12, 13, 14] },
   },
   {
@@ -70,7 +70,7 @@ export const products: ProductCategory[] = [
       'Machine mounting and coolant configuration',
     ],
     applications: ['Angular machining', 'Features with restricted tool access'],
-    catalogueHref: '/downloads/custom-angle-heads.pdf',
+    catalogueHref: '/downloads/shk-products-services-current.pdf#page=13',
     source: { document: 'catalogue', pages: [15, 16] },
   },
   {
@@ -85,7 +85,7 @@ export const products: ProductCategory[] = [
       'Tool setting solutions',
     ],
     applications: ['Part location', 'Tool monitoring'],
-    catalogueHref: '/downloads/probing-tool-breakage.pdf',
+    catalogueHref: '/downloads/shk-products-services-current.pdf#page=14',
     source: { document: 'catalogue', pages: [17, 18, 19, 20] },
   },
   {
@@ -100,7 +100,7 @@ export const products: ProductCategory[] = [
       'Indexing, lever and collet chucks',
     ],
     applications: ['Gear machining', 'Grinding', 'Valve bodies and fittings'],
-    catalogueHref: '/downloads/mandrels-chucks.pdf',
+    catalogueHref: '/downloads/shk-products-services-current.pdf#page=15',
     source: { document: 'catalogue', pages: [28, 30, 31, 32, 33, 34, 35, 36, 37, 38] },
   },
   {
@@ -115,7 +115,7 @@ export const products: ProductCategory[] = [
       'Spiral and centralized conveyors',
     ],
     applications: ['Turning and machining centres', 'Central chip handling'],
-    catalogueHref: '/downloads/chip-conveyors.pdf',
+    catalogueHref: '/downloads/shk-products-services-current.pdf#page=3',
     source: { document: 'catalogue', pages: [39, 40] },
   },
   {
@@ -160,7 +160,7 @@ export const products: ProductCategory[] = [
     },
     compatibility:
       'Confirm sump capacity, contamination type, suction arrangement and machine layout with SHK before selection.',
-    catalogueHref: '/downloads/coolant-sump-cleaning-filtration.pdf',
+    catalogueHref: '/downloads/shk-products-services-current.pdf#page=4',
     source: { document: 'oilmax-sump-cleaner', pages: [1, 2] },
   },
   {
@@ -179,7 +179,7 @@ export const products: ProductCategory[] = [
       'Brass, copper and SS burr',
       'Hobbing / broaching burr and grinding dust',
     ],
-    catalogueHref: '/downloads/chip-compactors.pdf',
+    catalogueHref: '/downloads/shk-products-services-current.pdf#page=6',
     source: { document: 'catalogue', pages: [41, 42, 43, 46, 47, 49] },
   },
   {
@@ -218,7 +218,7 @@ export const products: ProductCategory[] = [
     },
     compatibility:
       'Confirm required air flow, machine enclosure, mist loading and installation arrangement with SHK before selection.',
-    catalogueHref: '/downloads/oil-mist-collection.pdf',
+    catalogueHref: '/downloads/shk-products-services-current.pdf#page=8',
     source: { document: 'air-seiki-brochure', pages: [1, 2, 3, 4, 5] },
   },
   {
@@ -229,7 +229,7 @@ export const products: ProductCategory[] = [
     image: granite,
     features: ['Granite testing plates', 'Clamp force gauges', 'ATC alignment gauges'],
     applications: ['Setup inspection', 'Machine and tooling checks'],
-    catalogueHref: '/downloads/measuring-test-equipment.pdf',
+    catalogueHref: '/downloads/shk-products-services-current.pdf#page=16',
     source: { document: 'catalogue', pages: [14, 24, 54] },
   },
   {
@@ -239,7 +239,7 @@ export const products: ProductCategory[] = [
     description: 'Discuss the component, contamination and cleaning requirement with SHK.',
     features: ['Ultrasonic cleaning solutions'],
     applications: ['Component cleaning — suitability to be reviewed'],
-    catalogueHref: '/downloads/ultrasonic-cleaning.pdf',
+    catalogueHref: '/downloads/shk-products-services-current.pdf#page=18',
     source: { document: 'business-card' },
   },
   {
@@ -254,7 +254,7 @@ export const products: ProductCategory[] = [
       'Turning and advanced mill-turn',
     ],
     applications: ['Machining programme preparation', 'Milling and turning'],
-    catalogueHref: '/downloads/cam-programming.pdf',
+    catalogueHref: '/downloads/shk-products-services-current.pdf#page=17',
     source: { document: 'catalogue', pages: [26] },
   },
 ];

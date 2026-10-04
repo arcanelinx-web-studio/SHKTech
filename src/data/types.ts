@@ -44,6 +44,7 @@ export interface Service {
 }
 export interface Brand {
   name: string;
+  logo?: string;
   source: Source;
 }
 export interface Problem {

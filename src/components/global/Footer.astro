@@ -43,7 +43,10 @@ import WhatsAppCTA from './WhatsAppCTA.astro';
     <div class="footer-bottom">
       <span>© {new Date().getFullYear()} {site.name} · Bengaluru</span>
       <span class="footer-tagline">PRECISION · PRODUCTIVITY · UPTIME</span>
-      <a href="/privacy/">Privacy</a>
+      <div class="footer-utility-links">
+        <a href="/privacy/">Privacy</a>
+        <a class="footer-admin-link" href="/admin/login/" rel="nofollow">SHK Admin</a>
+      </div>
     </div>
   </div>
 </footer>

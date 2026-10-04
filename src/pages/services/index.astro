@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/global/Breadcrumb.astro';
 import EnquiryButton from '../../components/enquiry/EnquiryButton.astro';
+import CatalogueCTA from '../../components/global/CatalogueCTA.astro';
 import { services } from '../../data/services';
 ---
 
@@ -14,10 +15,13 @@ import { services } from '../../data/services';
           <p class="eyebrow">MACHINE PERFORMANCE / LIFECYCLE</p>
           <h1 class="page-title">Understand the error. Define the next step.</h1>
         </div>
-        <p class="lead">
-          Calibration, alignment, reconditioning and subsystem retrofit. Begin with your machine and
-          the problem you are seeing.
-        </p>
+        <div>
+          <p class="lead">
+            Calibration, alignment, reconditioning and subsystem retrofit. Begin with your machine and
+            the problem you are seeing.
+          </p>
+          <CatalogueCTA href="/downloads/SHK-Catalogue-14-Machine-Services.pdf" label="Machine services catalogue" class="button-like" />
+        </div>
       </div>
 
       <div class="service-index">

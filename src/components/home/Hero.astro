@@ -2,7 +2,6 @@
 import { Image } from 'astro:assets';
 import probe from '../../assets/probe.webp';
 import Button from '../global/Button.astro';
-import { brands } from '../../data/brands';
 ---
 
 <section class="hero dark">
@@ -43,10 +42,16 @@ import { brands } from '../../data/brands';
       </figcaption>
     </figure>
   </div>
+
   <div class="container technology-strip" style="width:100%;max-width:none;box-sizing:border-box;padding-left:clamp(20px,3.25vw,68px);padding-right:clamp(20px,3.25vw,68px);">
     <span class="mono">TECHNOLOGY WE WORK WITH</span>
-    <div>
-      {brands.map((b) => <span>{b.name}</span>)}
+    <div style="display:flex;align-items:center;min-width:0;">
+      <img
+        src="/images/partners/shk-partner-strip.webp"
+        alt="Technology brands shown by SHK Tech Services: LK, TaeguTec, SolidCAM, Detron, Air Seiki, VGS & Co, Marposs and Oilmax"
+        loading="lazy"
+        style="display:block;width:min(100%,820px);height:auto;object-fit:contain;filter:saturate(.9);"
+      />
     </div>
   </div>
 </section>

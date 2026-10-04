@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - design-refinement-v2
+      - client-review-v3-shk-crm
   pull_request:
     branches:
       - main

@@ -11121,7 +11121,7 @@ button {
 .industry-context-note {
   max-width: 560px;
   margin: 5px 0 0;
-  color: #687984;
+  color: #586a74;
   font-size: 11px;
   line-height: 1.5;
 }
@@ -11135,8 +11135,8 @@ button {
 
 @media (prefers-color-scheme: dark) {
   .industry-context-note {
-    color: #687984 !important;
-    -webkit-text-fill-color: #687984 !important;
+    color: #586a74 !important;
+    -webkit-text-fill-color: #586a74 !important;
   }
 }
 

@@ -1,27 +1,25 @@
-# SHK lead desk, catalogue delivery and deployment setup
+# SHK Hostinger lead desk and catalogue delivery
 
-This review branch keeps the public SHK website design intact and adds an internal lead-management layer.
+This branch keeps the approved public website design and moves the enquiry / CRM layer to Hostinger-compatible PHP + MySQL.
 
-## Public enquiry flow
+## What the customer experiences
 
-1. Visitor selects one or more SHK product categories or services.
-2. Visitor submits the existing requirement form.
-3. The enquiry is stored in Cloudflare D1 with reference, contact details, product/application details and selected items.
-4. Up to five supported attachments can be stored privately in an R2 bucket bound as `FILES`.
-5. The relevant catalogue URL is selected from the category mapping.
-6. The customer sees the catalogue immediately after submission.
-7. If email delivery is configured, the customer receives the catalogue link by transactional email.
-8. SHK receives an internal enquiry email.
-9. If WhatsApp Business Platform credentials and an approved template are configured, an acknowledgement can also be sent on WhatsApp.
-10. The visitor can still continue the enquiry in WhatsApp using the structured message already used by the site.
+1. The visitor selects a product, service or enquiry-list item.
+2. The existing requirement form captures contact, application, quantity, machine and specification details.
+3. Up to five supported drawings/photos/documents can be stored privately with the enquiry.
+4. The enquiry receives an SHK reference and is saved in the Hostinger MySQL/MariaDB database.
+5. The matching SHK catalogue is shown immediately after submission.
+6. If an email address is supplied and SMTP is configured, the customer also receives the catalogue link by email.
+7. SHK receives an internal enquiry email.
+8. The visitor can continue in WhatsApp with the structured requirement message.
+9. If SHK later configures the Meta WhatsApp Business Platform and an approved template, an opted-in customer can also receive the acknowledgement/catalogue link automatically on WhatsApp.
 
-## Admin access
+## SHK Admin
 
-A discreet **SHK Admin** link is in the footer.
-
-The admin page is `/admin/`. The page itself contains no customer data until a valid server-side session is established. Credentials are environment secrets, never hard-coded into the site.
+The footer contains a discreet **SHK Admin** link to `/admin/`.
 
 Lead stages:
+
 - New
 - Contacted
 - Qualified
@@ -30,78 +28,64 @@ Lead stages:
 - Won
 - Lost
 
-The dashboard includes search, stage filtering, catalogue-delivery status, internal notes and protected attachment downloads.
+The dashboard supports search, stage filtering, internal notes, delivery status and protected attachment downloads.
 
-## Cloudflare bindings
+## Hostinger setup
 
-Create and bind:
+### 1. Build the website
 
-- D1 database binding: `DB`
-- R2 bucket binding: `FILES`
+Use the final production origin when building:
 
-Apply `migrations/0001_leads.sql` to the D1 database.
-
-Configure secrets/variables from `.env.example` in Cloudflare. Never commit real passwords, API keys or Meta tokens.
-
-## Email delivery
-
-The Functions integration uses Resend's HTTPS API. Configure:
-- `RESEND_API_KEY`
-- `ENQUIRY_FROM_EMAIL` from a verified sending domain
-- `SHK_ALERT_EMAIL`
-
-If these values are absent, the lead is still stored and the catalogue is still shown in the browser; email delivery is reported as not configured.
-
-## WhatsApp Business acknowledgement
-
-Automatic business-to-customer WhatsApp messages require Meta WhatsApp Business Platform credentials and an approved template.
-
-Expected environment values:
-- `WHATSAPP_TOKEN`
-- `WHATSAPP_PHONE_NUMBER_ID`
-- `WHATSAPP_TEMPLATE_NAME`
-- `WHATSAPP_TEMPLATE_LANGUAGE`
-
-Recommended template body:
-
-```
-Hi {{1}}, thank you for your enquiry with SHK Tech Services.
-Reference: {{2}}
-Your relevant catalogue: {{3}}
-
-Our engineering team will review your requirement and follow up.
-Responsible Engineering.
+```bash
+SITE_URL=https://YOUR-FINAL-DOMAIN npm run build
 ```
 
-The customer must select the WhatsApp opt-in checkbox before this automatic template is attempted.
+Upload the contents of `dist/` to the website's Hostinger `public_html` directory.
 
-## Catalogue files expected by the website
+### 2. Create the database
 
-Put the final client-approved PDFs in `public/downloads/` using exactly these filenames:
+In Hostinger hPanel create one MySQL database and database user.
 
-| Website category | Required filename |
-| --- | --- |
-| Chip conveyors | `chip-conveyors.pdf` |
-| Coolant, sump cleaning & filtration | `coolant-sump-cleaning-filtration.pdf` |
-| Chip compactors | `chip-compactors.pdf` |
-| Oil mist collection | `oil-mist-collection.pdf` |
-| Rotary & tilting tables | `rotary-tilting-tables.pdf` |
-| Fixtures & clamping | `fixtures-clamping.pdf` |
-| Tool holders & pull studs | `tool-holders-pull-studs.pdf` |
-| Custom angle heads | `custom-angle-heads.pdf` |
-| Probing & tool breakage | `probing-tool-breakage.pdf` |
-| Mandrels & chucks | `mandrels-chucks.pdf` |
-| Measuring & test equipment | `measuring-test-equipment.pdf` |
-| CAM / programming | `cam-programming.pdf` |
-| Ultrasonic cleaning | `ultrasonic-cleaning.pdf` |
-| Company profile | `shk-tech-services-company-profile.pdf` |
-| Complete portfolio / general enquiry fallback | `shk-products-services-current.pdf` |
+Import:
 
-Once these exact files exist, all product-page catalogue buttons and automated catalogue-delivery links use the same source files. No additional code mapping is required.
+`deployment/hostinger/schema.sql`
 
-## Attachment policy
+through phpMyAdmin.
 
-Allowed extensions:
+### 3. Create the private configuration
+
+Copy:
+
+`deployment/hostinger/config.sample.php`
+
+to a directory **outside** `public_html`, ideally:
+
+`.../domains/YOUR-DOMAIN/shk-private/config.php`
+
+Fill in:
+
+- production domain;
+- Hostinger database name/user/password;
+- SHK admin username and password hash;
+- Hostinger mailbox SMTP credentials;
+- SHK internal alert email;
+- optional Meta WhatsApp Business credentials.
+
+The PHP API automatically looks for the private configuration beside `public_html`.
+
+### 4. SMTP
+
+For Hostinger Email the recommended defaults in the sample are:
+
+- host: `smtp.hostinger.com`
+- SSL port: `465`
+
+Use a real mailbox on the final domain as the sender. The mailbox password remains only in the private server configuration.
+
+### 5. Attachments
+
+Supported:
+
 - PDF
 - JPG / JPEG
 - PNG
@@ -111,15 +95,61 @@ Allowed extensions:
 - STEP / STP
 
 Limits:
-- maximum 5 files from the current form
-- maximum 15 MB per file
 
-R2 objects remain private. The public site does not expose R2 URLs. Admin downloads go through the authenticated `/api/admin/file` endpoint.
+- maximum five files from the form;
+- maximum 15 MB each.
+
+They are stored below the private `shk-private/uploads/` directory, not inside the public website. Admin downloads are served through an authenticated PHP endpoint.
+
+## Final catalogue mapping
+
+| Website area | File |
+| --- | --- |
+| Rotary & tilting tables | `SHK-Catalogue-01-Rotary-Tilting-Tables.pdf` |
+| Fixtures & clamping | `SHK-Catalogue-02-Fixtures-Clamping.pdf` |
+| Tool holders & pull studs | `SHK-Catalogue-03-Tool-Holders-Pull-Studs.pdf` |
+| Custom angle heads | `SHK-Catalogue-04-Custom-Angle-Heads.pdf` |
+| Probing & tool breakage | `SHK-Catalogue-05-Probing-Tool-Breakage.pdf` |
+| Mandrels & chucks | `SHK-Catalogue-06-Mandrels-Chucks.pdf` |
+| Chip conveyors | `SHK-Catalogue-07-Chip-Conveyors.pdf` |
+| Coolant / sump cleaning / filtration | `SHK-Catalogue-08-Coolant-Sump-Cleaning-Filtration.pdf` |
+| Chip compactors | `SHK-Catalogue-09-Chip-Compactors.pdf` |
+| Oil mist collection | `SHK-Catalogue-10-Oil-Mist-Collection.pdf` |
+| Measuring & test equipment | `SHK-Catalogue-11-Measuring-Test-Equipment.pdf` |
+| CAM / programming | `SHK-Catalogue-12-CAM-Programming.pdf` |
+| Ultrasonic cleaning | `SHK-Catalogue-13-Ultrasonic-Cleaning.pdf` |
+| Machine services | `SHK-Catalogue-14-Machine-Services.pdf` |
+| Company profile / general fallback | `SHK-Tech-Services-Company-Profile.pdf` |
+
+## WhatsApp Business acknowledgement
+
+The automatic outbound message is optional because Meta requires an approved WhatsApp Business template. The integration expects three template variables:
+
+```text
+Hi {{1}}, thank you for your enquiry with SHK Tech Services.
+Reference: {{2}}
+Your relevant catalogue: {{3}}
+
+Our engineering team will review your requirement and follow up.
+Responsible Engineering.
+```
+
+Variables are customer name, SHK reference and catalogue URL.
+
+## Important final-domain check
+
+The current generated catalogue PDFs contain the temporary GitHub Pages address in their contact page. Before final client handover, regenerate or edit the PDFs to show the client's final Hostinger domain (or remove the website URL if the domain is not yet confirmed).
 
 ## Rollback
 
-All work in this feature pass lives on:
+Current Hostinger branch:
+
+`client-review-v4-hostinger-crm`
+
+Previous branch:
 
 `client-review-v3-shk-crm`
 
-The approved `design-refinement-v2` branch remains untouched and is the rollback point.
+Approved design rollback:
+
+`design-refinement-v2`

@@ -267,6 +267,7 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
 <script>
   import { buildMessage, whatsappUrl, createReference } from '../../utils/whatsapp';
   import { getItems } from '../../stores/enquiry';
+  import { isShowcaseMode, saveShowcaseLead } from '../../utils/showcase';
   const form = document.querySelector<HTMLFormElement>('#requirement-form')!;
   form.querySelector<HTMLButtonElement>('.form-submit')!.disabled = false;
   const attachment = document.querySelector<HTMLInputElement>('#attachment')!;
@@ -359,14 +360,19 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
     submit.disabled = true;
     submit.textContent = selectedFiles.length ? 'Uploading attachments…' : 'Submitting enquiry…';
 
-    if (selectedFiles.length) {
+    const showcase = isShowcaseMode();
+
+    if (selectedFiles.length && showcase) {
+      document.getElementById('file-status')!.textContent =
+        'Showcase mode: filenames are recorded in the preview lead desk. Attach the actual files in WhatsApp for this demonstration.';
+    } else if (selectedFiles.length) {
       try {
         uploadedAttachments = await uploadSelectedFiles(selectedFiles);
         document.getElementById('file-status')!.textContent =
           uploadedAttachments.length + ' file' + (uploadedAttachments.length === 1 ? '' : 's') + ' securely attached to this enquiry.';
       } catch (uploadError) {
         document.getElementById('file-status')!.textContent =
-          'Secure upload is not available on this preview. Your filenames will still be included; attach the files manually in WhatsApp.';
+          'Secure upload is temporarily unavailable. Your filenames will still be included; attach the files manually in WhatsApp.';
       }
     }
 
@@ -399,18 +405,23 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
 
     let serverResult: any = null;
     try {
-      const response = await fetch('/api/enquiries.php', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json', accept: 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      serverResult = await response.json().catch(() => null);
-      if (!response.ok || !serverResult?.ok) throw new Error(serverResult?.error || 'Enquiry service unavailable.');
-      reference = serverResult.reference;
+      if (showcase) {
+        reference = createReference();
+        serverResult = saveShowcaseLead(payload, reference);
+      } else {
+        const response = await fetch('/api/enquiries.php', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', accept: 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        serverResult = await response.json().catch(() => null);
+        if (!response.ok || !serverResult?.ok) throw new Error(serverResult?.error || 'Enquiry service unavailable.');
+        reference = serverResult.reference;
+      }
     } catch (submitError) {
       reference ||= createReference();
       error.textContent =
-        'The online lead desk is not connected on this preview yet. You can still continue on WhatsApp; SHK will receive the message there.';
+        'The online lead desk is temporarily unavailable. You can still continue on WhatsApp; SHK can receive the requirement there.';
     } finally {
       submit.disabled = false;
       submit.innerHTML = 'Submit enquiry & get catalogue <span aria-hidden="true">↗</span>';
@@ -430,9 +441,11 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
     if (serverResult?.catalogues?.length) {
       catalogueBox.hidden = false;
       catalogueStatus.textContent =
-        serverResult.delivery?.customerEmail?.sent
-          ? 'Enquiry ' + reference + ' recorded. We also sent these catalogue links to your email.'
-          : 'Enquiry ' + reference + ' recorded. Your relevant catalogue is ready below.';
+        serverResult.delivery?.showcase
+          ? 'Enquiry ' + reference + ' saved to the interactive SHK showcase lead desk. Your relevant catalogue is ready below.'
+          : serverResult.delivery?.customerEmail?.sent
+            ? 'Enquiry ' + reference + ' recorded. We also sent these catalogue links to your email.'
+            : 'Enquiry ' + reference + ' recorded. Your relevant catalogue is ready below.';
       serverResult.catalogues.forEach((catalogue: { title: string; url: string }) => {
         const link = document.createElement('a');
         link.className = 'button button-secondary';

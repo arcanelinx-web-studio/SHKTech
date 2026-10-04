@@ -1,6 +1,6 @@
 # SHK Tech Services
 
-Static-first Astro / TypeScript / Tailwind website for SHK Tech Services, Bengaluru. Developed on `astra-foundation-v1`; do not merge into main without review.
+Static-first Astro / TypeScript / Tailwind website for SHK Tech Services, Bengaluru. The production target for this review branch is **Hostinger**, not Cloudflare.
 
 ## Local development
 
@@ -20,53 +20,70 @@ npm run build
 npm run preview
 ```
 
-Browser regression checks require installed Google Chrome and a running site:
-
-```powershell
-npm run test:browser
-```
-
-Set `BASE_URL` to test another local port. Set `REVIEW_DIR` to a file URL or path relative to `tests/browser.mjs` to choose the screenshot/report output directory. In this workspace the default writes to the task's `outputs/review` folder. Tests do not send a WhatsApp message: they intercept the generated link.
-
-For restricted Codex shells, use `npm install --cache ../npm-cache` and set `$env:ASTRO_TELEMETRY_DISABLED='1'` before Astro commands. These are environment workarounds, not application requirements.
+The Astro build is static. PHP files placed under `public/api/` are copied unchanged to `dist/api/` and run only after the `dist` contents are deployed to Hostinger.
 
 ## Architecture
 
-- `src/config/site.ts`: all company/contact information. Business-card details are provisional.
-- `src/data/`: typed catalogue categories, services, brands, industries, problems and machine zones with source provenance.
-- `src/components/`: global, navigation, home, products, enquiry and machine explorer components.
-- `src/layouts/BaseLayout.astro`: metadata, structured data, shared shell and fonts.
-- `src/pages/`: pre-rendered category, service and problem routes, homepage, about, privacy, enquiry and 404.
-- `src/stores/enquiry.ts`: validated, deduplicated localStorage list with cross-tab updates and blocked-storage fallback.
-- `src/utils/whatsapp.ts`: pure message formatting, URL encoding and random reference generation.
-- `src/assets/`: extracted catalogue images; Astro generates responsive WebP assets.
-- `public/images/logos/`: exact, unmodified supplied SVG artwork.
-- `tests/`: message/storage unit checks and browser workflows, responsive screenshots and axe audits.
+- `src/`: public Astro website and browser interactions.
+- `public/downloads/`: client-approved SHK company profile and catalogues.
+- `public/api/`: Hostinger PHP API for enquiries, attachments and the admin lead desk.
+- `deployment/hostinger/schema.sql`: MariaDB / MySQL lead database schema.
+- `deployment/hostinger/config.sample.php`: private server configuration template.
+- `src/pages/admin.astro`: protected SHK lead desk interface.
+- `tests/`: type, unit, build, browser and accessibility checks.
 
-React is deliberately absent: the public interactions use small TypeScript modules and native HTML. On the CRM review branch, Cloudflare Pages Functions add the SHK lead desk, D1-backed enquiry storage, optional private R2 attachment storage, transactional catalogue delivery and protected admin APIs. There are still no analytics or advertising scripts.
+The public website remains static and lightweight. The CRM functions use PHP plus Hostinger's MySQL/MariaDB service. Customer drawings are stored outside the public web root when the private directory is configured. Email catalogue delivery uses SMTP. Optional automatic WhatsApp acknowledgement uses the Meta WhatsApp Business Platform and requires an approved template and customer opt-in.
 
-## Content expansion
+## Catalogue delivery
 
-Add verified records to `products.ts` or `services.ts`; route generation is automatic. The product template supports applications, features, specifications, compatibility, downloads and related categories. The `Product` interface extends category fields for a later model-level catalogue. Add model-level routes once their source content is available.
+The final PDFs in `public/downloads/` are now the same files used by:
 
-Do not publish an unrelated image for a category without a verified image. Ultrasonic cleaning is supported by the business card but has no identified product photo/specification; its card intentionally uses a text treatment.
+- each product page's **View catalogue** action;
+- the Machine Services pages;
+- the company profile download;
+- the post-enquiry catalogue result;
+- automatic catalogue email;
+- optional WhatsApp acknowledgement.
 
-## Enquiries, catalogue delivery and privacy
+A general enquiry falls back to the SHK company profile.
 
-The enquiry list and optional notes stay in localStorage until cleared. On the CRM-enabled deployment, form submissions are stored in SHK's D1 lead database before the visitor continues to WhatsApp. Matching catalogue links are returned immediately and can be sent by transactional email. When the R2 `FILES` binding is configured, supported attachments are stored privately and can only be downloaded through the authenticated SHK admin API. Optional WhatsApp Business acknowledgement requires Meta credentials, an approved template and customer opt-in.
+## Hostinger deployment
 
-See `docs/LEAD-DESK-SETUP.md` for bindings, environment variables, catalogue filenames and rollback details.
+Build the website with the final domain:
 
-## Cloudflare Pages / static hosting
+```powershell
+$env:SITE_URL="https://YOUR-FINAL-DOMAIN"
+npm run build
+```
 
-1. Confirm the company contacts and final domain before public release.
-2. Connect the repository and select the reviewed deployment branch.
-3. Build command: `npm run build`. Output directory: `dist`. Set Node 24 and `SITE_URL` to the confirmed HTTPS origin.
-4. `public/_headers` adds basic security and immutable asset-cache headers on Cloudflare Pages and Netlify.
-5. Verify canonical URLs, sitemap, WhatsApp destination, phone/email and the native mobile WhatsApp flow on the deployed site.
+Upload the **contents of `dist/`** into the Hostinger website's `public_html` directory.
 
-The fallback `https://shktech.pages.dev` is a provisional build origin, not a claim that SHK owns that address or that the site is deployed. No public deployment was performed in this task. `.env.example` documents the required origin setting; use an environment variable in the build process.
+Create a Hostinger MySQL database and import `deployment/hostinger/schema.sql`. Copy `deployment/hostinger/config.sample.php` to a private directory beside `public_html`, normally:
+
+```text
+.../domains/YOUR-DOMAIN/shk-private/config.php
+```
+
+Fill in the database, admin and SMTP credentials in that private file. Real credentials must never be committed to GitHub.
+
+See `docs/LEAD-DESK-SETUP.md` for the complete production checklist.
+
+## Review / rollback
+
+Hostinger adaptation branch:
+
+`client-review-v4-hostinger-crm`
+
+Previous CRM experiment:
+
+`client-review-v3-shk-crm`
+
+Approved pre-CRM design rollback point:
+
+`design-refinement-v2`
+
+Do not merge into main until the client review is complete.
 
 ## Source policy
 
-See `docs/SOURCE-AUDIT.md` for page references, confirmed specification transcription, contact conflict and remaining client confirmations. Do not introduce authorised-partner claims, customer proof, measurable outcomes or model compatibility without new evidence.
+See `docs/SOURCE-AUDIT.md` for content provenance and remaining client confirmations. Do not introduce authorised-partner claims, customer proof, measurable outcomes or model compatibility without supporting material.

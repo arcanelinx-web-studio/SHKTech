@@ -176,7 +176,7 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
       </div>
 
       <p id="attachment-hint" class="field-hint">
-        On the CRM-enabled deployment, supported files are stored privately for SHK with the enquiry. If secure storage is not configured yet, attach them manually in WhatsApp instead.
+        Supported files are stored privately with your enquiry for SHK. If secure storage is temporarily unavailable, attach them manually in WhatsApp instead.
       </p>
       <p id="file-status" class="field-hint" aria-live="polite"></p>
 
@@ -281,7 +281,7 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
     const uploaded: Array<{ key: string; name: string; size: number; type: string }> = [];
     for (const file of files.slice(0, 5)) {
       if (file.size > 15 * 1024 * 1024) throw new Error(file.name + ' is larger than 15 MB.');
-      const response = await fetch('/api/uploads', {
+      const response = await fetch('/api/uploads.php', {
         method: 'POST',
         headers: {
           'content-type': file.type || 'application/octet-stream',
@@ -399,7 +399,7 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
 
     let serverResult: any = null;
     try {
-      const response = await fetch('/api/enquiries', {
+      const response = await fetch('/api/enquiries.php', {
         method: 'POST',
         headers: { 'content-type': 'application/json', accept: 'application/json' },
         body: JSON.stringify(payload),

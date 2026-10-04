@@ -145,6 +145,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const catalogues = Array.isArray(lead.catalogues) ? lead.catalogues : [];
       const items = Array.isArray(lead.items) ? lead.items : [];
       const delivery = lead.delivery || {};
+      const attachments = Array.isArray(lead.attachments) ? lead.attachments : [];
       const contact = [lead.phone, lead.email].filter(Boolean).join(' · ');
       return '<article class="lead-card" data-id="' + lead.id + '">' +
         '<div class="lead-summary">' +
@@ -163,6 +164,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             '<p><strong>Qty:</strong> ' + esc((lead.quantity || '-') + ' ' + (lead.quantity_unit || '')) + '</p>' +
             '<p><strong>Machine:</strong> ' + esc((lead.machine_type || '-') + ' ' + (lead.machine_model || '')) + '</p>' +
             (items.length ? '<p><strong>Selected:</strong> ' + items.map((i:any)=>esc(i.title)).join(' · ') + '</p>' : '') +
+            (attachments.length ? '<p><strong>Attachments:</strong><br>' + attachments.map((a:any) => {
+              if (typeof a === 'string') return esc(a);
+              return '<a class="text-link" href="/api/admin/file?key=' + encodeURIComponent(a.key) + '">' + esc(a.name) + ' ↗</a>';
+            }).join('<br>') + '</p>' : '') +
           '</div>' +
           '<div class="lead-actions">' +
             '<div><h3>Catalogue delivery</h3><div class="catalogue-links">' +

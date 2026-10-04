@@ -11369,3 +11369,60 @@ button {
     max-height: 54px;
   }
 }
+
+
+/* === LOGO STRIP RELIABILITY + FOOTER LOGIN BUTTON V19 === */
+.technology-brand-rail {
+  min-height: 76px;
+  padding: 8px 16px;
+  background: #f6f7f5;
+}
+
+.technology-brand-rail > img {
+  display: block;
+  width: min(100%, 980px);
+  height: auto;
+  max-height: 58px;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.footer-bottom {
+  align-items: center !important;
+}
+
+.footer-admin-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  align-self: center !important;
+  min-height: 36px !important;
+  margin: 0 !important;
+  padding: 0 13px !important;
+  border: 1px solid #384751 !important;
+  border-radius: 3px !important;
+  background: transparent !important;
+  color: #b9c6ce !important;
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  letter-spacing: .02em !important;
+}
+
+.footer-admin-link:hover {
+  border-color: #5a7180 !important;
+  background: #142029 !important;
+  color: #fff !important;
+}
+
+@media (max-width: 600px) {
+  .technology-brand-rail > img {
+    width: 900px;
+    max-width: none;
+    max-height: 48px;
+  }
+
+  .footer-admin-link {
+    min-height: 34px !important;
+  }
+}

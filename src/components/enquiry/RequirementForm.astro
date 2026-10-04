@@ -12,8 +12,8 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
       <p class="eyebrow">07 — TALK TO AN ENGINEER</p>
       <h2>Send us the part, the drawing or the <span class="blue">problem.</span></h2>
       <p>
-        Attach a drawing, a photo of the machine or a PDF. Share the requirement and continue the
-        conversation with SHK on WhatsApp.
+        Attach a drawing, a photo of the machine or a PDF. Your enquiry is recorded for SHK,
+        the relevant catalogue is made available immediately, and you can continue the conversation on WhatsApp.
       </p>
       <dl class="contact-details">
         <dt class="mono">PHONE</dt>
@@ -221,15 +221,25 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
         </div>
       </details>
 
+      <label style="display:flex;gap:10px;align-items:flex-start;margin:4px 0 18px;font-size:12px;line-height:1.6;color:#53616b;">
+        <input name="whatsappOptIn" type="checkbox" value="yes" style="margin-top:3px;" />
+        <span>Also send my enquiry acknowledgement and catalogue link on WhatsApp when SHK's WhatsApp Business messaging is available.</span>
+      </label>
+
       <p id="form-error" class="form-error" role="alert" tabindex="-1"></p>
       <div class="requirement-submit-row">
         <button class="button button-primary form-submit" type="submit" disabled>
-          Send requirement <ArrowUpRight size={18} />
+          Submit enquiry & get catalogue <ArrowUpRight size={18} />
         </button>
-        <span class="field-hint">Opens WhatsApp for review. Nothing is sent automatically.</span>
+        <span class="field-hint">Your enquiry is recorded first. Relevant catalogue links are then shown here and sent by email when provided.</span>
       </div>
 
       <div id="whatsapp-result" hidden>
+        <div id="catalogue-delivery" hidden style="margin:0 0 20px;padding:18px;border:1px solid #d9dfe1;background:#fff;">
+          <span class="mono">CATALOGUE DELIVERY</span>
+          <p id="catalogue-status" style="margin:8px 0 10px;"></p>
+          <div id="catalogue-links" class="button-row"></div>
+        </div>
         <p id="handoff-status">Your requirement is ready. Review it in WhatsApp, attach any files, then send.</p>
         <a id="whatsapp-open" class="button button-primary" href="#">Open WhatsApp ↗</a>
         <button class="button button-secondary" id="copy-message" type="button">Copy requirement</button>
@@ -282,19 +292,22 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
   }
   context();
   window.addEventListener('hashchange', context);
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const data = new FormData(form);
     const value = (key: string) => String(data.get(key) || '').trim();
     const error = document.getElementById('form-error')!;
+    const submit = form.querySelector<HTMLButtonElement>('.form-submit')!;
     error.textContent = '';
+
     if (!value('name') || !value('details')) {
       error.textContent = 'Enter your name and a brief description of the requirement.';
       error.focus();
       return;
     }
-    const phone = value('phone'),
-      email = value('email');
+
+    const phone = value('phone');
+    const email = value('email');
     if (!phone && !email) {
       error.textContent = 'Enter a phone number or email address so SHK can contact you.';
       error.focus();
@@ -311,51 +324,99 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
       return;
     }
     if (value('preferred') !== 'Email' && !phone) {
-      error.textContent =
-        'Enter a phone number for your preferred contact method, or select Email.';
+      error.textContent = 'Enter a phone number for your preferred contact method, or select Email.';
       error.focus();
       return;
     }
-    reference ||= createReference();
-    message = buildMessage(
-      {
-        type: value('type'),
-        name: value('name'),
-        company: value('company'),
-        phone,
-        email,
-        machineType: value('machineType'),
-        machineModel: value('machineModel'),
-        location: value('location'),
-        productCondition: value('productCondition'),
-        quantity: value('quantity'),
-        quantityUnit: value('quantityUnit'),
-        usageApplication: value('usageApplication'),
-        brand: value('brand'),
-        specification: value('specification'),
-        category: value('category'),
-        details: value('details'),
-        preferred: value('preferred'),
-        attachmentNames: Array.from(attachment.files || []).map((f) => f.name),
-      },
-      getItems(),
-      reference,
-    );
+
+    const items = getItems();
+    const payload = {
+      type: value('type'),
+      name: value('name'),
+      company: value('company'),
+      phone,
+      email,
+      machineType: value('machineType'),
+      machineModel: value('machineModel'),
+      location: value('location'),
+      productCondition: value('productCondition'),
+      quantity: value('quantity'),
+      quantityUnit: value('quantityUnit'),
+      usageApplication: value('usageApplication'),
+      brand: value('brand'),
+      specification: value('specification'),
+      category: value('category'),
+      details: value('details'),
+      preferred: value('preferred'),
+      attachmentNames: Array.from(attachment.files || []).map((f) => f.name),
+      items,
+      whatsappOptIn: data.get('whatsappOptIn') === 'yes',
+    };
+
+    submit.disabled = true;
+    submit.textContent = 'Submitting enquiry…';
+
+    let serverResult: any = null;
+    try {
+      const response = await fetch('/api/enquiries', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', accept: 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      serverResult = await response.json().catch(() => null);
+      if (!response.ok || !serverResult?.ok) throw new Error(serverResult?.error || 'Enquiry service unavailable.');
+      reference = serverResult.reference;
+    } catch (submitError) {
+      reference ||= createReference();
+      error.textContent =
+        'The online lead desk is not connected on this preview yet. You can still continue on WhatsApp; SHK will receive the message there.';
+    } finally {
+      submit.disabled = false;
+      submit.innerHTML = 'Submit enquiry & get catalogue <span aria-hidden="true">↗</span>';
+    }
+
+    message = buildMessage(payload, items, reference);
     const href = whatsappUrl(message);
     const longMessage = href.length > 7000;
     const destination = longMessage ? href.split('?')[0]! : href;
     (document.getElementById('whatsapp-open') as HTMLAnchorElement).href = destination;
+
+    const catalogueBox = document.getElementById('catalogue-delivery')!;
+    const catalogueStatus = document.getElementById('catalogue-status')!;
+    const catalogueLinks = document.getElementById('catalogue-links')!;
+    catalogueLinks.replaceChildren();
+
+    if (serverResult?.catalogues?.length) {
+      catalogueBox.hidden = false;
+      catalogueStatus.textContent =
+        serverResult.delivery?.customerEmail?.sent
+          ? 'Enquiry ' + reference + ' recorded. We also sent these catalogue links to your email.'
+          : 'Enquiry ' + reference + ' recorded. Your relevant catalogue is ready below.';
+      serverResult.catalogues.forEach((catalogue: { title: string; url: string }) => {
+        const link = document.createElement('a');
+        link.className = 'button button-secondary';
+        link.href = catalogue.url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = catalogue.title + ' ↗';
+        catalogueLinks.append(link);
+      });
+    } else {
+      catalogueBox.hidden = true;
+    }
+
     document.getElementById('handoff-status')!.textContent = longMessage
-      ? 'This requirement is too long for a reliable WhatsApp link. Copy the requirement below, open WhatsApp, paste it into the conversation and attach your files.'
-      : 'Your requirement is ready. Review it in WhatsApp, attach any files, then send.';
+      ? 'Your requirement is recorded. The WhatsApp message is long, so copy it below, open WhatsApp and paste it into the conversation.'
+      : 'Your requirement is ready for WhatsApp. Review it there, attach any selected files, then send.';
+
     document.getElementById('message-preview')!.textContent = message;
     document.getElementById('whatsapp-result')!.hidden = false;
-    if (!longMessage) window.open(destination, '_blank', 'noopener,noreferrer');
     document.getElementById('whatsapp-result')!.scrollIntoView({
       behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
       block: 'nearest',
     });
   });
+
   document.getElementById('copy-message')?.addEventListener('click', async () => {
     try {
       await navigator.clipboard.writeText(message);

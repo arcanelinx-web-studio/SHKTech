@@ -341,6 +341,46 @@ import { ArrowUpRight, Paperclip, ChevronDown } from '@lucide/astro';
       getItems(),
       reference,
     );
+    const selectedItems = getItems();
+    void fetch('/api/enquiries', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      keepalive: true,
+      body: JSON.stringify({
+        reference,
+        source: 'Website',
+        type: value('type'),
+        name: value('name'),
+        company: value('company'),
+        phone,
+        email,
+        location: value('location'),
+        productCondition: value('productCondition'),
+        quantity: value('quantity'),
+        quantityUnit: value('quantityUnit'),
+        usageApplication: value('usageApplication'),
+        brand: value('brand'),
+        specification: value('specification'),
+        machineType: value('machineType'),
+        machineModel: value('machineModel'),
+        category: value('category'),
+        details: value('details'),
+        preferred: value('preferred'),
+        selectedItems,
+        whatsappMessage: message,
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          const status = document.getElementById('handoff-status');
+          if (status) status.textContent =
+            'Requirement recorded for SHK. Review it in WhatsApp, attach any files, then send.';
+        }
+      })
+      .catch(() => {
+        // WhatsApp remains the reliable fallback if CRM storage is unavailable.
+      });
+
     const href = whatsappUrl(message);
     const longMessage = href.length > 7000;
     const destination = longMessage ? href.split('?')[0]! : href;

@@ -2,6 +2,8 @@
 import { Image } from 'astro:assets';
 import probe from '../../assets/probe.webp';
 import Button from '../global/Button.astro';
+import { FileText } from '@lucide/astro';
+import { site } from '../../config/site';
 ---
 
 <section class="hero dark">
@@ -20,6 +22,16 @@ import Button from '../global/Button.astro';
         <Button href="#requirement">Talk to an Engineer</Button>
         <Button href="#machine" secondary>Explore the Machine</Button>
       </div>
+      <a
+        class="hero-profile-link"
+        href={site.downloads.companyProfile}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <FileText size={15} />
+        View SHK company profile
+        <span aria-hidden="true">↗</span>
+      </a>
       <div class="hero-values" aria-label="Precision, productivity and uptime">
         <span>Precision</span>
         <span>Productivity</span>
@@ -45,12 +57,11 @@ import Button from '../global/Button.astro';
 
   <div class="container technology-strip" style="width:100%;max-width:none;box-sizing:border-box;padding-left:clamp(20px,3.25vw,68px);padding-right:clamp(20px,3.25vw,68px);">
     <span class="mono">TECHNOLOGY WE WORK WITH</span>
-    <div style="display:flex;align-items:center;min-width:0;">
+    <div class="technology-brand-rail" aria-label="Technology brands shown by SHK Tech Services">
       <img
-        src="/images/partners/shk-partner-strip.webp"
-        alt="Technology brands shown by SHK Tech Services: LK, TaeguTec, SolidCAM, Detron, Air Seiki, VGS & Co, Marposs and Oilmax"
+        src="/images/partners/shk-brand-strip-transparent.webp"
+        alt="LK, TaeguTec, SolidCAM, Detron, Air Seiki, VGS & Co, Marposs and Oilmax"
         loading="lazy"
-        style="display:block;width:min(100%,820px);height:auto;object-fit:contain;filter:saturate(.9);"
       />
     </div>
   </div>

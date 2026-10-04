@@ -1,0 +1,49 @@
+---
+import '../styles/global.css';
+import '../styles/admin.css';
+import Logo from '../components/global/Logo.astro';
+interface Props {
+  title: string;
+  login?: boolean;
+}
+const { title, login = false } = Astro.props;
+---
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0B1115" />
+    <meta name="robots" content="noindex,nofollow,noarchive" />
+    <title>{title} | SHK Admin</title>
+    <link rel="icon" type="image/svg+xml" href="/images/logos/SHK-logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="admin-body">
+    <header class="admin-topbar">
+      <a class="admin-brand" href={login ? '/' : '/admin/'}>
+        <Logo />
+        <span class="admin-product-name">Enquiry Desk</span>
+      </a>
+      <div class="admin-topbar-actions">
+        <a href="/" class="admin-public-link">View website ↗</a>
+        {!login && <button type="button" class="admin-logout" id="admin-logout">Sign out</button>}
+      </div>
+    </header>
+    <main class="admin-main"><slot /></main>
+    {!login && (
+      <script>
+        document.getElementById('admin-logout')?.addEventListener('click', async () => {
+          sessionStorage.removeItem('shk-admin-preview');
+          try { await fetch('/api/admin/logout', { method: 'POST', credentials: 'include' }); } catch {}
+          location.href = new URL('./login/', location.href).href;
+        });
+      </script>
+    )}
+  </body>
+</html>

@@ -187,6 +187,10 @@ export async function onRequestPost(context) {
   try { raw = await context.request.json(); }
   catch { return Response.json({ ok: false, error: 'Invalid enquiry.' }, { status: 400 }); }
 
+  if (cleanText(raw.website, 100)) {
+    return Response.json({ ok: true, reference: 'received', catalogues: [], delivery: {} });
+  }
+
   const payload = {
     type: cleanText(raw.type, 80),
     name: cleanText(raw.name, 100),

@@ -1,0 +1,498 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+---
+
+<AdminLayout title="Enquiry workspace">
+  <main class="admin-app">
+    <aside class="admin-sidebar">
+      <a class="admin-brand-lockup" href="/" aria-label="SHK Tech Services website">
+        <img src="/images/logos/SHK-logo-white.svg" alt="" />
+        <span>
+          <strong>SHK <b>TECH</b></strong>
+          <small>SERVICES</small>
+        </span>
+      </a>
+
+      <div class="admin-sidebar-label">ENQUIRY WORKSPACE</div>
+      <nav class="admin-nav" aria-label="Admin workspace">
+        <button class="active" data-admin-view="all"><span>▦</span> All enquiries</button>
+        <button data-admin-status="New"><span>●</span> New</button>
+        <button data-admin-status="Qualified"><span>◇</span> Qualified</button>
+        <button data-admin-status="Quotation"><span>₹</span> Quotation</button>
+        <button data-admin-status="Follow-up"><span>↻</span> Follow-up</button>
+        <button data-admin-status="Won"><span>✓</span> Won</button>
+      </nav>
+
+      <div class="admin-sidebar-bottom">
+        <a href="/" target="_blank" rel="noopener">View public website ↗</a>
+        <button id="admin-logout">Sign out</button>
+      </div>
+    </aside>
+
+    <section class="admin-main">
+      <header class="admin-topbar">
+        <div>
+          <p class="admin-kicker">SHK / BUSINESS DEVELOPMENT</p>
+          <h1>Enquiry pipeline</h1>
+        </div>
+        <div class="admin-topbar-actions">
+          <label class="admin-search">
+            <span aria-hidden="true">⌕</span>
+            <input id="admin-search" type="search" placeholder="Search company, contact, product…" />
+          </label>
+          <button id="admin-refresh" class="admin-icon-button" aria-label="Refresh enquiries">↻</button>
+        </div>
+      </header>
+
+      <section class="admin-metrics" aria-label="Enquiry summary">
+        <article>
+          <span class="admin-metric-label">TOTAL ENQUIRIES</span>
+          <strong id="metric-total">—</strong>
+          <small>captured in the workspace</small>
+        </article>
+        <article>
+          <span class="admin-metric-label">NEW</span>
+          <strong id="metric-new">—</strong>
+          <small>awaiting first response</small>
+        </article>
+        <article>
+          <span class="admin-metric-label">QUOTATIONS</span>
+          <strong id="metric-quotation">—</strong>
+          <small>active commercial opportunities</small>
+        </article>
+        <article class="attention">
+          <span class="admin-metric-label">FOLLOW-UP DUE</span>
+          <strong id="metric-due">—</strong>
+          <small>due today / next 24 hours</small>
+        </article>
+      </section>
+
+      <section class="admin-pipeline" aria-label="Pipeline stages">
+        {['New', 'Contacted', 'Qualified', 'Quotation', 'Follow-up', 'Won', 'Lost'].map((stage) => (
+          <button data-pipeline-status={stage}>
+            <span>{stage}</span>
+            <strong data-stage-count={stage}>0</strong>
+          </button>
+        ))}
+      </section>
+
+      <section class="admin-list-panel">
+        <div class="admin-list-heading">
+          <div>
+            <p class="admin-kicker" id="admin-list-kicker">ALL ENQUIRIES</p>
+            <h2 id="admin-list-title">Current opportunities</h2>
+          </div>
+          <span id="admin-result-count" class="admin-result-count">Loading…</span>
+        </div>
+
+        <div id="admin-loading" class="admin-empty-state">
+          <span class="admin-loader"></span>
+          <strong>Loading enquiries</strong>
+          <p>Connecting to the SHK enquiry workspace.</p>
+        </div>
+
+        <div id="admin-empty" class="admin-empty-state" hidden>
+          <span>◎</span>
+          <strong>No enquiries here yet.</strong>
+          <p>Website enquiries will appear automatically after the CRM database is connected.</p>
+        </div>
+
+        <div id="admin-table-wrap" class="admin-table-wrap" hidden>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Reference / contact</th>
+                <th>Requirement</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Follow-up</th>
+                <th>Received</th>
+              </tr>
+            </thead>
+            <tbody id="admin-enquiry-rows"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <aside id="admin-drawer" class="admin-drawer" aria-hidden="true">
+      <div class="admin-drawer-top">
+        <div>
+          <p class="admin-kicker" id="drawer-reference">ENQUIRY</p>
+          <h2 id="drawer-name">Customer</h2>
+        </div>
+        <button id="drawer-close" aria-label="Close enquiry">×</button>
+      </div>
+
+      <div class="admin-drawer-content">
+        <div class="admin-drawer-meta" id="drawer-meta"></div>
+
+        <section class="admin-drawer-section">
+          <p class="admin-kicker">REQUIREMENT</p>
+          <h3 id="drawer-category">General enquiry</h3>
+          <p id="drawer-details"></p>
+          <div id="drawer-specs" class="admin-spec-grid"></div>
+        </section>
+
+        <section class="admin-drawer-section admin-workflow-form">
+          <p class="admin-kicker">PIPELINE CONTROL</p>
+          <div class="admin-form-grid">
+            <label>
+              Status
+              <select id="drawer-status">
+                {['New', 'Contacted', 'Qualified', 'Quotation', 'Follow-up', 'Won', 'Lost'].map((v) => <option>{v}</option>)}
+              </select>
+            </label>
+            <label>
+              Priority
+              <select id="drawer-priority">
+                {['Low', 'Normal', 'High', 'Urgent'].map((v) => <option>{v}</option>)}
+              </select>
+            </label>
+            <label>
+              Follow-up
+              <input id="drawer-followup" type="datetime-local" />
+            </label>
+            <label>
+              Owner
+              <input id="drawer-owner" placeholder="Example: Shrinivas" maxlength="120" />
+            </label>
+          </div>
+          <button id="drawer-save" class="button button-primary">Save pipeline update</button>
+          <p id="drawer-save-status" class="admin-save-status"></p>
+        </section>
+
+        <section class="admin-drawer-section">
+          <p class="admin-kicker">ACTIVITY</p>
+          <div class="admin-activity-compose">
+            <select id="activity-kind" aria-label="Activity type">
+              <option value="note">Internal note</option>
+              <option value="whatsapp">WhatsApp</option>
+              <option value="call">Phone call</option>
+              <option value="email">Email</option>
+              <option value="meeting">Meeting</option>
+            </select>
+            <textarea id="activity-note" rows="3" maxlength="2000" placeholder="Add follow-up notes, quotation discussion or next action…"></textarea>
+            <button id="activity-add" class="button button-secondary">Add activity</button>
+          </div>
+          <div id="activity-list" class="admin-activity-list"></div>
+        </section>
+      </div>
+    </aside>
+    <div id="drawer-backdrop" class="admin-drawer-backdrop" hidden></div>
+  </main>
+</AdminLayout>
+
+<script>
+  type Enquiry = Record<string, any>;
+
+  const state: {
+    status: string;
+    search: string;
+    enquiries: Enquiry[];
+    selected: Enquiry | null;
+  } = { status: '', search: '', enquiries: [], selected: null };
+
+  const rows = document.querySelector<HTMLTableSectionElement>('#admin-enquiry-rows')!;
+  const drawer = document.querySelector<HTMLElement>('#admin-drawer')!;
+  const backdrop = document.querySelector<HTMLElement>('#drawer-backdrop')!;
+
+  function txt(value: unknown) {
+    return String(value ?? '').trim();
+  }
+
+  function formatDate(value: unknown, withTime = false) {
+    if (!value) return '—';
+    const date = new Date(String(value));
+    if (Number.isNaN(date.getTime())) return txt(value);
+    return new Intl.DateTimeFormat('en-IN', {
+      day: '2-digit',
+      month: 'short',
+      ...(withTime ? { hour: '2-digit', minute: '2-digit' } : { year: 'numeric' }),
+    }).format(date);
+  }
+
+  function countFor(summary: any, stage: string) {
+    const row = (summary.byStatus || []).find((item: any) => item.status === stage);
+    return Number(row?.count || 0);
+  }
+
+  function updateSummary(summary: any) {
+    document.querySelector('#metric-total')!.textContent = String(summary.total || 0);
+    document.querySelector('#metric-new')!.textContent = String(countFor(summary, 'New'));
+    document.querySelector('#metric-quotation')!.textContent = String(countFor(summary, 'Quotation'));
+    document.querySelector('#metric-due')!.textContent = String(summary.due || 0);
+    document.querySelectorAll<HTMLElement>('[data-stage-count]').forEach((el) => {
+      el.textContent = String(countFor(summary, el.dataset.stageCount || ''));
+    });
+  }
+
+  function statusClass(status: string) {
+    return 'status-' + status.toLowerCase().replace(/[^a-z]+/g, '-');
+  }
+
+  function renderRows() {
+    rows.replaceChildren();
+    document.querySelector('#admin-result-count')!.textContent =
+      `${state.enquiries.length} ${state.enquiries.length === 1 ? 'enquiry' : 'enquiries'}`;
+
+    const empty = document.querySelector<HTMLElement>('#admin-empty')!;
+    const table = document.querySelector<HTMLElement>('#admin-table-wrap')!;
+    empty.hidden = state.enquiries.length !== 0;
+    table.hidden = state.enquiries.length === 0;
+
+    for (const enquiry of state.enquiries) {
+      const tr = document.createElement('tr');
+      tr.tabIndex = 0;
+      tr.setAttribute('role', 'button');
+      tr.setAttribute('aria-label', `Open ${txt(enquiry.reference)} ${txt(enquiry.name)}`);
+      tr.addEventListener('click', () => openEnquiry(enquiry.id));
+      tr.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') openEnquiry(enquiry.id);
+      });
+
+      const contact = document.createElement('td');
+      const ref = document.createElement('span');
+      ref.className = 'admin-ref';
+      ref.textContent = txt(enquiry.reference);
+      const name = document.createElement('strong');
+      name.textContent = txt(enquiry.name) || 'Unnamed contact';
+      const company = document.createElement('small');
+      company.textContent = txt(enquiry.company) || txt(enquiry.phone) || txt(enquiry.email) || '—';
+      contact.append(ref, name, company);
+
+      const requirement = document.createElement('td');
+      const category = document.createElement('strong');
+      category.textContent = txt(enquiry.category) || txt(enquiry.enquiry_type) || 'General requirement';
+      const details = document.createElement('small');
+      details.textContent = txt(enquiry.details).slice(0, 92) || '—';
+      requirement.append(category, details);
+
+      const status = document.createElement('td');
+      const statusPill = document.createElement('span');
+      statusPill.className = `admin-status ${statusClass(txt(enquiry.status))}`;
+      statusPill.textContent = txt(enquiry.status);
+      status.append(statusPill);
+
+      const priority = document.createElement('td');
+      const priorityPill = document.createElement('span');
+      priorityPill.className = `admin-priority priority-${txt(enquiry.priority).toLowerCase()}`;
+      priorityPill.textContent = txt(enquiry.priority);
+      priority.append(priorityPill);
+
+      const follow = document.createElement('td');
+      follow.textContent = formatDate(enquiry.follow_up_at, true);
+
+      const received = document.createElement('td');
+      received.textContent = formatDate(enquiry.created_at, true);
+
+      tr.append(contact, requirement, status, priority, follow, received);
+      rows.append(tr);
+    }
+  }
+
+  async function loadEnquiries() {
+    document.querySelector<HTMLElement>('#admin-loading')!.hidden = false;
+    document.querySelector<HTMLElement>('#admin-empty')!.hidden = true;
+    document.querySelector<HTMLElement>('#admin-table-wrap')!.hidden = true;
+
+    const params = new URLSearchParams();
+    if (state.status) params.set('status', state.status);
+    if (state.search) params.set('search', state.search);
+
+    try {
+      const response = await fetch(`/api/enquiries?${params}`, { credentials: 'same-origin' });
+      if (response.status === 401) {
+        location.replace('/admin/login/');
+        return;
+      }
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Unable to load enquiries.');
+      state.enquiries = data.enquiries || [];
+      updateSummary(data.summary || {});
+      renderRows();
+    } catch (error) {
+      const empty = document.querySelector<HTMLElement>('#admin-empty')!;
+      empty.hidden = false;
+      empty.querySelector('strong')!.textContent = 'CRM connection is not ready.';
+      empty.querySelector('p')!.textContent =
+        error instanceof Error ? error.message : 'Connect the Cloudflare D1 database to activate enquiries.';
+    } finally {
+      document.querySelector<HTMLElement>('#admin-loading')!.hidden = true;
+    }
+  }
+
+  async function openEnquiry(id: string) {
+    const response = await fetch(`/api/admin/enquiries/${encodeURIComponent(id)}`, {
+      credentials: 'same-origin',
+    });
+    if (response.status === 401) return location.replace('/admin/login/');
+    const data = await response.json();
+    if (!response.ok) return;
+    state.selected = data.enquiry;
+
+    document.querySelector('#drawer-reference')!.textContent = txt(data.enquiry.reference);
+    document.querySelector('#drawer-name')!.textContent = txt(data.enquiry.name) || 'Customer';
+    document.querySelector('#drawer-category')!.textContent =
+      txt(data.enquiry.category) || txt(data.enquiry.enquiry_type) || 'General requirement';
+    document.querySelector('#drawer-details')!.textContent = txt(data.enquiry.details);
+
+    const meta = document.querySelector<HTMLElement>('#drawer-meta')!;
+    meta.replaceChildren();
+    [
+      ['Company', data.enquiry.company],
+      ['Phone', data.enquiry.phone],
+      ['Email', data.enquiry.email],
+      ['Location', data.enquiry.location],
+      ['Source', data.enquiry.source],
+      ['Received', formatDate(data.enquiry.created_at, true)],
+    ].forEach(([label, value]) => {
+      if (!txt(value)) return;
+      const item = document.createElement('div');
+      const key = document.createElement('span');
+      key.textContent = String(label);
+      const val = document.createElement('strong');
+      val.textContent = txt(value);
+      item.append(key, val);
+      meta.append(item);
+    });
+
+    const specs = document.querySelector<HTMLElement>('#drawer-specs')!;
+    specs.replaceChildren();
+    [
+      ['Application', data.enquiry.usage_application],
+      ['Brand / make', data.enquiry.brand],
+      ['Specification', data.enquiry.specification],
+      ['Machine type', data.enquiry.machine_type],
+      ['Machine / model', data.enquiry.machine_model],
+      ['Quantity', data.enquiry.quantity ? `${data.enquiry.quantity} ${txt(data.enquiry.quantity_unit)}` : ''],
+      ['Preferred contact', data.enquiry.preferred_contact],
+    ].forEach(([label, value]) => {
+      if (!txt(value)) return;
+      const item = document.createElement('div');
+      const key = document.createElement('span');
+      key.textContent = String(label);
+      const val = document.createElement('strong');
+      val.textContent = txt(value);
+      item.append(key, val);
+      specs.append(item);
+    });
+
+    (document.querySelector('#drawer-status') as HTMLSelectElement).value = txt(data.enquiry.status);
+    (document.querySelector('#drawer-priority') as HTMLSelectElement).value = txt(data.enquiry.priority);
+    (document.querySelector('#drawer-owner') as HTMLInputElement).value = txt(data.enquiry.assigned_to);
+    (document.querySelector('#drawer-followup') as HTMLInputElement).value =
+      txt(data.enquiry.follow_up_at).slice(0, 16);
+
+    renderActivity(data.activity || []);
+    drawer.classList.add('open');
+    drawer.setAttribute('aria-hidden', 'false');
+    backdrop.hidden = false;
+  }
+
+  function renderActivity(activity: any[]) {
+    const root = document.querySelector<HTMLElement>('#activity-list')!;
+    root.replaceChildren();
+    if (!activity.length) {
+      const p = document.createElement('p');
+      p.className = 'admin-no-activity';
+      p.textContent = 'No activity recorded yet.';
+      root.append(p);
+      return;
+    }
+    for (const item of activity) {
+      const article = document.createElement('article');
+      const top = document.createElement('div');
+      const kind = document.createElement('strong');
+      kind.textContent = txt(item.kind).replace(/^./, (c) => c.toUpperCase());
+      const date = document.createElement('span');
+      date.textContent = formatDate(item.created_at, true);
+      top.append(kind, date);
+      const note = document.createElement('p');
+      note.textContent = txt(item.note);
+      article.append(top, note);
+      root.append(article);
+    }
+  }
+
+  async function saveUpdate(withActivity = false) {
+    if (!state.selected) return;
+    const status = document.querySelector<HTMLSelectElement>('#drawer-status')!.value;
+    const priority = document.querySelector<HTMLSelectElement>('#drawer-priority')!.value;
+    const followUpAt = document.querySelector<HTMLInputElement>('#drawer-followup')!.value || null;
+    const assignedTo = document.querySelector<HTMLInputElement>('#drawer-owner')!.value || null;
+    const note = withActivity ? document.querySelector<HTMLTextAreaElement>('#activity-note')!.value : '';
+    const kind = withActivity ? document.querySelector<HTMLSelectElement>('#activity-kind')!.value : 'note';
+    const message = document.querySelector<HTMLElement>('#drawer-save-status')!;
+    message.textContent = 'Saving…';
+
+    const response = await fetch(`/api/admin/enquiries/${encodeURIComponent(state.selected.id)}`, {
+      method: 'PATCH',
+      headers: { 'content-type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ status, priority, followUpAt, assignedTo, note, kind }),
+    });
+    if (response.status === 401) return location.replace('/admin/login/');
+    const data = await response.json();
+    if (!response.ok) {
+      message.textContent = data.error || 'Unable to save.';
+      return;
+    }
+
+    message.textContent = withActivity ? 'Activity added.' : 'Pipeline updated.';
+    if (withActivity) document.querySelector<HTMLTextAreaElement>('#activity-note')!.value = '';
+    await loadEnquiries();
+    await openEnquiry(state.selected.id);
+    window.setTimeout(() => (message.textContent = ''), 2200);
+  }
+
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+    backdrop.hidden = true;
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-admin-status], [data-pipeline-status]').forEach((button) => {
+    button.addEventListener('click', () => {
+      state.status = button.dataset.adminStatus || button.dataset.pipelineStatus || '';
+      document.querySelectorAll('.admin-nav button').forEach((item) => item.classList.remove('active'));
+      document.querySelector<HTMLElement>(`[data-admin-status="${state.status}"]`)?.classList.add('active');
+      document.querySelector('#admin-list-kicker')!.textContent =
+        state.status ? `${state.status.toUpperCase()} PIPELINE` : 'ALL ENQUIRIES';
+      document.querySelector('#admin-list-title')!.textContent =
+        state.status ? `${state.status} opportunities` : 'Current opportunities';
+      loadEnquiries();
+    });
+  });
+
+  document.querySelector('[data-admin-view="all"]')?.addEventListener('click', () => {
+    state.status = '';
+    document.querySelectorAll('.admin-nav button').forEach((item) => item.classList.remove('active'));
+    document.querySelector('[data-admin-view="all"]')?.classList.add('active');
+    document.querySelector('#admin-list-kicker')!.textContent = 'ALL ENQUIRIES';
+    document.querySelector('#admin-list-title')!.textContent = 'Current opportunities';
+    loadEnquiries();
+  });
+
+  let searchTimer = 0;
+  document.querySelector<HTMLInputElement>('#admin-search')!.addEventListener('input', (event) => {
+    state.search = (event.target as HTMLInputElement).value.trim();
+    window.clearTimeout(searchTimer);
+    searchTimer = window.setTimeout(loadEnquiries, 250);
+  });
+
+  document.querySelector('#admin-refresh')?.addEventListener('click', loadEnquiries);
+  document.querySelector('#drawer-close')?.addEventListener('click', closeDrawer);
+  backdrop.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeDrawer();
+  });
+  document.querySelector('#drawer-save')?.addEventListener('click', () => saveUpdate(false));
+  document.querySelector('#activity-add')?.addEventListener('click', () => saveUpdate(true));
+  document.querySelector('#admin-logout')?.addEventListener('click', async () => {
+    await fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' });
+    location.replace('/admin/login/');
+  });
+
+  loadEnquiries();
+</script>

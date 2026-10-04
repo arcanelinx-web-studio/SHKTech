@@ -35,6 +35,13 @@ export function isShowcaseMode() {
 
 export function cataloguesForShowcase(payload: any): Catalogue[] {
   const ids = new Set<string>();
+
+  // Only map brands where the supplied SHK material explicitly supports the product family.
+  const brandToCatalogue: Record<string, string> = {
+    oilmax: 'coolant-filtration',
+    'air seiki': 'mist-collectors',
+    solidcam: 'cam-programming',
+  };
   for (const item of Array.isArray(payload?.items) ? payload.items : []) {
     if (item?.id && catalogues[item.id]) ids.add(item.id);
   }
@@ -44,23 +51,28 @@ export function cataloguesForShowcase(payload: any): Catalogue[] {
     if (catalogue.title.toLowerCase() === category) ids.add(id);
   }
 
+  const brand = String(payload?.brand || '').trim().toLowerCase();
+  const brandCatalogue = brandToCatalogue[brand];
+  if (brandCatalogue) ids.add(brandCatalogue);
+
   const type = String(payload?.type || '').toLowerCase();
   if (!ids.size && ['calibration', 'reconditioning', 'retrofit', 'technical consultation'].includes(type)) {
     ids.add('machine-services');
   }
 
-  const selected = [...ids].slice(0, 4).map((id) => catalogues[id]!);
-  if (!selected.length) {
-    return [{
-      title: 'SHK Tech Services Company Profile',
-      url: publicUrl('/downloads/SHK-Tech-Services-Company-Profile.pdf'),
-    }];
-  }
-
-  return selected.map((catalogue) => ({
+  const selected = [...ids].slice(0, 3).map((id) => catalogues[id]!);
+  const links = selected.map((catalogue) => ({
     title: catalogue.title,
     url: publicUrl('/downloads/' + catalogue.file),
   }));
+
+  // Standard customer handoff: relevant technical material first, company profile second.
+  links.push({
+    title: 'SHK Tech Services Company Profile',
+    url: publicUrl('/downloads/SHK-Tech-Services-Company-Profile.pdf'),
+  });
+
+  return links;
 }
 
 function defaultShowcaseLeads(): ShowcaseLead[] {

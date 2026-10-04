@@ -14,6 +14,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <button id="logout" class="button button-secondary" hidden>Sign out</button>
       </div>
 
+      <div id="showcase-banner" class="showcase-banner" hidden>
+        <div>
+          <span class="mono">INTERACTIVE CLIENT SHOWCASE</span>
+          <strong>Try the complete lead flow before production hosting.</strong>
+          <p>Enquiries submitted on this GitHub Pages preview appear here in this browser. Production login, shared database, email delivery and private file storage activate on Hostinger.</p>
+        </div>
+        <a class="button button-secondary" href="/#requirement">Create preview enquiry ↗</a>
+      </div>
+
       <section id="login-panel" class="admin-login">
         <div>
           <p class="eyebrow">SECURE ACCESS</p>
@@ -68,6 +77,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <style>
   .admin-shell{min-height:76vh}
   .admin-heading{display:flex;justify-content:space-between;gap:28px;align-items:flex-start;margin-bottom:42px}
+  .showcase-banner{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:30px;align-items:center;margin:-12px 0 34px;padding:24px 26px;border:1px solid #bfd3df;border-left:3px solid #8cc63f;background:#eef4f6}
+  .showcase-banner strong{display:block;margin:7px 0 5px;font-size:17px}
+  .showcase-banner p{margin:0;max-width:760px;font-size:12.5px;line-height:1.65}
   .admin-login{display:grid;grid-template-columns:1fr 1fr;gap:60px;max-width:960px;border:1px solid #d9dfe1;background:#fff;padding:42px}
   .admin-login form{display:grid;gap:18px}
   .admin-login label,.admin-filters label{display:grid;gap:8px;font-size:12px;font-weight:600}
@@ -95,6 +107,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .catalogue-links a{color:#0878ac;font-size:12px;font-weight:600}
   .empty-admin{padding:40px;border:1px dashed #bbc7cc;text-align:center;background:#fff}
   @media(max-width:900px){
+    .showcase-banner{grid-template-columns:1fr;gap:18px;padding:21px}
+    .showcase-banner .button{width:100%}
     .admin-login{grid-template-columns:1fr;gap:24px;padding:28px}
     .admin-metrics{grid-template-columns:repeat(2,1fr)}
     .admin-filters{grid-template-columns:1fr}
@@ -104,6 +118,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </style>
 
 <script>
+  import { isShowcaseMode, loadShowcaseLeads, resetShowcaseLeads, updateShowcaseLead } from '../utils/showcase';
+
+  const showcase = isShowcaseMode();
   const loginPanel = document.getElementById('login-panel')!;
   const dashboard = document.getElementById('dashboard')!;
   const logout = document.getElementById('logout') as HTMLButtonElement;
@@ -172,8 +189,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           '<div class="lead-actions">' +
             '<div><h3>Catalogue delivery</h3><div class="catalogue-links">' +
               catalogues.map((c:any)=>'<a href="' + esc(c.url) + '" target="_blank" rel="noopener">' + esc(c.title) + ' ↗</a>').join('') +
-            '</div><p class="lead-meta">Email: ' + esc(delivery.customerEmail?.sent ? 'sent' : delivery.customerEmail?.attempted ? 'failed' : 'not configured') +
-            ' · WhatsApp: ' + esc(delivery.whatsapp?.sent ? 'sent' : delivery.whatsapp?.attempted ? 'failed' : 'not configured') + '</p></div>' +
+            '</div><p class="lead-meta">' + (
+              delivery.showcase
+                ? 'Showcase mode · catalogue ready · email/WhatsApp activate on production hosting'
+                : 'Email: ' + esc(delivery.customerEmail?.sent ? 'sent' : delivery.customerEmail?.attempted ? 'failed' : 'not configured') +
+                  ' · WhatsApp: ' + esc(delivery.whatsapp?.sent ? 'sent' : delivery.whatsapp?.attempted ? 'failed' : 'not configured')
+            ) + '</p></div>' +
             '<label><span class="mono">INTERNAL NOTES</span><textarea rows="3" data-notes>' + esc(lead.notes || '') + '</textarea></label>' +
             '<button class="button button-primary" data-save>Save update</button>' +
           '</div>' +
@@ -184,15 +205,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     list.querySelectorAll<HTMLButtonElement>('[data-save]').forEach((button) => {
       button.addEventListener('click', async () => {
         const card = button.closest<HTMLElement>('.lead-card')!;
+        const id = Number(card.dataset.id);
+        const stage = (card.querySelector('[data-stage]') as HTMLSelectElement).value;
+        const notes = (card.querySelector('[data-notes]') as HTMLTextAreaElement).value;
         button.disabled = true;
+
+        if (showcase) {
+          const saved = updateShowcaseLead(id, stage, notes);
+          button.disabled = false;
+          status.textContent = saved
+            ? 'Showcase lead updated in this browser.'
+            : 'Could not update this showcase lead.';
+          return;
+        }
+
         const response = await fetch('/api/admin/leads.php', {
           method:'PATCH',
           headers:{'content-type':'application/json'},
-          body:JSON.stringify({
-            id:Number(card.dataset.id),
-            stage:(card.querySelector('[data-stage]') as HTMLSelectElement).value,
-            notes:(card.querySelector('[data-notes]') as HTMLTextAreaElement).value,
-          }),
+          body:JSON.stringify({ id, stage, notes }),
         });
         button.disabled = false;
         status.textContent = response.ok ? 'Lead updated.' : 'Could not save this update.';
@@ -202,6 +232,35 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   async function load() {
     status.textContent = 'Loading enquiries…';
+
+    if (showcase) {
+      const query = search.value.trim().toLowerCase();
+      const stage = stageFilter.value;
+      const leads = loadShowcaseLeads().filter((lead) => {
+        const haystack = [
+          lead.reference,
+          lead.name,
+          lead.company,
+          lead.phone,
+          lead.email,
+          lead.category,
+          lead.type,
+          lead.location,
+        ].join(' ').toLowerCase();
+        return (!query || haystack.includes(query)) && (!stage || lead.stage === stage);
+      });
+
+      loginPanel.hidden = true;
+      dashboard.hidden = false;
+      logout.hidden = false;
+      logout.textContent = 'Reset showcase';
+      document.getElementById('showcase-banner')!.hidden = false;
+      status.textContent = leads.length + ' preview enquiries loaded · stored only in this browser.';
+      render(leads);
+      return;
+    }
+
+    document.getElementById('showcase-banner')!.hidden = true;
     const params = new URLSearchParams();
     if (search.value.trim()) params.set('q', search.value.trim());
     if (stageFilter.value) params.set('stage', stageFilter.value);
@@ -224,6 +283,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     loginPanel.hidden = true;
     dashboard.hidden = false;
     logout.hidden = false;
+    logout.textContent = 'Sign out';
     status.textContent = data.leads.length + ' enquiries loaded.';
     render(data.leads);
   }
@@ -249,6 +309,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   });
 
   logout.addEventListener('click', async () => {
+    if (showcase) {
+      resetShowcaseLeads();
+      search.value = '';
+      stageFilter.value = '';
+      status.textContent = 'Showcase data reset.';
+      await load();
+      return;
+    }
     await fetch('/api/admin/logout.php',{method:'POST'});
     await load();
   });

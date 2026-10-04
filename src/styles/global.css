@@ -11943,3 +11943,37 @@ button {
   .admin-drawer-meta,
   .admin-spec-grid { grid-template-columns: 1fr; }
 }
+
+
+/* Client-supplied technology marks — subtle enhancement only */
+.technology-logo-panel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+.technology-logo-panel img {
+  width: min(760px, 100%);
+  height: auto;
+  max-height: 84px;
+  object-fit: contain;
+  border-radius: 2px;
+  opacity: .9;
+  filter: saturate(.88) contrast(1.02);
+  transition: opacity .2s ease, filter .2s ease, transform .2s ease;
+}
+.technology-logo-panel img:hover {
+  opacity: 1;
+  filter: saturate(1) contrast(1.04);
+  transform: translateY(-1px);
+}
+@media (max-width: 900px) {
+  .technology-logo-panel {
+    justify-content: flex-start;
+    width: 100%;
+  }
+  .technology-logo-panel img {
+    width: min(100%, 700px);
+    max-height: 100px;
+  }
+}
